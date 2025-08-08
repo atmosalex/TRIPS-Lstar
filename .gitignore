@@ -42,3 +42,5 @@ pt_solutions/*
 configs/*
 !configs/example1.txt
 test*
+__pycache__/
+misc/*
