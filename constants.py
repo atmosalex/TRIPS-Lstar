@@ -1,0 +1,10 @@
+c = 299792458
+MeV2J = 1.60218e-13
+G2T = 1e-4
+nT2T = 1e-9
+mu0 = 1.25663706e-6
+RE = 6.3712e6
+mass0_proton = 1.67262189821e-27
+mass0_electron = 9.10938356e-31
+charge_proton = 1.602176620898e-19
+charge_electron = -1 * charge_proton
