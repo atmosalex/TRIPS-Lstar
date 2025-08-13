@@ -36,6 +36,9 @@
 ehthumbs.db
 Thumbs.db
 
+# PyCharm
+.idea
+
 # TRiPS specific:
 pt_solutions/*
 !pt_solutions/thisdir.txt
