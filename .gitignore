@@ -47,3 +47,5 @@ configs/*
 test*
 __pycache__/
 misc/*
+plot_fieldonly.py
+incredible_amazing_algorithm_that_will_make_100000000_USD.py

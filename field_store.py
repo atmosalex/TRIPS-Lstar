@@ -5,14 +5,18 @@ class HDF5_field:
     def __init__(self, filepath, existing = False, delete = False):
         self.filepath = filepath
         self.group_name_data = "data"
+        self.datakeys_existing_at_construction = []
         if not existing:
-            self.__setup()
+            self._setup()
         else:
+            with h5py.File(self.filepath, 'r', swmr=True) as fo:
+                if self.group_name_data in fo:
+                    for key in fo[self.group_name_data]:
+                        self.datakeys_existing_at_construction.append(key)
             if delete:
                 self.delete_all_data()
 
-
-    def __setup(self):
+    def _setup(self):
         """ create the basic file structure """
         self.add_group(self.group_name_data)
 
