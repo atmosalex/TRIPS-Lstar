@@ -8,7 +8,7 @@ def moving_average(a, n) :
     return ret[n - 1:] / n
 
 class Proton_trace:
-    def __init__(self, mu_SI, aeq, L, iphase_gyro=0, iphase_bounce=0, iphase_drift=0, storetrack = True, tsperorbit=300):#, dipole_mode=False):
+    def __init__(self, mu_SI, aeq, L, iphase_gyro=0, iphase_bounce=0, iphase_drift=0, storetrack = True, storeinterval = 1, tsperorbit=300):#, add_dipole_background=False):
         #proton properties:
         self.name = "proton"
         self.m0 = constants.mass0_proton
@@ -42,43 +42,60 @@ class Proton_trace:
                                          "gyration phase (0-1)": 5,
                                          "bounce phase (0-1)": 6,
                                          "drift phase (0-1)": 7}
+
+        self.storeinterval = storeinterval
+        self.skipcounter = 0
         self.storetrack = storetrack
         if storetrack:
             self.update = self.update_keep #function pointer
         else:
             self.times = [0]
             self.pt = [[np.nan, np.nan, np.nan, np.nan, np.nan, np.nan]]
-            self.update = self.update_discard
+            self.update = self.update_lastonly
 
-    def getpt(self, tlimit = -1):
-        idx = len(self.times)
-        if tlimit > 0:
-            if self.times[0] > tlimit:
-                return np.array([])
+    # def getpt(self, tlimit = -1):
+    #     idx = len(self.times)
+    #     if tlimit > 0:
+    #         if self.times[0] > tlimit:
+    #             return np.array([])
+    #
+    #         while self.times[idx-1] > tlimit:
+    #             idx -= 1
+    #     return np.array(self.pt[:idx])
+    #
+    # def gettimes(self, tlimit = -1):
+    #     idx = len(self.times)
+    #     if tlimit > 0:
+    #         if self.times[0] > tlimit:
+    #             return np.array([])
+    #
+    #         while self.times[idx-1] > tlimit:
+    #             idx -= 1
+    #     return np.array(self.times[:idx])
 
-            while self.times[idx-1] > tlimit:
-                idx -= 1
-        return np.array(self.pt[:idx])
+    def reset(self, time, state):
+        self.times = [time]
+        self.pt = [list(state)]
+        self.skipcounter = 0
 
-    def gettimes(self, tlimit = -1):
-        idx = len(self.times)
-        if tlimit > 0:
-            if self.times[0] > tlimit:
-                return np.array([])
-
-            while self.times[idx-1] > tlimit:
-                idx -= 1
-        return np.array(self.times[:idx])
-        
     def update_keep(self, time, state):
         """
         time: float
         state: array of floats, length 6
         """
-        self.times.append(time)
-        self.pt.append(state)
+        #self.times.append(time)
+        #self.pt.append(state)
+        #return
+        #we always keep the most recent time, state:
+        if self.skipcounter % self.storeinterval == 0:
+            self.times.append(time)
+            self.pt.append(state)
+        else:
+            self.times[-1] = time
+            self.pt[-1] = state
+        self.skipcounter = self.skipcounter + 1
 
-    def update_discard(self, time, state):
+    def update_lastonly(self, time, state):
         """
         time: float
         state: array of floats, length 6

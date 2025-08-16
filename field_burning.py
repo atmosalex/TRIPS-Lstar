@@ -1,4 +1,4 @@
-import field_h5
+import field_store
 import field_tools
 import IGRF_tools
 import numpy as np
@@ -168,7 +168,7 @@ def solvefield_pulse(pulse, fpath_sol, t0_ts, dur, resolution):
     print("E0 = ", pulse.E0, "V/m")
     # solution storage on disk:
     file_exists = os.path.exists(fpath_sol)
-    disk = field_h5.HDF5_field(fpath_sol, existing=file_exists, delete=True)
+    disk = field_store.HDF5_field(fpath_sol, existing=file_exists, delete=True)
     disk.add_dataset(disk.group_name_data, "t0", t0_ts)
 
     # solve time evolution:
@@ -363,7 +363,7 @@ def burn_IRBEM_field_to_grid_sph(dpar, times=[1420070400.0], Rmax=7, resolution=
     print("memory/storeage required for field (mb) > 3 x {:.2f}mb".format(sol_Bx.nbytes / 1024 / 1024))
 
     # solution storage on disk:
-    disk = field_h5.HDF5_field(output, existing=os.path.exists(output), delete=True)
+    disk = field_store.HDF5_field(output, existing=os.path.exists(output), delete=True)
     disk.add_dataset(disk.group_name_data, "t0", times[0])
     disk.add_dataset(disk.group_name_data, "co_grid", "sph")
     disk.add_dataset(disk.group_name_data, "co_vec", "cart")
@@ -539,7 +539,7 @@ def burn_IRBEM_field_to_grid_cart(dpar, times=[1420070400.0], Rmax=7, resolution
     print("memory/storeage required for field (mb) > 3 x {:.2f}mb".format(sol_Bx.nbytes / 1024 / 1024))
 
     # solution storage on disk:
-    disk = field_h5.HDF5_field(output, existing=os.path.exists(output), delete=True)
+    disk = field_store.HDF5_field(output, existing=os.path.exists(output), delete=True)
     disk.add_dataset(disk.group_name_data, "t0", times[0])
     disk.add_dataset(disk.group_name_data, "co_grid", "cart")
     disk.add_dataset(disk.group_name_data, "co_vec", "cart")
@@ -651,7 +651,7 @@ def burn_IRBEM_field_to_grid_cart(dpar, times=[1420070400.0], Rmax=7, resolution
 #     print("memory/storeage required for field (mb) > 3 x {:.2f}mb".format(sol_Bx.nbytes / 1024 / 1024))
 #
 #     # solution storage on disk:
-#     disk = field_h5.HDF5_field(output, existing=file_exists, delete=True)
+#     disk = field_store.HDF5_field(output, existing=file_exists, delete=True)
 #     disk.add_dataset(disk.group_name_data, "t0", t0_ts)
 #     disk.add_dataset(disk.group_name_data, "co_grid", "cart")
 #     disk.add_dataset(disk.group_name_data, "co_vec", "cart")
@@ -747,7 +747,7 @@ def burn_IRBEM_field_to_grid_cart(dpar, times=[1420070400.0], Rmax=7, resolution
 #     print("memory/storeage required for field (mb) > 16 x {:.2f}mb".format(sol_Br.nbytes / 1024 / 1024))
 #     #solution storage on disk:
 #     file_exists = os.path.exists(fpath_sol)
-#     disk = field_h5.HDF5_field(fpath_sol, existing = file_exists, delete = file_exists)
+#     disk = field_store.HDF5_field(fpath_sol, existing = file_exists, delete = file_exists)
 
 #     #march91pulse = field_tools.Epulse(240e-3, 0.8, 0.8, 8.0, 2000e3, 80, pi / 8, 30000e3)
 #     #Ephimax, *_ = np.abs(march91pulse.Ephi_dEphidr(0, 25 * field_tools.constants.RE, pi / 8))  # get the maximum amplitude of the pulse

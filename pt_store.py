@@ -109,21 +109,17 @@ class HDF5_pt:
             quantity_ow[...] = quantity
         fo.close()
 
-    def add_particledata(self, id, particle, compressmethod=None, skipeveryn=1, checkcode=1):
+    def add_particledata(self, id, particle, compressmethod=None, checkcode=1):
         """add new data corresponding to a particle ID"""
         # checkcode = 0 is used to indicate that a solution has not been attempted yet
         # checkcode = 1 is used to indicate a successful solution
         # checkcode = 2 is used to indicate an error - i.e. invalid drift orbit
 
-        times = particle.gettimes()
-        pt = particle.getpt()
-
-        if len(pt) == 0:
-            times = np.array([np.nan])
-            pt = np.array([[np.nan, np.nan, np.nan]])
+        times = np.array(particle.times) #particle.gettimes()
+        if len(times):
+            pt = np.array(particle.pt)[:, :3] #particle.getpt()
         else:
-            times = times[::skipeveryn]
-            pt = pt[:, :3][::skipeveryn]
+            pt = np.array([[np.nan, np.nan, np.nan]])
 
         print("", "adding track", id, "to", self.filepath, ", length ", len(times))
 
@@ -338,7 +334,7 @@ class HDF5_pt:
             fo.close()
             return q
 
-    def read_particledata(self, id, verbose=True, skipeveryn=1):
+    def read_particledata(self, id, verbose=True, storeinterval=1):
         fo = h5py.File(self.filepath, 'r', swmr=True)
         checklist = fo['tracklist_check']
         checkcode = checklist[id][()]
@@ -347,8 +343,8 @@ class HDF5_pt:
         #if checkcode != 1:
         #    if verbose: print(" warning: checkcode is ", checkcode)
 
-        times = fo.get(self.group_name_tracks + "/" + str(id) + '/time')[::skipeveryn][()]
-        pos = fo.get(self.group_name_tracks + "/" + str(id) + '/position')[::skipeveryn][()]
+        times = fo.get(self.group_name_tracks + "/" + str(id) + '/time')[::storeinterval][()]
+        pos = fo.get(self.group_name_tracks + "/" + str(id) + '/position')[::storeinterval][()]
 
         fo.close()
         return times, pos

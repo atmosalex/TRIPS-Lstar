@@ -143,7 +143,7 @@ def plot_positions(resultfile, ptids, filename=None, limit=-1, view_ele = None, 
     plt.close()
 
 
-def plot_positions2D_birdseye(resultfile, ptids, tracklist, seeEarth=True, filename=None, ring = -1, axlims = [], maxn=-1, skipeveryn = 5):
+def plot_positions2D_birdseye(resultfile, ptids, tracklist, seeEarth=True, filename=None, ring = -1, axlims = [], maxn=-1, storeinterval = 5):
     if maxn > 0:
         nplot = min(len(ptids), maxn)
     elif maxn == 0:
@@ -173,7 +173,7 @@ def plot_positions2D_birdseye(resultfile, ptids, tracklist, seeEarth=True, filen
 
         if checkcode == 0: continue
 
-        time, positions = resultfile.read_particledata(ptid, verbose = False, skipeveryn = skipeveryn)
+        time, positions = resultfile.read_particledata(ptid, verbose = False, storeinterval = storeinterval)
 
 
         #draw particle trajectory:
@@ -319,7 +319,7 @@ def plot_invariants(resultfile, ptids, tracklist, axes_invariants_idx = [4, 0, 7
     return [ax.get_xlim(), ax.get_ylim()]
 
 
-class Plot_2D_dshell_contour():
+class Plot_2D_dshell_contour:
     def __init__(self, ellipsoid_surf, hemisph = -1, numberoftracks=1):
         fig = plt.figure()
         ax = fig.add_subplot()
@@ -345,10 +345,11 @@ class Plot_2D_dshell_contour():
         self.fig = fig
         self.ax = ax
         self.colours = colors(numberoftracks)
+        self.R_view = 1 * constants.RE
 
     def add_particle(self, solved_position, idx=0):
-        pass
-        #self.ax.plot(solved_position[:, 0], solved_position[:, 1], alpha=1)
+        self.ax.plot(solved_position[:, 0], solved_position[:, 1], alpha=1)
+        self.R_view = np.max(np.linalg.norm(solved_position[:, :2], axis=1))
 
     def add_dshell(self, dshell, ellipsoid_surf, idx=0):
         ax = self.ax
@@ -384,9 +385,9 @@ class Plot_2D_dshell_contour():
         ax.set_xlabel('$X_{\mathrm{MAG}}$')
         ax.set_ylabel('$Y_{\mathrm{MAG}}$')
 
-        R_view = 1 * constants.RE
-        ax.set_xlim(-1 * R_view, R_view)
-        ax.set_ylim(-1 * R_view, R_view)
+
+        ax.set_xlim(-1 * self.R_view, self.R_view)
+        ax.set_ylim(-1 * self.R_view, self.R_view)
         ax.set_aspect('equal')
         plt.show()
         plt.close()
@@ -509,9 +510,6 @@ if __name__ == "__main__":
 
 
 
-    plot = Plot_3D_axes(earth_to_add = ellipsoid_surf)
-    #plot = Plot_2D_dshell_contour(ellipsoid_surf, dshell_init.hemisph_to_draw_contour)
-
     for ds_id in info['dshell_ID']:
         if info['dshell_check'][ds_id] != 1:
             continue
@@ -524,8 +522,13 @@ if __name__ == "__main__":
                                              quit_in_loss_cone=attrs['quit_in_loss_cone'])
         dshell_init.params = params
 
-        plot.add_dshell(dshell_init, ellipsoid_surf)
+
         break #only add one
+
+
+    #plot = Plot_3D_axes(earth_to_add = ellipsoid_surf)
+    plot = Plot_2D_dshell_contour(ellipsoid_surf, dshell_init.hemisph_to_draw_contour)
+    plot.add_dshell(dshell_init, ellipsoid_surf)
 
     Daa = []
     for pt_id in info['tracklist_ID']:
@@ -536,9 +539,9 @@ if __name__ == "__main__":
         #interpolate_constant_dt(times, positions, dt_min=-1)
 
         phasespacecoords0, phasespacecoords1 = resultfile.read_invariants(pt_id)
-        Daa.append((phasespacecoords1[3]-phasespacecoords0[3])**2)
+        #Daa.append((phasespacecoords1[3]-phasespacecoords0[3])**2)
 
-        plot.add_particle(solved_position, firstpointsonly=1)
+        plot.add_particle(solved_position)#, firstpointsonly=1)
 
     plot.show_close()
 

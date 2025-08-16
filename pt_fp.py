@@ -139,7 +139,7 @@ def calc_rg(Y0, bfield, m0, q, t):
 
     return abs(mr*v_perp2/F1)
 
-def get_instantaneous_GC_from_track(bfield, particle, tlimit = -1, freezefield = -1): #freezefield not implemented yet
+def get_instantaneous_GC_from_track(bfield, particle, freezefield = -1): #freezefield not implemented yet
     """
     get the instantaneous gyrocentre position based on the pre-calculated motion of the particle
     this uses the already-solved change in momentum of the particle at a given time step, which requires its future trajectory to be known
@@ -156,33 +156,41 @@ def get_instantaneous_GC_from_track(bfield, particle, tlimit = -1, freezefield =
     else:
         get_field_time = get_field_time_particle
 
-    pt = particle.getpt(tlimit)
-    times = particle.gettimes(tlimit)
-
     track_gyrocentre = []
     track_gyrocentre_time = []
     track_gyrocentre_p = []
 
+    if not len(particle.times):
+        return track_gyrocentre_time, track_gyrocentre, track_gyrocentre_p
+
+    momentum = np.array(particle.pt)[:, 3:]
+
     #find the direction vector of the force on the particle at each time: 
-    pt_up = np.roll(pt[:,3:], -1, axis = 0)
-    dp = pt_up - pt[:,3:]
+    momentum_up = np.roll(momentum, -1, axis = 0)
+    dp = momentum_up - momentum
     #times_up = np.roll(times, -1)
     #dt = times_up - times
-    force_ns = dp/ np.linalg.norm(dp, axis = 1)[:, None]
+    force_ns = dp / np.linalg.norm(dp, axis = 1)[:, None]
 
-    for idx in range(len(pt)-1):
-        p_ = pt[idx][3:]
-        t_ = get_field_time(times[idx])
+    for idx in range(momentum.shape[0] - 1):
+        p_ = momentum[idx]
+        t_ = get_field_time(particle.times[idx])
 
         # the quantity rg * pperp is conserved
-        rg = calc_rg(pt[idx], bfield, particle.m0, particle.q, t_) #involves calls to the magnetic field
+        rg = calc_rg(particle.pt[idx], bfield, particle.m0, particle.q, t_) #involves calls to the magnetic field
 
         #gc = (pt[idx+1][:3] + pt[idx][:3])/2 + force_ns[idx] * rg
-        gc = pt[idx][:3] + force_ns[idx] * rg
+        gc = particle.pt[idx][:3] + force_ns[idx] * rg
 
         track_gyrocentre.append(gc)
-        track_gyrocentre_time.append(times[idx])
+        track_gyrocentre_time.append(particle.times[idx])
         track_gyrocentre_p.append(p_)
+
+    tsperorbit = particle.tsperorbit//particle.storeinterval
+    #take the moving average of the gyrocentre over the number of timesteps in a gyration (that were kept):
+    track_gyrocentre_time = list(pt_particles.moving_average(np.array(track_gyrocentre_time), tsperorbit))
+    track_gyrocentre = list(pt_particles.moving_average(np.array(track_gyrocentre), tsperorbit))
+    track_gyrocentre_p = list(pt_particles.moving_average(np.array(track_gyrocentre_p), tsperorbit))
 
     return track_gyrocentre_time, track_gyrocentre, track_gyrocentre_p
 
@@ -262,7 +270,7 @@ def get_instantaneous_GC_from_track(bfield, particle, tlimit = -1, freezefield =
 #     # sys.exit()
 #     return idx_Bmax_peaks, Bmax_peaks, peak_in_nhemisph
 
-def get_idx_mirrpt_from_track(track_gyrocentre_time, track_gyrocentre, bfield, tsperorbit, n_mirrpt = 4, freezefield=-1):
+def get_idx_mirrpt_from_track(track_gyrocentre_time, track_gyrocentre, bfield, tsperorbit_stored, n_mirrpt = 4, freezefield=-1):
     """
     detect mirror points along the supplied trajectory based on where the particle reverses direction relative to the field
     works better than the _Bmaxdetection version for weird trajectories
@@ -288,7 +296,7 @@ def get_idx_mirrpt_from_track(track_gyrocentre_time, track_gyrocentre, bfield, t
     found_reversal = False
 
     #first data point:
-    idx_start = ngyrations_wait * tsperorbit
+    idx_start = ngyrations_wait * tsperorbit_stored
     # we start looking after a few gyrations because otherwise the initial position of a particle on the equator may be interpreted as a mirror point
     t_ = get_field_time(track_gyrocentre_time[idx_start])
     dS = [track_gyrocentre[idx_start][0] - track_gyrocentre[idx_start - 1][0], track_gyrocentre[idx_start][1] - track_gyrocentre[idx_start - 1][1], track_gyrocentre[idx_start][2] - track_gyrocentre[idx_start - 1][2]]
@@ -312,7 +320,7 @@ def get_idx_mirrpt_from_track(track_gyrocentre_time, track_gyrocentre, bfield, t
             idx_reverse = idx
             found_reversal = True
             # wait a few gyrations before confirming we found a reversal...
-        elif found_reversal and idx - idx_reverse >= ngyrations_wait * tsperorbit:
+        elif found_reversal and idx - idx_reverse >= ngyrations_wait * tsperorbit_stored:
             idx_reversals.append(idx_reverse)
             # find the hemisphere we are in according to our numerical detection of the magnetic equator:
             above_equator = track_gyrocentre[idx][2] > bfield.find_magequator_z(track_gyrocentre[idx_reverse][0], track_gyrocentre[idx_reverse][1], track_gyrocentre[idx_reverse][2], t_)
@@ -321,19 +329,30 @@ def get_idx_mirrpt_from_track(track_gyrocentre_time, track_gyrocentre, bfield, t
             found_reversal = False
             continue
 
+    # print(len(idx_reversals))
+    # import matplotlib.pyplot as plt
+    # fig, ax = plt.subplots(1)
+    # ax2 = ax.twinx()
+    # track_gyrocentre = np.array(track_gyrocentre)
+    # ax.plot(track_gyrocentre[idx_start:, 0], track_gyrocentre[idx_start:, 2])
+    # ax2.plot(track_gyrocentre[idx_start:idx_start + len(Bmags), 0], Bmags, color='red')
+    # ax2.set_yscale('log')
+    # plt.show()
+    # sys.exit()
+    # #plt.plot(np.arange(idx_start, idx_reversals[-1]), Bmags[:idx_reversals[-1]-idx_start])
+    # plt.plot(np.arange(len(Bmags)), Bmags)
+    # for idx in idx_reversals:
+    #     print(idx)
+    #     plt.axvline(idx)
+    # plt.show()
+    # sys.exit()
+
     #find the phase along the bounce associated with each mirror point, starting from either 0.25 or 0.75
     if mirrpt_results_in_field_direction[0]:
         mirrpt_bounce_phase = [0.75 + 0.5*idx for idx in range(n_mirrpt)]
     else: #if not mirrpt_results_in_field_direction[0]:
         mirrpt_bounce_phase = [0.25 + 0.5*idx for idx in range(n_mirrpt)]
 
-    # import matplotlib.pyplot as plt
-    # plt.plot(np.arange(idx_start, idx_reversals[-1]), Bmags[:idx_reversals[-1]-idx_start])
-    # for idx in idx_reversals:
-    #     print(idx)
-    #     plt.axvline(idx)
-    # plt.show()
-    # sys.exit()
     return idx_reversals, [Bmags[idx] for idx in idx_reversals], mirrpt_above_equator, mirrpt_bounce_phase
 
 def get_second_invariant_from_GC_bounce(track_gyrocentre_bounce_time, track_gyrocentre_bounce, track_gyrocentre_bounce_p, bfield, freezefield=-1):
@@ -376,7 +395,6 @@ def get_second_invariant_from_GC_bounce(track_gyrocentre_bounce_time, track_gyro
 
     return J2, I
 
-
 def converge_on_first_crossing_idx(xyz, ti, bfield, idx_jump, count_index=0, time_direction=1, crossing_direction=1):
     # find where dZ goes from negative to positive relative to the equator (crossing_direction==1)
     # or where dZ goes from positive to negative relative to the equator (crossing_direction==-1)
@@ -406,206 +424,7 @@ def converge_on_first_crossing_idx(xyz, ti, bfield, idx_jump, count_index=0, tim
     else:
         return -1
 
-# # version 3:
-# def push_until_bounce_phase(bfield, particle, reverse=False, update_particle=False):
-#     """
-#     get the time of the soonest equatorial crossing at 0 bounce phase (negative to positive dZ relative to the magnetic equator)
-#     if pt begins at dZ=0 and idx_left_equator_safe = 0, this function will return the first point in the trajectory
-#      therefore set idx_left_equator_safe to a value s.t. the particle will not trip a bounce detection near the very beginning of its trajectory
-#      this is a problem when the resolution of the magnetic equator is poor
-#     input must be numpy arrays
-#     returns floats, lists
-#     """
-#
-#     track_gyrocentre_time, track_gyrocentre, _ = get_instantaneous_GC_from_track(bfield, particle, particle.tsperorbit, tlimit=-1, freezefield=-1, take_moving_average=True)
-#     # import matplotlib.pyplot as plt
-#     # ax = plt.figure().add_subplot(projection='3d')
-#     # pt = np.array(particle.pt)
-#     # gc = np.array(track_gyrocentre)
-#     # ax.scatter([pt[:,0][0]/constants.RE], [pt[:,1][0]/constants.RE], [pt[:,2][0]/constants.RE], marker='x', color='black')
-#     # ax.plot(pt[:,0]/constants.RE, pt[:,1]/constants.RE, pt[:,2]/constants.RE, color='black', lw=0.5)
-#     # ax.plot(gc[:, 0]/constants.RE, gc[:, 1]/constants.RE, gc[:, 2]/constants.RE, color='red', lw=0.5)
-#     # ax.set_xlabel('X [RE]')
-#     # ax.set_ylabel('Y [RE]')
-#     # ax.set_zlabel('Z [RE]')
-#     # ax.set_aspect('equal')
-#     # plt.show()
-#     # sys.exit()
-#
-#     # import matplotlib.pyplot as plt
-#     # fig, ax = plt.subplots(1)
-#     # ax2 = ax.twinx()
-#     # gradBdotB_list = []
-#     # Babs_list = []
-#     # idxs = []
-#     # for idx in range(0, len(track_gyrocentre), particle.tsperorbit):
-#     #     idxs.append(idx)
-#     #     dx = 1
-#     #     dy = 1
-#     #     dz = 1
-#     #     Bvec = bfield.getBE(*track_gyrocentre[idx],particle.times[idx])[:3]
-#     #     Babs = np.linalg.norm(Bvec)
-#     #     Bnorm = Bvec/Babs
-#     #     Babs_list.append(Babs*1e9)
-#     #     Bvec_ux = bfield.getBE(track_gyrocentre[idx][0] + dx, track_gyrocentre[idx][1], track_gyrocentre[idx][2], particle.times[idx])[:3]
-#     #     Babs_ux = np.linalg.norm(Bvec_ux)
-#     #     Bvec_uy = bfield.getBE(track_gyrocentre[idx][0], track_gyrocentre[idx][1] + dy, track_gyrocentre[idx][2], particle.times[idx])[:3]
-#     #     Babs_uy = np.linalg.norm(Bvec_uy)
-#     #     Bvec_uz = bfield.getBE(track_gyrocentre[idx][0], track_gyrocentre[idx][1], track_gyrocentre[idx][2] + dz, particle.times[idx])[:3]
-#     #     Babs_uz = np.linalg.norm(Bvec_uz)
-#     #     gradB = [(Babs_ux - Babs)/dx , (Babs_uy - Babs)/dy , (Babs_uz - Babs)/dz]
-#     #     gradBdotB_list.append(np.dot(gradB, Bnorm))
-#     # #ax.plot(np.arange(len(track_gyrocentre)), [angle_between(bfield.getBE(*track_gyrocentre[idx],particle.times[idx])[:3], particle.pt[idx][3:])*180/np.pi for idx in range(len(track_gyrocentre))])
-#     # ax.plot(idxs, gradBdotB_list, color='black')
-#     # ax.set_ylabel(r'$\nabla \mathbf{B}\cdot B$')
-#     # #ax2.plot(idxs, np.array(track_gyrocentre[::particle.tsperorbit])[:,2]/constants.RE, color='red')
-#     # #ax2.set_ylabel('Z [RE]', color='red')
-#     # ax2.plot(idxs, Babs_list, color='red')
-#     # ax2.set_ylabel('$\mathbf{B}$ [nT]', color='red')
-#     # ax.set_xlabel('steps along trajectory')
-#     # plt.show()
-#     # sys.exit()
-#
-#
-#     idx_reversals, B_mirrpt, mirrpt_above_equator, mirrpt_bounce_phase = get_idx_mirrpt_from_track(track_gyrocentre_time, track_gyrocentre, bfield, particle.tsperorbit, n_mirrpt = 2)
-#
-#     if len(idx_reversals) < 2:
-#         print("Error: push duration did not result in the number of mirror points required")
-#         return None, None, None, None
-#
-#     #check that conjugate mirror points are on different sides of the magnetic equator:
-#     if mirrpt_above_equator[0] == mirrpt_above_equator[1]:
-#         if not continue_with_irregular_bounce:
-#             print("Error: conjugate mirror points are on the same side of the magnetic equator")
-#             print("","this may be due to low grid resolution relative to the spatial scale of the particle's bounce")
-#             return None, None, None, None
-#         else:
-#             print("Warning: conjugate mirror points are on the same side of the magnetic equator")
-#             print("","continuing anyway...")
-#
-#     # get bounce period:
-#     t_halfbounce = particle.times[idx_reversals[1]] - particle.times[idx_reversals[0]]
-#     tb_est = 2 * t_halfbounce
-#
-#     if mirrpt_above_equator[0] == True and reverse == False:
-#         t_bounce_reset = particle.times[idx_reversals[0]] + 1.5*t_halfbounce
-#     elif mirrpt_above_equator[0] == False and reverse == False:
-#         t_bounce_reset = particle.times[idx_reversals[0]] + 0.5*t_halfbounce
-#     elif mirrpt_above_equator[0] == True and reverse == True:
-#         t_bounce_reset = particle.times[idx_reversals[0]] + 0.5*t_halfbounce
-#     else:# reversal_in_nhemisph[0] == False and reverse == True:
-#         t_bounce_reset = particle.times[idx_reversals[0]] + 1.5*t_halfbounce
-#
-#     if t_bounce_reset > particle.times[-1]:
-#         #push the particle a bit more:
-#         print(" extending particle trajectory to complete bounce...")
-#         tuncapped = list(particle.times)
-#         ptuncapped = list(particle.pt)
-#         tcap, xcap, pcap = pusher(particle, bfield, t_bounce_reset - particle.times[-1], particle.tsperorbit, t_limit_exact=True)
-#         pt_bounce_reset = np.array(particle.pt[-1])
-#
-#         if not update_particle:
-#             particle.times = tuncapped
-#             particle.pt = ptuncapped
-#
-#     else:
-#         idx_x = np.argmax(particle.times > t_bounce_reset)
-#         pt_idx_x = np.array(particle.pt[idx_x])
-#         pt_idx_xm1 = np.array(particle.pt[idx_x - 1])
-#         dpt = pt_idx_x - pt_idx_xm1
-#         frac_dz = (t_bounce_reset - particle.times[idx_x - 1]) / (particle.times[idx_x] - particle.times[idx_x - 1])
-#         if frac_dz == 0:
-#             # we are already at the equator at idx_x - 1 of the trajectory
-#             pt_bounce_reset = particle.pt[idx_x - 1]
-#         else:
-#             pt_bounce_reset = pt_idx_xm1 + dpt * frac_dz
-#
-#             if update_particle:
-#                 particle.times = particle.times[:idx_x-1]
-#                 particle.pt = particle.pt[:idx_x-1]
-#                 particle.update(t_bounce_reset, [*pt_bounce_reset[:3], *pt_bounce_reset[3:]])
-#
-#
-#     # #diagnosis code:###########
-#     # print("Finding magnetic equator numerically...")
-#     # pt_plot = np.array(particle.pt)
-#     # t_plot = np.array(particle.times)
-#     # print(bfield.find_magequator_z(*pt_plot[0][:3], t_plot[0]))
-#     # #[25356331.97088619  1161364.28553742 -4525178.71368194]
-#     # zeq_list = []
-#     # idx_skip = particle.tsperorbit*5 #every 5 gyrations
-#     # for idx in range(0, len(pt_plot), idx_skip):
-#     #     zeq_list.append(bfield.find_magequator_z(*pt_plot[idx][:3], t_plot[idx]))
-#     # zeq_list = np.array(zeq_list)
-#     # #
-#     # import matplotlib.pyplot as plt
-#     # fig, ax = plt.subplots(1)
-#     #
-#     # idx_skip = list(range(0, len(pt_plot), idx_skip))
-#     # for count in range(len(zeq_list)):
-#     #     idx = idx_skip[count]
-#     #     ax.plot([pt_plot[idx][1]/constants.RE, pt_plot[idx][1]/constants.RE], [zeq_list[count]/constants.RE, pt_plot[idx][2]/constants.RE], color='black', ls='-', alpha=0.3) #equator
-#     #     ax.scatter([pt_plot[idx][1]/constants.RE], [zeq_list[count]/constants.RE], marker='.', color='black', alpha=0.3)
-#     # #ax.plot(pt_plot[:,1][::idx_skip], zeq_list, color='black', ls='-') #equator
-#     # ax.scatter(pt_plot[:,1][idx_reversals]/constants.RE, pt_plot[:,2][idx_reversals]/constants.RE,marker='x', s=25)
-#     # ax.scatter([pt_bounce_reset[1]/constants.RE], [pt_bounce_reset[2]/constants.RE],marker='x', color='black')
-#     # ax.scatter([pt_plot[:,1][0]/constants.RE], [pt_plot[:,2][0]/constants.RE],marker='x', color='red')
-#     # ax.plot(pt_plot[:, 1]/constants.RE, pt_plot[:, 2]/constants.RE, color='red', lw=0.3)
-#     # plt.show()
-#     # sys.exit()
-#     # ###########################
-#
-#     # #field strength along trace from mirror points to equator:
-#     # import matplotlib.pyplot as plt
-#     # pt_plot = np.array(particle.pt)
-#     # t_plot = np.array(particle.times)
-#     # fig, ax = plt.subplots(1)
-#     # for idx in idx_reversals:
-#     #     _, fieldtrace = bfield.find_magequator(*pt_plot[idx][:3], t_plot[idx], return_tracepath=True)
-#     #     #ax.plot(np.sqrt(fieldtrace[:, 0]**2 + fieldtrace[:, 1]**2) / constants.RE, fieldtrace[:, 2] / constants.RE, color='green', lw=0.5)
-#     #     ax.plot([np.linalg.norm(bfield.getBE(*fieldtrace[idx][:3], t_plot[idx])[:3]) for idx in range(len(fieldtrace))], fieldtrace[:, 2] / constants.RE, color='green', lw=0.5)
-#     # plt.show()
-#     # sys.exit()
-#
-#     # #pitch angle:
-#     # import matplotlib.pyplot as plt
-#     # pt_plot = np.array(particle.pt)
-#     # t_plot = np.array(particle.times)
-#     # fig, ax = plt.subplots(1)
-#     # for idx in range(0, len(pt_plot), particle.tsperorbit):
-#     #     #_, fieldtrace = bfield.find_magequator(*pt_plot[idx][:3], t_plot[idx], return_tracepath=True)
-#     #     #ax.plot(np.sqrt(fieldtrace[:, 0]**2 + fieldtrace[:, 1]**2) / constants.RE, fieldtrace[:, 2] / constants.RE, color='green', lw=0.5)
-#     #     ax.scatter([angle_between(bfield.getBE(*pt_plot[idx][:3], t_plot[idx])[:3], pt_plot[idx][3:])*180/np.pi], pt_plot[idx, 2] / constants.RE, color='green', lw=0.5)
-#     # plt.show()
-#     # sys.exit()
-#
-#     # #diagnosis code:###########
-#     # #compare field line trace to gyrocentre trace
-#     # print("Finding magnetic equator numerically...")
-#     # pt_plot = np.array(particle.pt)
-#     # gc_plot = np.array(track_gyrocentre)
-#     # t_plot = np.array(particle.times)
-#     #
-#     # import matplotlib.pyplot as plt
-#     # ax = plt.figure().add_subplot(projection='3d')
-#     # #for idx in idx_reversals:
-#     # #    _, fieldtrace = bfield.find_magequator(*pt_plot[idx][:3], t_plot[idx], return_tracepath = True)
-#     # #    ax.plot(fieldtrace[:, 0] / constants.RE, fieldtrace[:, 1] / constants.RE, fieldtrace[:, 2] / constants.RE, color='green', lw=0.5)
-#     # ax.scatter([pt_plot[:,0][idx_reversals[0]]/constants.RE], [pt_plot[:,1][idx_reversals[0]]/constants.RE], [pt_plot[:,2][idx_reversals[0]]/constants.RE],marker='.', color='black')
-#     # ax.scatter([pt_plot[:,0][idx_reversals[1]]/constants.RE], [pt_plot[:,1][idx_reversals[1]]/constants.RE], [pt_plot[:,2][idx_reversals[1]]/constants.RE],marker='.', color='black')
-#     # ax.plot(gc_plot[:, 0]/constants.RE, gc_plot[:, 1]/constants.RE, gc_plot[:, 2]/constants.RE, color='blue', lw=0.3)
-#     # #ax.scatter(pt_plot[:,0][idx_reversals]/constants.RE, pt_plot[:,1][idx_reversals]/constants.RE, pt_plot[:,2][idx_reversals]/constants.RE,marker='x', s=25)
-#     # ax.scatter([pt_bounce_reset[0]/constants.RE], [pt_bounce_reset[1]/constants.RE], [pt_bounce_reset[2]/constants.RE],marker='x', color='black')
-#     # ax.scatter([pt_plot[:,0][0]/constants.RE], [pt_plot[:,1][0]/constants.RE], [pt_plot[:,2][0]/constants.RE],marker='x', color='red')
-#     # ax.plot(pt_plot[:, 0]/constants.RE, pt_plot[:, 1]/constants.RE, pt_plot[:, 2]/constants.RE, color='red', lw=0.3)
-#     # ax.set_aspect('equal')
-#     # plt.show()
-#     # sys.exit()
-#     ###########################
-#
-#     return t_bounce_reset, pt_bounce_reset, particle.times, particle.pt, tb_est
-
-def extract_GC_only(particle, bfield, solved_times, solved_position, solved_momenta = None, existing_skipeveryn=1):
+def extract_GC_only(particle, bfield, solved_times, solved_position, solved_momenta = None, existing_storeinterval=1):
     #set up the particle:
     if solved_momenta is None:
         # infer momentum from previously calculated trajectory:
@@ -623,16 +442,8 @@ def extract_GC_only(particle, bfield, solved_times, solved_position, solved_mome
         print("", "skipping...")
         return 2
 
-    #in this case, we will take a moving average because if existing_skipeveryn > 1, the trajectory will be missing points and not smooth
-    tsperorbit = particle.tsperorbit//existing_skipeveryn
     track_gyrocentre_time, track_gyrocentre, _ = get_instantaneous_GC_from_track(bfield, particle)
-
-    #take the moving average of the gyrocentre over the number of timesteps in a gyration (that were kept):
-    if tsperorbit % 2 != 0:
-        print("Warning: time steps per orbit is an odd number, which will cause a small error in approximation of K")
-    gc_pos = list(pt_particles.moving_average(np.array(track_gyrocentre), tsperorbit))
-    gc_times = list(pt_particles.moving_average(np.array(track_gyrocentre_time), tsperorbit))
-    return gc_times, gc_pos
+    return track_gyrocentre_time, track_gyrocentre
 
 def construct_guiding_center_frame(x_GC_MAG, B_GC):
     """
@@ -803,7 +614,6 @@ def solve_trajectory(dshell_init, particle, bfield, ellipsoid_surf, cfg):
     reverse = cfg.reverse_time
     pusher = pushers.boris_fwd #default particle pusher
     exect0 = time.perf_counter()
-    tsperorbit = particle.tsperorbit
 
     if (not particle.storetrack) and cfg.store_GC:
         print("Error: cannot calculate the GC trajectory because the particle object does not store its track")
@@ -813,7 +623,8 @@ def solve_trajectory(dshell_init, particle, bfield, ellipsoid_surf, cfg):
     #perform diagnostic initialization on the magnetic equator:
     print("Performing diagnostic initialization")
     t0_init, x0_init, p0_init, tb_est_dipole = diagnostic_initialization(dshell_init, particle, bfield, ellipsoid_surf)
-    particle.update(t0_init, [*x0_init, *p0_init])
+    particle.reset(t0_init, np.hstack((*x0_init, *p0_init)))
+
     # gyrophase specification will become meaningless after the particle undergoes a diagnostic bounce
 
     #push the particle forward in time for ~2 bounce orbits in a static field at t0:
@@ -821,14 +632,16 @@ def solve_trajectory(dshell_init, particle, bfield, ellipsoid_surf, cfg):
     #modify the particle to keep the track for our starting calculation:
     particle.update = particle.update_keep
     #use a static field at t0 to do this: we want to find where the particle would be at t0:
-    pusher(particle, bfield, 2.5 * tb_est_dipole, tsperorbit, t_limit_exact = False, freezefield = t0_init)
+    pusher(particle, bfield, 2.5 * tb_est_dipole, particle.tsperorbit, t_limit_exact = False, freezefield = t0_init)
 
     #detect properties of the bounce trajectory:
     print("Interpolating an initial position from the test bounce orbit...")
     #extract the gyrocenter:
-    track_gyrocentre_time, track_gyrocentre, _ = get_instantaneous_GC_from_track(bfield, particle, tlimit=-1, freezefield=t0_init)
+    track_gyrocentre_time, track_gyrocentre, _ = get_instantaneous_GC_from_track(bfield, particle, freezefield=t0_init)
+
     #identify 3 mirror point indices using the guiding center trajectory:
-    idx_reversals, B_mirrpt, mirrpt_above_equator, mirrpt_bounce_phase = get_idx_mirrpt_from_track(track_gyrocentre_time, track_gyrocentre, bfield, particle.tsperorbit, n_mirrpt=3)
+    tsperorbit_stored = particle.tsperorbit // particle.storeinterval
+    idx_reversals, B_mirrpt, mirrpt_above_equator, mirrpt_bounce_phase = get_idx_mirrpt_from_track(track_gyrocentre_time, track_gyrocentre, bfield, tsperorbit_stored, n_mirrpt=3)
     if not check_trajectory_bounces(idx_reversals, mirrpt_above_equator): return 2
     #we now have an accurate, numerically-derived approximation of bounce time:
     # this is 2x the time between numerically-detected mirror points
@@ -874,8 +687,7 @@ def solve_trajectory(dshell_init, particle, bfield, ellipsoid_surf, cfg):
     # in a time-dependent field, there is no guarantee the motion we just solved will be repeated at a different time
     # therefore, we have to start again from t0...
     # set the state vector at t0 to pt_init, which corresponds to the user-specified bounce phase:
-    particle.pt = list([list(pt_init)])
-    particle.times = [t0_init]
+    particle.reset(t0_init, pt_init)
 
     if cfg.calculate_initial_invariants:
         particle.phasespacecoords[0, :] = derive_invariants(particle, bfield, ellipsoid_surf, reverse=reverse)
@@ -892,16 +704,16 @@ def solve_trajectory(dshell_init, particle, bfield, ellipsoid_surf, cfg):
         delta_az = 0
         x0 = pt_init[:3]
         while abs(delta_az) <= 2*np.pi and bfield.range_adequate:
-            t1, x1, p1 = pusher(particle, bfield, tb_est, tsperorbit)
+            t1, x1, p1 = pusher(particle, bfield, tb_est, particle.tsperorbit)
             delta_az += angle_between([x0[0], x0[1], 0], [x1[0], x1[1], 0]) #approximation of drift around the MAG frame
             print("","{:.2f}%".format(100*delta_az/(2*np.pi))) #only works if dt_solve_increment << drift orbit time
             x0 = x1
     elif cfg.quit_after_one_bounce:
         #solve for one bounce period:
-        t1, x1, p1 = pusher(particle, bfield, tb_est, tsperorbit)
+        t1, x1, p1 = pusher(particle, bfield, tb_est, particle.tsperorbit)
     else:
         #solve for a pre-determined duration:
-        t1, x1, p1 = pusher(particle, bfield, cfg.duration_solve_max, tsperorbit)
+        t1, x1, p1 = pusher(particle, bfield, cfg.duration_solve_max, particle.tsperorbit)
 
     if not bfield.range_adequate:
         print("","particle went outside of field domain in time or space, ending simulation")
@@ -1016,11 +828,9 @@ def derive_invariants(particle, bfield, ellipsoid_surf, reverse=False): #called 
     func_ptr_original = particle.update
     #
     # delete the entire track and initialise from the last state vector:
-    particle.times = list([t1])
-    particle.pt = list([list(pt1_fwd)])
+    particle.reset(t1, pt1_fwd)
     # modify the particle to keep the track:
     particle.update = particle.update_keep
-
 
     #estimate pitch angle at the equator based on conservation of the first invariant:
     bebl = min([1., np.linalg.norm(Be_GC)/np.linalg.norm(Bl_GC)])
@@ -1030,33 +840,25 @@ def derive_invariants(particle, bfield, ellipsoid_surf, reverse=False): #called 
 
     #visit conjugate mirror points over ~two bounce periods with the field frozen at t1:
     print("", "solving for just over two bounce orbits from last state in a static field at last epoch...")
-    tsperorbit = particle.tsperorbit
     #estimate tb:
     L_dip = bfield.get_L(xe_GC_MAG)
     tb_est_dipole = tb_estimate(L_dip * RE, v1mag, aeq_est)
-    pusher(particle, bfield, 2.5 * tb_est_dipole, tsperorbit, t_limit_exact = False, freezefield = t1)
+    pusher(particle, bfield, 2.5 * tb_est_dipole, particle.tsperorbit, t_limit_exact = False, freezefield = t1)
 
 
     #first and second invariant
     #
-    track_gyrocentre_time, track_gyrocentre, track_gyrocentre_p = get_instantaneous_GC_from_track(bfield, particle, tlimit=-1, freezefield=t1)
-
-    #take the moving average of the gyrocentre over the number of timesteps in a gyration:
-    #if tsperorbit % 2 != 0:
-    #    print("Warning: time steps per orbit is an odd number, which will cause a small error in approximation of K")
-    track_gyrocentre_smooth = list(pt_particles.moving_average(np.array(track_gyrocentre), tsperorbit))
-    track_gyrocentre_time_smooth = list(pt_particles.moving_average(np.array(track_gyrocentre_time), tsperorbit))
-    track_gyrocentre_p_smooth = list(pt_particles.moving_average(np.array(track_gyrocentre_p), tsperorbit))
-
-    idx_reversals, B_mirrpt, mirrpt_above_equator, mirrpt_bounce_phase = get_idx_mirrpt_from_track(track_gyrocentre_time_smooth, track_gyrocentre_smooth, bfield, tsperorbit, n_mirrpt = 3, freezefield=t1)
+    track_gyrocentre_time, track_gyrocentre, track_gyrocentre_p = get_instantaneous_GC_from_track(bfield, particle, freezefield=t1)
+    tsperorbit_stored = particle.tsperorbit // particle.storeinterval
+    idx_reversals, B_mirrpt, mirrpt_above_equator, mirrpt_bounce_phase = get_idx_mirrpt_from_track(track_gyrocentre_time, track_gyrocentre, bfield, tsperorbit_stored, n_mirrpt = 3, freezefield=t1)
     if not check_trajectory_bounces(idx_reversals, mirrpt_above_equator, reversals_required=3): return invariants
 
     #isolate one GC bounce:
-    track_gyrocentre_smooth_bounce = track_gyrocentre_smooth[idx_reversals[0]:idx_reversals[2]]
-    track_gyrocentre_smooth_bounce_time = track_gyrocentre_time_smooth[idx_reversals[0]:idx_reversals[2]]
-    track_gyrocentre_smooth_bounce_p = track_gyrocentre_p_smooth[idx_reversals[0]:idx_reversals[2]]
+    track_gyrocentre_bounce = track_gyrocentre[idx_reversals[0]:idx_reversals[2]]
+    track_gyrocentre_bounce_time = track_gyrocentre_time[idx_reversals[0]:idx_reversals[2]]
+    track_gyrocentre_bounce_p = track_gyrocentre_p[idx_reversals[0]:idx_reversals[2]]
 
-    J2, I = get_second_invariant_from_GC_bounce(track_gyrocentre_smooth_bounce_time, track_gyrocentre_smooth_bounce, track_gyrocentre_smooth_bounce_p, bfield, freezefield=t1)
+    J2, I = get_second_invariant_from_GC_bounce(track_gyrocentre_bounce_time, track_gyrocentre_bounce, track_gyrocentre_bounce_p, bfield, freezefield=t1)
     K_ = np.power(np.mean(B_mirrpt[:2]) / G2T, 0.5) * I / RE
     invariants[2] = K_
 
@@ -1068,8 +870,8 @@ def derive_invariants(particle, bfield, ellipsoid_surf, reverse=False): #called 
 
     #find bounce phase:
     # the next mirror point will be used as a reference point to determine bounce phase:
-    tb_est = track_gyrocentre_smooth_bounce_time[-1] - track_gyrocentre_smooth_bounce_time[0]
-    next_mirr_t = track_gyrocentre_smooth_bounce_time[0]
+    tb_est = track_gyrocentre_bounce_time[-1] - track_gyrocentre_bounce_time[0]
+    next_mirr_t = track_gyrocentre_bounce_time[0]
     next_mirr_phase = mirrpt_bounce_phase[0]
     dt_mirr = next_mirr_t - particle.times[-1]
     bounces_until_mirr = dt_mirr / tb_est

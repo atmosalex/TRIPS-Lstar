@@ -15,9 +15,7 @@ import driftshells
 import cosys
 import config
 
-dict_Particles = {
-    "p": pt_particles.Proton_trace,
-    "e": pt_particles.Electron_trace}
+dict_Particles = {"p": pt_particles.Proton_trace, "e": pt_particles.Electron_trace}
 
 #Organise the generation of particle tracks
 
@@ -68,8 +66,8 @@ def get_resultfile_GC_new_from_resultfile_existing(resultfile, cfg):
     tracklist_existing = resultfile.get_existing_tracklist()
     resultfile_GC = pt_store.HDF5_pt(filename_hdf5_GC)
     resultfile_GC.setup(cfg.datadic, dict_tracklist = tracklist_existing)
-    if cfg.skipeveryn > 1:
-        print("Warning: cfg.skipeveryn was set to {} in original trajectory calculation...".format(cfg.skipeveryn))
+    if cfg.storeinterval > 1:
+        print("Warning: cfg.storeinterval was set to {} in original trajectory calculation...".format(cfg.storeinterval))
         print("","this will be accounted for, but may limit the accuracy of the guiding center reanalysis")
         print()
     return resultfile_GC
@@ -139,19 +137,13 @@ if cfg.reverse_time:
 else:
     simulation_t0 = 0
 
-if len(cfg.perturbation_grid): #include non-dipolar field perturbations and time variation from the file
-    if len(cfg.custom_field_grid):
-        #not implemented yet, the following will exit:
-        bfield = field_tools.Griddedfield_With_Perturbation(cfg.custom_field_grid, cfg.perturbation_grid, simulation_t0=simulation_t0, reversetime = cfg.reverse_time)
-    else:
-        bfield = field_tools.Dipolefield_With_Perturbation(cfg.perturbation_grid, simulation_t0=simulation_t0, reversetime = cfg.reverse_time)
+if len(cfg.add_field_from_grid):
+    bfield = field_tools.Griddedfield(cfg.add_field_from_grid, simulation_t0=simulation_t0, reversetime = cfg.reverse_time, add_dip = cfg.add_dipole_background)
 else:
-    if len(cfg.custom_field_grid):
-        bfield = field_tools.Griddedfield(cfg.custom_field_grid, simulation_t0=simulation_t0, reversetime = cfg.reverse_time)
-    else:
-        bfield = field_tools.Dipolefield(year_dec) #static
+    bfield = field_tools.Dipolefield(year_dec) #static
 
-if not bfield.static and cfg.duration_solve_max > bfield.field_time[-1]:
+if cfg.duration_solve_max > bfield.field_time[-1]:
+    #static fields will have a default value of 0
     print("Error: cannot solve for longer than the field is specified ({}s)".format(bfield.field_time[-1]))
     sys.exit(1)
 
@@ -192,14 +184,14 @@ for pt_id in info['tracklist_ID']:
     phase_d = info['tracklist_pd'][pt_id]
 
     #instantiate particle:
-    particle = dict_Particles[cfg.species](mu_SI, pa, L, phase_g, phase_b, phase_d, storetrack=cfg.store_trajectory)
+    particle = dict_Particles[cfg.species](mu_SI, pa, L, phase_g, phase_b, phase_d, storetrack=cfg.store_trajectory, storeinterval=cfg.storeinterval)
 
     if args.extractgcfrom:
         # extract guiding center from previously-completed simulation:
         if info['tracklist_check'][pt_id] == 1: #if the track has been successfully calculated
             solved_times, solved_position = resultfile.read_particledata(pt_id, False)
 
-            particle.gc_times, particle.gc_pos = (pt_fp.extract_GC_only(particle, bfield, solved_times, solved_position, existing_skipeveryn=cfg.skipeveryn))
+            particle.gc_times, particle.gc_pos = (pt_fp.extract_GC_only(particle, bfield, solved_times, solved_position))
 
             particle.times = particle.gc_times
             particle.pt = particle.gc_pos
@@ -210,7 +202,7 @@ for pt_id in info['tracklist_ID']:
 
         #copy invariants from whatever they were in the original file:
         particle.phasespacecoords = resultfile.read_invariants(pt_id)
-        resultfile_GC.add_particledata(pt_id, particle, checkcode=code_success, compressmethod="gzip", skipeveryn=cfg.skipeveryn)
+        resultfile_GC.add_particledata(pt_id, particle, checkcode=code_success, compressmethod="gzip")
         count += 1
     else:
         #look up or solve drift shell: #################################################
@@ -229,7 +221,7 @@ for pt_id in info['tracklist_ID']:
         #
         if info['dshell_check'][dshell_ID] == 2:
             print("Could not determine drift shell for track ID {}, skipping...".format(pt_id))
-            resultfile.add_particledata(pt_id, particle, checkcode=2, compressmethod="gzip", skipeveryn=cfg.skipeveryn)
+            resultfile.add_particledata(pt_id, particle, checkcode=2, compressmethod="gzip")
             continue
         ################################################################################
 
@@ -237,12 +229,12 @@ for pt_id in info['tracklist_ID']:
 
         #code_success will not be 1 if cfg.store_trajectory is False and cfg.store_GC is True
         if cfg.store_GC:
-            particle.gc_times, particle.gc_pos = pt_fp.extract_GC_only(particle, bfield, particle.times, np.array(particle.pt)[:,:3], solved_momenta = np.array(particle.pt)[:,3:], skipeveryn=1)
+            particle.gc_times, particle.gc_pos = pt_fp.extract_GC_only(particle, bfield, particle.times, np.array(particle.pt)[:,:3], solved_momenta = np.array(particle.pt)[:,3:])
             particle.times = particle.gc_times
             particle.pt = particle.gc_pos
 
         #store the particle track in the HDF5 file:
-        resultfile.add_particledata(pt_id, particle, checkcode = code_success, compressmethod = "gzip", skipeveryn = cfg.skipeveryn)
+        resultfile.add_particledata(pt_id, particle, checkcode = code_success, compressmethod = "gzip")
         print()
         print()
         count += 1

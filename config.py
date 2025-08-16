@@ -12,7 +12,7 @@ class Keywords:
     storegc = "store_GC"
     calculate_initial_invariants = "calculate_initial_invariants"
     calculate_final_invariants = "calculate_final_invariants"
-    dipole_mode = "dipole_mode"
+    add_dipole_background = "add_dipole_background"
     year_month_day = "year_month_day"
     ax_lstar = "ax_Lstar"
     ax_aeq = "ax_aeq"
@@ -20,40 +20,31 @@ class Keywords:
     ax_phasedrift = "ax_phasedrift"
     ax_phasebounce = "ax_phasebounce"
     ax_phasegyro = "ax_phasegyro"
-    perturbation_grid = "perturbation_grid"
-    custom_field_grid = "custom_field_grid"
-    skipeveryn = "skipeveryn"
+    add_field_from_grid = "add_field_from_grid"
+    storeinterval = "storeinterval"
 
     @staticmethod
     def get_keywords():
-        static_values = [
-            value for name, value in vars(Keywords).items()
-            if not name.startswith('__') and not callable(value)
-        ]
+        static_values = []
+        for name, value in vars(Keywords).items():
+            if not name.startswith('__') and not callable(value):# and name != 'dict_comments':
+                static_values.append(value)
+        # static_values = [
+        #     value for name, value in vars(Keywords).items()
+        #     if not name.startswith('__') and not callable(value)
+        # ]
         return static_values
 
-    # continuefrom = "continuefrom"
-    # year = "year"
-    # month = "month"
-    # day = "day"
-    # lmin = "Lmin"
-    # lmax = "Lmax"
-    # nl = "nL"
-    # amin = "amin"
-    # amax = "amax"
-    # na = "na"
-    # logmumin = "logmumin"
-    # logmumax = "logmumax"
-    # nmu = "nmu"
-    # nphase_gyro = "nphase_gyro"
-    # nphase_bounce = "nphase_bounce"
-    # nphase_drift = "nphase_drift"
-    # emin = "emin"
-    # emax = "emax"
-    # iphase_gyro = "iphase_gyro"
-    # iphase_bounce = "iphase_bounce"
-    # iphase_drift = "iphase_drift"
-    # override_energy_axis = "override energy axis"
+    @staticmethod
+    def get_comment_for_file(keyname):
+        match keyname:
+            case Keywords.species:
+                comment = "type of particle to trace"
+            case Keywords.duration:
+                comment = "maximum duration to solve for"
+            case _:
+                comment = ""
+        return "# " + comment + ":" if len(comment) else "#"
 
 
 class Configuration:
@@ -125,7 +116,7 @@ class Configuration:
             self.datadic[Keywords.storegc] = str(self.datadic[Keywords.storegc][0])
             self.datadic[Keywords.calculate_initial_invariants] = str(self.datadic[Keywords.calculate_initial_invariants][0])
             self.datadic[Keywords.calculate_final_invariants] = str(self.datadic[Keywords.calculate_final_invariants][0])
-            self.datadic[Keywords.dipole_mode] = str(self.datadic[Keywords.dipole_mode][0])
+            self.datadic[Keywords.add_dipole_background] = str(self.datadic[Keywords.add_dipole_background][0])
 
             #phase space coordinates:
             self.datadic[Keywords.year_month_day] = np.array([int(x) for x in self.datadic[Keywords.year_month_day]])
@@ -136,48 +127,13 @@ class Configuration:
             self.datadic[Keywords.ax_phasebounce] = np.array([float(x) for x in self.datadic[Keywords.ax_phasebounce]])
             self.datadic[Keywords.ax_phasegyro] = np.array([float(x) for x in self.datadic[Keywords.ax_phasegyro]])
 
-            self.datadic[Keywords.perturbation_grid] = str(self.datadic[Keywords.perturbation_grid][0])
-            self.datadic[Keywords.custom_field_grid] = str(self.datadic[Keywords.custom_field_grid][0])
+            self.datadic[Keywords.add_field_from_grid] = str(self.datadic[Keywords.add_field_from_grid][0])
 
-            self.datadic[Keywords.skipeveryn] = int(self.datadic[Keywords.skipeveryn][0])
+            self.datadic[Keywords.storeinterval] = int(self.datadic[Keywords.storeinterval][0])
         except Exception as e:
             print(e)
             return 0
         return 1
-            # self.datadic[Keywords.year] = int(self.datadic[Keywords.year][0])
-            # self.datadic[Keywords.month] = int(self.datadic[Keywords.month][0])
-            # self.datadic[Keywords.day] = int(self.datadic[Keywords.day][0])
-
-            # self.datadic[Keywords.lmin] = float(self.datadic[Keywords.lmin][0])
-            # self.datadic[Keywords.lmax] = float(self.datadic[Keywords.lmax][0])
-            # self.datadic[Keywords.nl] = int(self.datadic[Keywords.nl][0])
-            #
-            # self.datadic[Keywords.amin] = float(self.datadic[Keywords.amin][0])
-            # self.datadic[Keywords.amax] = float(self.datadic[Keywords.amax][0])
-            # self.datadic[Keywords.na] = int(self.datadic[Keywords.na][0])
-            #
-            # self.datadic[Keywords.logmumin] = float(self.datadic[Keywords.logmumin][0])
-            # self.datadic[Keywords.logmumax] = float(self.datadic[Keywords.logmumax][0])
-            # self.datadic[Keywords.nmu] = int(self.datadic[Keywords.nmu][0])
-            #
-            # self.datadic[Keywords.nphase_gyro] = int(self.datadic[Keywords.nphase_gyro][0])
-            # self.datadic[Keywords.nphase_bounce] = int(self.datadic[Keywords.nphase_bounce][0])
-            # self.datadic[Keywords.nphase_drift] = int(self.datadic[Keywords.nphase_drift][0])
-
-
-            #self.datadic[Keywords.emin] = float(self.datadic[Keywords.emin][0])
-            #self.datadic[Keywords.emax] = float(self.datadic[Keywords.emax][0])
-
-            #self.datadic[Keywords.iphase_gyro] = float(self.datadic[Keywords.iphase_gyro][0])
-            #self.datadic[Keywords.iphase_bounce] = float(self.datadic[Keywords.iphase_bounce][0])
-            #self.datadic[Keywords.iphase_drift] = float(self.datadic[Keywords.iphase_drift][0])
-
-            # if str(self.datadic[Keywords.override_energy_axis][0]):
-            #     self.datadic[Keywords.override_energy_axis] = np.array([float(x) for x in self.datadic[Keywords.override_energy_axis]])
-            # else:
-            #     self.datadic[Keywords.override_energy_axis] = np.array([])
-
-            #self.datadic[Keywords.continuefrom] = str(self.datadic[Keywords.continuefrom][0])
 
 
     def _interpret_data_dictionary_and_set_attributes(self):
@@ -227,10 +183,10 @@ class Configuration:
             else:
                 self.datadic[Keywords.calculate_final_invariants] = False
 
-            if self.datadic[Keywords.dipole_mode][0].lower() in ["y", "t"]:
-                self.datadic[Keywords.dipole_mode] = True
+            if self.datadic[Keywords.add_dipole_background][0].lower() in ["y", "t"]:
+                self.datadic[Keywords.add_dipole_background] = True
             else:
-                self.datadic[Keywords.dipole_mode] = False
+                self.datadic[Keywords.add_dipole_background] = False
 
             if self.datadic[Keywords.reverse][0].lower() in ["y", "t"]:
                 self.datadic[Keywords.reverse] = True
@@ -244,20 +200,6 @@ class Configuration:
         for key, value in self.datadic.items():
             setattr(self, key, value)
         return 1
-
-        # if self.datadic[Keywords.iphase_gyro] > 1 or self.datadic[Keywords.iphase_gyro] < 0:
-        #     print("Error: initial gyration phase has been specified incorrectly (please specify 0 <= x <= 1)")
-        #     sys.exit()
-        # if self.datadic[Keywords.iphase_bounce] > 1 or self.datadic[Keywords.iphase_bounce] < 0:
-        #     print("Error: initial bounce phase has been specified incorrectly (please specify 0 <= x <= 1)")
-        #     sys.exit()
-        # if self.datadic[Keywords.iphase_drift] > 1 or self.datadic[Keywords.iphase_drift] < 0:
-        #     print("Error: initial drift phase has been specified incorrectly (please specify 0 <= x <= 1)")
-        #     sys.exit()
-
-        #if self.datadic[Keywords.nphase_gyro] < 1: self.datadic[Keywords.nphase_gyro] = 1
-        #if self.datadic[Keywords.nphase_bounce] < 1: self.datadic[Keywords.nphase_bounce] = 1
-        #if self.datadic[Keywords.nphase_drift] < 1: self.datadic[Keywords.nphase_drift] = 1
 
 
     # def get_grid_axes(self, aeq_max_for_bounce_detection=89):
@@ -315,6 +257,8 @@ class Configuration:
             for comment in topcomments:
                 wf.write('#' + comment + '\n')
             for keyname in self.datadic.keys():
+                comment = Keywords.get_comment_for_file(keyname)
+                wf.write(comment + "\n")
                 wf.write(str(keyname))
                 wf.write(",")
                 if isinstance(self.datadic[keyname], list) or isinstance(self.datadic[keyname], np.ndarray):
@@ -322,7 +266,7 @@ class Configuration:
                     wf.write(listastext)
                 else:
                     wf.write(str(self.datadic[keyname]))
-                wf.write("\n")
+                wf.write("\n\n")
         return 1
 
     def printsum(self):

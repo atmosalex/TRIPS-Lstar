@@ -1,4 +1,4 @@
-import field_h5
+import field_store
 import numpy as np
 import IGRF_tools
 from datetime import datetime, timezone
@@ -517,7 +517,7 @@ class _Geomagneticfield:
         """
         pe, tracepathe, traceBe = self.find_magequator(*Xs, time, trace_ds=trace_ds, return_tracepath=True, actoninterr=actoninterr)
         BXs = self.getBE(*Xs, actoninterr=actoninterr)[:3]
-        absBXs = np.linalg.norm(BXs)
+        absBXs = np.linalg.norm(BXs) #B at the starting point Xs
 
         if pe is None:
             # ERROR A. - could not trace, probably interpolation error
@@ -554,6 +554,9 @@ class _Geomagneticfield:
             idx0 = 1
             while traceB0[idx0] > Bhit: #Be <= Bhit, so when traceB0[idx0] == Be, traceB0[idx0] <= Bhit and this condition will be False
                 idx0 += 1
+                if idx0 > len(traceB0) - 1:
+                    #the field is stronger than Bhit all the way to the equator
+                    return pe, traceBe[-1], [], []
             tracepath0 = tracepath0[idx0-1:]
             traceB0 = traceB0[idx0-1:]
         else:
@@ -954,7 +957,6 @@ class _Geomagneticfield:
 class Dipolefield(_Geomagneticfield):
     def __init__(self, year_dec):
         super().__init__(year_dec)
-        self.static = True
 
     def getBE(self, xh_MAG, yh_MAG, zh_MAG, t=0, actoninterr=1):
         """
@@ -962,11 +964,6 @@ class Dipolefield(_Geomagneticfield):
         """
         bx, by, bz = self.getB_dipole(xh_MAG, yh_MAG, zh_MAG)
         return bx, by, bz, 0, 0, 0
-
-    # def calculate_driftshell(self, ellipsoid_surf, Xgc, **kwargs):
-    #     print("Error: Lstar algorithm not implemented for dipole fields, returning L")
-    #     sys.exit(1)
-    #     #return self.get_L(Xgc)
 
     def find_magequator(self, xs, ys, zs, ti, **kwargs):
         """ some arguments are unused but exist to match the function signature of child classes """
@@ -983,219 +980,237 @@ class Dipolefield(_Geomagneticfield):
         return self.origin_MAG[2]
 
 
-class Dipolefield_With_Perturbation(_Geomagneticfield):
-    def __init__(self, fileload, simulation_t0=0, reversetime=False):
+# class Dipolefield_With_Perturbation(_Geomagneticfield):
+#     def __init__(self, fileload, simulation_t0=0, reversetime=False):
+#         # load the HDF5 file
+#         print("Loading E, B field perturbations from", fileload)
+#
+#         disk = field_store.HDF5_field(fileload, existing=True)
+#
+#         t0_ts = disk.read_dataset(disk.group_name_data, "t0")
+#         t0 = datetime.fromtimestamp(t0_ts, tz=timezone.utc)
+#         year_dec = cosys.dt_to_dec(t0)
+#         super().__init__(year_dec)
+#         self.t0 = t0
+#
+#         self.pert_time = disk.read_dataset(disk.group_name_data, "time")
+#         self.pert_dt = self.pert_time[1] - self.pert_time[0]
+#         self.pert_t_min = self.pert_time[0]
+#         # self.pert_t_max = self.pert_time[-1]
+#
+#         self.pert_x = disk.read_dataset(disk.group_name_data, "c1")
+#         self.pert_dx = self.pert_x[1] - self.pert_x[0]
+#         self.pert_x_min = self.pert_x[0]
+#         # self.pert_x_max = self.pert_x[-1]
+#
+#         self.pert_y = disk.read_dataset(disk.group_name_data, "c2")
+#         self.pert_dy = self.pert_y[1] - self.pert_y[0]
+#         self.pert_y_min = self.pert_y[0]
+#         # self.pert_y_max = self.pert_y[-1]
+#
+#         self.pert_z = disk.read_dataset(disk.group_name_data, "c3")
+#         self.pert_dz = self.pert_z[1] - self.pert_z[0]
+#         self.pert_z_min = self.pert_z[0]
+#         # self.pert_z_max = self.pert_z[-1]
+#
+#         # store solutions:
+#         nt = np.size(self.pert_time)
+#         nx = np.size(self.pert_x)
+#         ny = np.size(self.pert_y)
+#         nz = np.size(self.pert_z)
+#         self.pert_BE = np.zeros((6, nt, nx, ny, nz))
+#         self.pert_BE[0, :, :, :, :] = disk.read_dataset(disk.group_name_data, "B1")
+#         self.pert_BE[1, :, :, :, :] = disk.read_dataset(disk.group_name_data, "B2")
+#         self.pert_BE[2, :, :, :, :] = disk.read_dataset(disk.group_name_data, "B3")
+#         self.pert_BE[3, :, :, :, :] = disk.read_dataset(disk.group_name_data, "E1")
+#         self.pert_BE[4, :, :, :, :] = disk.read_dataset(disk.group_name_data, "E2")
+#         self.pert_BE[5, :, :, :, :] = disk.read_dataset(disk.group_name_data, "E3")
+#
+#         self.simulation_t0 = simulation_t0
+#         if reversetime:
+#             # modify calls to int_field so that time becomes self.simulation_t0 - ti:
+#             self.tmult = -1
+#         else:
+#             self.tmult = 1
+#
+#         print("", "done\n")
+#
+#
+#     def int_field(self, xi, yi, zi, ti, actoninterr=1):
+#         ti = self.simulation_t0 + self.tmult * ti
+#         # if reversed, time evolution goes backwards from self.simulation_t0
+#
+#         # global R_e dg dx dy dz xmint ymint zmint
+#         dx = self.pert_dx
+#         dy = self.pert_dy
+#         dz = self.pert_dz
+#         dt = self.pert_dt
+#
+#         pxe0 = floor((xi - self.pert_x_min) / dx)
+#         pye0 = floor((yi - self.pert_y_min) / dy)
+#         pze0 = floor((zi - self.pert_z_min) / dz)
+#         pte0 = floor((ti - self.pert_t_min) / dt)
+#         tfac = (ti - self.pert_t_min - (pte0) * dt) / dt;
+#
+#
+#         interp_vals = [np.nan, np.nan, np.nan, np.nan, np.nan, np.nan]
+#
+#         if pte0 < 0 or pte0 > len(self.pert_time) - 1:
+#             self.range_adequate = False
+#             if actoninterr == 0:
+#                 if not self.warned_range and self.verbal_range_warning: print("Warning: field out of grid range at time {:.2f}".format(ti));
+#                 self.warned_range = True
+#                 return interp_vals
+#             else:
+#                 raise ValueError("EM field time interpolation error")
+#         if pxe0 < 0 or pye0 < 0 or pze0 < 0 or pxe0 > len(self.pert_x) - 2 or pye0 > len(self.pert_y) - 2 or pze0 > len(self.pert_z) - 2:
+#             self.range_adequate = False
+#             if actoninterr == 0:
+#                 if not self.warned_range and self.verbal_range_warning: print("Warning: field out of grid range at coordinate [{:.2f}, {:.2f}, {:.2f}] RE".format(xi/constants.RE, yi/constants.RE, zi/constants.RE))
+#                 self.warned_range = True
+#                 return interp_vals
+#             else:
+#                 raise ValueError("EM field interpolation error")
+#
+#         xfac = (xi - self.pert_x_min - (pxe0) * dx) / dx;
+#         yfac = (yi - self.pert_y_min - (pye0) * dy) / dy;
+#         zfac = (zi - self.pert_z_min - (pze0) * dz) / dz;
+#
+#         # check:
+#         # print(self.pert_x[pxe0]/constants.RE, xi/constants.RE, self.pert_x[pxe0+1]/constants.RE, xfac)
+#         # print(self.pert_y[pye0]/constants.RE, yi/constants.RE, self.pert_y[pye0+1]/constants.RE, yfac)
+#         # print(self.pert_z[pze0]/constants.RE, zi/constants.RE, self.pert_z[pze0+1]/constants.RE, zfac)
+#         # print(self.pert_time[pte0], ti, self.pert_time[pte0+1], tfac)
+#         # print()
+#
+#         ns = [0, 0, 0, 0, 0, 0, 0, 0]
+#         interp_vals = [0, 0, 0, 0, 0, 0]
+#         t_idxs = [pte0, pte0 + 1]
+#         t_facs = [1 - tfac, tfac]
+#
+#         for idxt in range(2):
+#             pte = t_idxs[idxt]
+#             time_fac = t_facs[idxt]
+#             for idx in range(6):
+#                 ns[0] = self.pert_BE[idx, pte, pxe0, pye0, pze0]
+#                 ns[1] = self.pert_BE[idx, pte, pxe0 + 1, pye0, pze0]
+#                 ns[2] = self.pert_BE[idx, pte, pxe0, pye0 + 1, pze0]
+#                 ns[3] = self.pert_BE[idx, pte, pxe0 + 1, pye0 + 1, pze0]
+#                 ns[4] = self.pert_BE[idx, pte, pxe0, pye0, pze0 + 1]
+#                 ns[5] = self.pert_BE[idx, pte, pxe0 + 1, pye0, pze0 + 1]
+#                 ns[6] = self.pert_BE[idx, pte, pxe0, pye0 + 1, pze0 + 1]
+#                 ns[7] = self.pert_BE[idx, pte, pxe0 + 1, pye0 + 1, pze0 + 1]
+#
+#                 nsa = ns[0] + (ns[1] - ns[0]) * xfac;
+#                 nsb = ns[2] + (ns[3] - ns[2]) * xfac;
+#                 nsc = ns[4] + (ns[5] - ns[4]) * xfac;
+#                 nsd = ns[6] + (ns[7] - ns[6]) * xfac;
+#
+#                 nsp = nsa + (nsb - nsa) * yfac;
+#                 nsq = nsc + (nsd - nsc) * yfac;
+#
+#                 interp_val = nsp + (nsq - nsp) * zfac;
+#
+#                 interp_vals[idx] += interp_val * time_fac
+#
+#         return interp_vals
+#
+#     def getBE(self, xh_MAG, yh_MAG, zh_MAG, t=0, actoninterr=1):
+#         """
+#         input: coordinates in m
+#         """
+#         bx, by, bz = self.getB_dipole(xh_MAG, yh_MAG, zh_MAG)
+#
+#         bwx0, bwy0, bwz0, qEx, qEy, qEz = self.int_field(xh_MAG, yh_MAG, zh_MAG, t, actoninterr=actoninterr)
+#
+#         return bx + bwx0, by + bwy0, bz + bwz0, qEx, qEy, qEz
+#
+#     # def getBsph_dipole(self, rh, thetah, t=0):
+#     #     """
+#     #     input: coordinates r [m], theta
+#     #     """
+#     #
+#     #     br = -2 * self.B0 * ((self.RE / rh) ** 3) * cos(thetah)
+#     #     btheta = -self.B0 * ((self.RE / rh) ** 3) * sin(thetah)
+#     #
+#     #     return br, btheta
+
+class Griddedfield(_Geomagneticfield):
+    def __init__(self, fileload, simulation_t0=0, reversetime=False, add_dip=False):
         # load the HDF5 file
-        print("Loading E, B field perturbations from", fileload)
+        print("Loading B field from", fileload)
+        precision = np.float32
 
-        disk = field_h5.HDF5_field(fileload, existing=True)
+        disk = field_store.HDF5_field(fileload, existing=True)
 
+        #instantiate time, dipolar elements
         t0_ts = disk.read_dataset(disk.group_name_data, "t0")
         t0 = datetime.fromtimestamp(t0_ts, tz=timezone.utc)
         year_dec = cosys.dt_to_dec(t0)
-        super().__init__(year_dec)
+        super().__init__(year_dec)  # defines B0, M
+        self.B_grid = True
         self.t0 = t0
-        self.static = False #perturbation is time-varying
 
-        self.pert_time = disk.read_dataset(disk.group_name_data, "time")
-        self.pert_dt = self.pert_time[1] - self.pert_time[0]
-        self.pert_t_min = self.pert_time[0]
-        # self.pert_t_max = self.pert_time[-1]
-
-        self.pert_x = disk.read_dataset(disk.group_name_data, "x")
-        self.pert_dx = self.pert_x[1] - self.pert_x[0]
-        self.pert_x_min = self.pert_x[0]
-        # self.pert_x_max = self.pert_x[-1]
-
-        self.pert_y = disk.read_dataset(disk.group_name_data, "y")
-        self.pert_dy = self.pert_y[1] - self.pert_y[0]
-        self.pert_y_min = self.pert_y[0]
-        # self.pert_y_max = self.pert_y[-1]
-
-        self.pert_z = disk.read_dataset(disk.group_name_data, "z")
-        self.pert_dz = self.pert_z[1] - self.pert_z[0]
-        self.pert_z_min = self.pert_z[0]
-        # self.pert_z_max = self.pert_z[-1]
-
-        # store solutions:
-        nt = np.size(self.pert_time)
-        nx = np.size(self.pert_x)
-        ny = np.size(self.pert_y)
-        nz = np.size(self.pert_z)
-        self.pert_BE = np.zeros((6, nt, nx, ny, nz))
-        self.pert_BE[0, :, :, :, :] = disk.read_dataset(disk.group_name_data, "Bwx")
-        self.pert_BE[1, :, :, :, :] = disk.read_dataset(disk.group_name_data, "Bwy")
-        self.pert_BE[2, :, :, :, :] = disk.read_dataset(disk.group_name_data, "Bwz")
-        self.pert_BE[3, :, :, :, :] = disk.read_dataset(disk.group_name_data, "Ex")
-        self.pert_BE[4, :, :, :, :] = disk.read_dataset(disk.group_name_data, "Ey")
-        self.pert_BE[5, :, :, :, :] = disk.read_dataset(disk.group_name_data, "Ez")
-
-        self.simulation_t0 = simulation_t0
-        if reversetime:
-            # modify calls to int_field so that time becomes self.simulation_t0 - ti:
-            self.tmult = -1
-        else:
-            self.tmult = 1
-
-        print("", "done\n")
-
-
-    def int_field(self, xi, yi, zi, ti, actoninterr=1):
-        ti = self.simulation_t0 + self.tmult * ti
-        # if reversed, time evolution goes backwards from self.simulation_t0
-
-        # global R_e dg dx dy dz xmint ymint zmint
-        dx = self.pert_dx
-        dy = self.pert_dy
-        dz = self.pert_dz
-        dt = self.pert_dt
-
-        pxe0 = floor((xi - self.pert_x_min) / dx)
-        pye0 = floor((yi - self.pert_y_min) / dy)
-        pze0 = floor((zi - self.pert_z_min) / dz)
-        pte0 = floor((ti - self.pert_t_min) / dt)
-        tfac = (ti - self.pert_t_min - (pte0) * dt) / dt;
-
-
-        interp_vals = [np.nan, np.nan, np.nan, np.nan, np.nan, np.nan]
-
-        if pte0 < 0 or pte0 > len(self.pert_time) - 1:
-            self.range_adequate = False
-            if actoninterr == 0:
-                if not self.warned_range and self.verbal_range_warning: print("Warning: field out of grid range at time {:.2f}".format(ti));
-                self.warned_range = True
-                return interp_vals
-            else:
-                raise ValueError("EM field time interpolation error")
-        if pxe0 < 0 or pye0 < 0 or pze0 < 0 or pxe0 > len(self.pert_x) - 2 or pye0 > len(self.pert_y) - 2 or pze0 > len(self.pert_z) - 2:
-            self.range_adequate = False
-            if actoninterr == 0:
-                if not self.warned_range and self.verbal_range_warning: print("Warning: field out of grid range at coordinate [{:.2f}, {:.2f}, {:.2f}] RE".format(xi/constants.RE, yi/constants.RE, zi/constants.RE))
-                self.warned_range = True
-                return interp_vals
-            else:
-                raise ValueError("EM field interpolation error")
-
-        xfac = (xi - self.pert_x_min - (pxe0) * dx) / dx;
-        yfac = (yi - self.pert_y_min - (pye0) * dy) / dy;
-        zfac = (zi - self.pert_z_min - (pze0) * dz) / dz;
-
-        # check:
-        # print(self.pert_x[pxe0]/constants.RE, xi/constants.RE, self.pert_x[pxe0+1]/constants.RE, xfac)
-        # print(self.pert_y[pye0]/constants.RE, yi/constants.RE, self.pert_y[pye0+1]/constants.RE, yfac)
-        # print(self.pert_z[pze0]/constants.RE, zi/constants.RE, self.pert_z[pze0+1]/constants.RE, zfac)
-        # print(self.pert_time[pte0], ti, self.pert_time[pte0+1], tfac)
-        # print()
-
-        ns = [0, 0, 0, 0, 0, 0, 0, 0]
-        interp_vals = [0, 0, 0, 0, 0, 0]
-        t_idxs = [pte0, pte0 + 1]
-        t_facs = [1 - tfac, tfac]
-
-        for idxt in range(2):
-            pte = t_idxs[idxt]
-            time_fac = t_facs[idxt]
-            for idx in range(6):
-                ns[0] = self.pert_BE[idx, pte, pxe0, pye0, pze0]
-                ns[1] = self.pert_BE[idx, pte, pxe0 + 1, pye0, pze0]
-                ns[2] = self.pert_BE[idx, pte, pxe0, pye0 + 1, pze0]
-                ns[3] = self.pert_BE[idx, pte, pxe0 + 1, pye0 + 1, pze0]
-                ns[4] = self.pert_BE[idx, pte, pxe0, pye0, pze0 + 1]
-                ns[5] = self.pert_BE[idx, pte, pxe0 + 1, pye0, pze0 + 1]
-                ns[6] = self.pert_BE[idx, pte, pxe0, pye0 + 1, pze0 + 1]
-                ns[7] = self.pert_BE[idx, pte, pxe0 + 1, pye0 + 1, pze0 + 1]
-
-                nsa = ns[0] + (ns[1] - ns[0]) * xfac;
-                nsb = ns[2] + (ns[3] - ns[2]) * xfac;
-                nsc = ns[4] + (ns[5] - ns[4]) * xfac;
-                nsd = ns[6] + (ns[7] - ns[6]) * xfac;
-
-                nsp = nsa + (nsb - nsa) * yfac;
-                nsq = nsc + (nsd - nsc) * yfac;
-
-                interp_val = nsp + (nsq - nsp) * zfac;
-
-                interp_vals[idx] += interp_val * time_fac
-
-        return interp_vals
-
-    def getBE(self, xh_MAG, yh_MAG, zh_MAG, t=0, actoninterr=1):
-        """
-        input: coordinates in m
-        """
-        bx, by, bz = self.getB_dipole(xh_MAG, yh_MAG, zh_MAG)
-
-        bwx0, bwy0, bwz0, qEx, qEy, qEz = self.int_field(xh_MAG, yh_MAG, zh_MAG, t, actoninterr=actoninterr)
-
-        return bx + bwx0, by + bwy0, bz + bwz0, qEx, qEy, qEz
-
-    # def getBsph_dipole(self, rh, thetah, t=0):
-    #     """
-    #     input: coordinates r [m], theta
-    #     """
-    #
-    #     br = -2 * self.B0 * ((self.RE / rh) ** 3) * cos(thetah)
-    #     btheta = -self.B0 * ((self.RE / rh) ** 3) * sin(thetah)
-    #
-    #     return br, btheta
-
-class Griddedfield(_Geomagneticfield):
-    def __init__(self, fileload, simulation_t0=0, reversetime=False):
-        # load the HDF5 file
-        print("Loading B field from", fileload)
-
-        disk = field_h5.HDF5_field(fileload, existing=True)
-
-        t0_ts = disk.read_dataset(disk.group_name_data, "t0")
         cosys_grid = disk.read_dataset(disk.group_name_data, "co_grid").decode("utf-8")
         #cosys_vec = disk.read_dataset(disk.group_name_data, "co_vec").decode("utf-8")
 
         #choose interpolation method:
         if cosys_grid == "sph":
-            self.int_field = self.int_field_sph
+            if add_dip:
+                self.int_field = self.int_field_sph_add_dip
+            else:
+                self.int_field = self.int_field_sph
         elif cosys_grid == "cart":
-            self.int_field = self.int_field_cart
+            if add_dip:
+                self.int_field = self.int_field_cart_add_dip
+            else:
+                self.int_field = self.int_field_cart
+
         else:
             print("Error: grid coordinate system not recognized: {}".format(cosys_grid))
             sys.exit()
 
-        t0 = datetime.fromtimestamp(t0_ts, tz=timezone.utc)
-        year_dec = cosys.dt_to_dec(t0)
-        super().__init__(year_dec)  # defines B0, M
-        self.B_grid = True
-        #self.origin_MAG = np.array([0, 0, 0])
-        self.t0 = t0
-        self.static = False
 
         self.field_time = disk.read_dataset(disk.group_name_data, "time")
-        nt = np.size(self.field_time)
         self.field_t_min = self.field_time[0]
+        nt = np.size(self.field_time)
 
         self.field_c1 = disk.read_dataset(disk.group_name_data, "c1")
         self.field_dc1 = self.field_c1[1] - self.field_c1[0]
         self.field_c1_min = self.field_c1[0]
+        nc1 = np.size(self.field_c1)
 
         self.field_c2 = disk.read_dataset(disk.group_name_data, "c2")
         self.field_dc2 = self.field_c2[1] - self.field_c2[0]
         self.field_c2_min = self.field_c2[0]
+        nc2 = np.size(self.field_c2)
 
         self.field_c3 = disk.read_dataset(disk.group_name_data, "c3")
         self.field_dc3 = self.field_c3[1] - self.field_c3[0]
         self.field_c3_min = self.field_c3[0]
+        nc3 = np.size(self.field_c3)
 
         print("", "numerical resolution delta coord. 1, 2, 3: {:.3E} x {:.3E} x {:.3E}".format(self.field_dc1/constants.RE, self.field_dc2/constants.RE, self.field_dc3/constants.RE))
-        # store solutions:
-        nc1 = np.size(self.field_c1)
-        nc2 = np.size(self.field_c2)
-        nc3 = np.size(self.field_c3)
-        self.field_B = np.zeros((3, nt, nc1, nc2, nc3))
-        self.field_B[0, :, :, :, :] = disk.read_dataset(disk.group_name_data, "B1")
-        self.field_B[1, :, :, :, :] = disk.read_dataset(disk.group_name_data, "B2")
-        self.field_B[2, :, :, :, :] = disk.read_dataset(disk.group_name_data, "B3")
+
+        # check for an electric field:
+        Efield_specified = np.all(['E{}'.format(i) in disk.datakeys_existing_at_construction for i in [1,2,3]])
+        if Efield_specified:
+            self.ncomp = 6
+        else:
+            self.ncomp = 3
+
+        self.field_BE = np.zeros((self.ncomp, nt, nc1, nc2, nc3), dtype=precision)
+        self.field_BE[0, :, :, :, :] = disk.read_dataset(disk.group_name_data, "B1")
+        self.field_BE[1, :, :, :, :] = disk.read_dataset(disk.group_name_data, "B2")
+        self.field_BE[2, :, :, :, :] = disk.read_dataset(disk.group_name_data, "B3")
+        if Efield_specified:
+            self.field_BE[3, :, :, :, :] = disk.read_dataset(disk.group_name_data, "E1")
+            self.field_BE[4, :, :, :, :] = disk.read_dataset(disk.group_name_data, "E2")
+            self.field_BE[5, :, :, :, :] = disk.read_dataset(disk.group_name_data, "E3")
 
         #we may need to interpolate from fields with only one time index
         if nt == 1:
-            print("","warning: field is static at t={}, time interpolation will not be correct".format(self.field_time[0]))
+            print("","warning: field is static at t={}, time interpolation will be ignored".format(self.field_time[0]))
             self.correct_time_interpolation = self.time_interpolation_in_static_fields
         else:
             self.correct_time_interpolation = self.time_interpolation_in_dynamic_fields
@@ -1267,15 +1282,15 @@ class Griddedfield(_Geomagneticfield):
         for idxt in range(2):
             pte = t_idxs[idxt]
             time_fac = t_facs[idxt]
-            for idx in range(3):
-                ns[0] = self.field_B[idx, pte, pxe0, pye0, pze0]
-                ns[1] = self.field_B[idx, pte, pxe0 + 1, pye0, pze0]
-                ns[2] = self.field_B[idx, pte, pxe0, pye0 + 1, pze0]
-                ns[3] = self.field_B[idx, pte, pxe0 + 1, pye0 + 1, pze0]
-                ns[4] = self.field_B[idx, pte, pxe0, pye0, pze0 + 1]
-                ns[5] = self.field_B[idx, pte, pxe0 + 1, pye0, pze0 + 1]
-                ns[6] = self.field_B[idx, pte, pxe0, pye0 + 1, pze0 + 1]
-                ns[7] = self.field_B[idx, pte, pxe0 + 1, pye0 + 1, pze0 + 1]
+            for idx in range(self.ncomp):
+                ns[0] = self.field_BE[idx, pte, pxe0, pye0, pze0]
+                ns[1] = self.field_BE[idx, pte, pxe0 + 1, pye0, pze0]
+                ns[2] = self.field_BE[idx, pte, pxe0, pye0 + 1, pze0]
+                ns[3] = self.field_BE[idx, pte, pxe0 + 1, pye0 + 1, pze0]
+                ns[4] = self.field_BE[idx, pte, pxe0, pye0, pze0 + 1]
+                ns[5] = self.field_BE[idx, pte, pxe0 + 1, pye0, pze0 + 1]
+                ns[6] = self.field_BE[idx, pte, pxe0, pye0 + 1, pze0 + 1]
+                ns[7] = self.field_BE[idx, pte, pxe0 + 1, pye0 + 1, pze0 + 1]
 
                 nsa = ns[0] + (ns[1] - ns[0]) * xfac;
                 nsb = ns[2] + (ns[3] - ns[2]) * xfac;
@@ -1345,15 +1360,15 @@ class Griddedfield(_Geomagneticfield):
         for idxt in range(2):
             pte = t_idxs[idxt]
             time_fac = t_facs[idxt]
-            for idx in range(3):
-                ns[0] = self.field_B[idx, pte, pre0, pthe0, pphie0]
-                ns[1] = self.field_B[idx, pte, pre0 + 1, pthe0, pphie0]
-                ns[2] = self.field_B[idx, pte, pre0, pthe0 + 1, pphie0]
-                ns[3] = self.field_B[idx, pte, pre0 + 1, pthe0 + 1, pphie0]
-                ns[4] = self.field_B[idx, pte, pre0, pthe0, pphie1]
-                ns[5] = self.field_B[idx, pte, pre0 + 1, pthe0, pphie1]
-                ns[6] = self.field_B[idx, pte, pre0, pthe0 + 1, pphie1]
-                ns[7] = self.field_B[idx, pte, pre0 + 1, pthe0 + 1, pphie1]
+            for idx in range(self.ncomp):
+                ns[0] = self.field_BE[idx, pte, pre0, pthe0, pphie0]
+                ns[1] = self.field_BE[idx, pte, pre0 + 1, pthe0, pphie0]
+                ns[2] = self.field_BE[idx, pte, pre0, pthe0 + 1, pphie0]
+                ns[3] = self.field_BE[idx, pte, pre0 + 1, pthe0 + 1, pphie0]
+                ns[4] = self.field_BE[idx, pte, pre0, pthe0, pphie1]
+                ns[5] = self.field_BE[idx, pte, pre0 + 1, pthe0, pphie1]
+                ns[6] = self.field_BE[idx, pte, pre0, pthe0 + 1, pphie1]
+                ns[7] = self.field_BE[idx, pte, pre0 + 1, pthe0 + 1, pphie1]
 
                 nsa = ns[0] + (ns[1] - ns[0]) * rfac;
                 nsb = ns[2] + (ns[3] - ns[2]) * rfac;
@@ -1369,16 +1384,33 @@ class Griddedfield(_Geomagneticfield):
 
         return interp_vals
 
+    def int_field_cart_add_dip(self, xi, yi, zi, ti, actoninterr=1):
+        interp_vals = self.int_field_cart(xi, yi, zi, ti, actoninterr=actoninterr)
+        #interp_vals = self.int_field_cart(xi - self.origin_MAG[0], yi - self.origin_MAG[1], zi - self.origin_MAG[2], ti, actoninterr=actoninterr)
+        bx, by, bz = self.getB_dipole(xi, yi, zi)
+        interp_vals[0] = interp_vals[0] + bx
+        interp_vals[1] = interp_vals[1] + by
+        interp_vals[2] = interp_vals[2] + bz
+        return interp_vals
+
+    def int_field_sph_add_dip(self, xi, yi, zi, ti, actoninterr=1):
+        interp_vals = self.int_field_sph(xi, yi, zi, ti, actoninterr=actoninterr)
+        bx, by, bz = self.getB_dipole(xi, yi, zi)
+        interp_vals[0] = interp_vals[0] + bx
+        interp_vals[1] = interp_vals[1] + by
+        interp_vals[2] = interp_vals[2] + bz
+        return interp_vals
+
     def getBE(self, xh_MAG, yh_MAG, zh_MAG, t=0, actoninterr=1):
         """
         input: coordinates in m
         """
         return self.int_field(xh_MAG, yh_MAG, zh_MAG, t, actoninterr=actoninterr)
 
-class Griddedfield_With_Perturbation(_Geomagneticfield):
-    def __init__(self, bgload, pertload, simulation_t0=0):
-        print("not implemented yet!")
-        sys.exit()
+# class Griddedfield_With_Perturbation(_Geomagneticfield):
+#     def __init__(self, bgload, pertload, simulation_t0=0):
+#         print("not implemented yet!")
+#         sys.exit()
 
 class IRBEMfield(Griddedfield):
     def __init__(self, dpar, t0_ts, field_ext=11, field_int=0, keys_needed = ['Dst', 'Pdyn', 'ByIMF', 'BzIMF', 'W1', 'W2', 'W3', 'W4', 'W5', 'W6']):
