@@ -51,7 +51,7 @@ class HDF5_field:
         return success
 
 
-    def add_dataset(self, gname_full, dsname, dataset, compressmethod=None):
+    def add_dataset(self, gname_full, dsname, dataset, compressmethod="gzip"):
 
         """add new data array to a group"""
         success = 0
@@ -82,7 +82,7 @@ class HDF5_field:
         return success
 
 
-    def overwrite_dataset_samesize(self, gname_full, dsname, dataset, compressmethod=None):
+    def overwrite_dataset_samesize(self, gname_full, dsname, dataset):
         """add new data array to a group"""
         success = 0
         

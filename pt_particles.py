@@ -2,6 +2,15 @@ import numpy as np
 from math import cos, sin, tan, acos, asin, atan, atan2, sqrt, pi, floor
 import constants
 
+phasespacecoords_idxdict = {"mu [MeV/G]": 0,
+    "E [MeV]": 1,
+    "K [G^0.5 RE]" : 2,
+    "aeq [rad]" : 3,
+    "L*": 4,
+    "gyration phase (0-1)": 5,
+    "bounce phase (0-1)": 6,
+    "drift phase (0-1)": 7}
+
 def moving_average(a, n) :
     ret = np.cumsum(a, dtype=float, axis = 0)
     ret[n:] = ret[n:] - ret[:-n]
@@ -34,14 +43,6 @@ class Proton_trace:
         mu = mu_SI * constants.G2T / constants.MeV2J #MeV/G
         self.phasespacecoords = np.array([[mu, -1.0, -1.0, aeq, L, iphase_gyro, iphase_bounce, iphase_drift],
                                           [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]])
-        self.phasespacecoords_idxdict = {"mu [MeV/G]": 0,
-                                         "E [MeV]": 1,
-                                         "K [G^0.5 RE]" : 2,
-                                         "aeq [rad]" : 3,
-                                         "L*": 4,
-                                         "gyration phase (0-1)": 5,
-                                         "bounce phase (0-1)": 6,
-                                         "drift phase (0-1)": 7}
 
         self.storeinterval = storeinterval
         self.skipcounter = 0
@@ -137,7 +138,7 @@ class Proton_trace:
 
         for tidx in time_index_list:
             print("invariants {}:".format(["before", "after"][tidx]))
-            for q, idx in self.phasespacecoords_idxdict.items():
+            for q, idx in phasespacecoords_idxdict.items():
                 if self.phasespacecoords[tidx][idx] < 0:
                     val = "<not calculated>"
                 else:

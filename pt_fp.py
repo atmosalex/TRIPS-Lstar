@@ -618,7 +618,7 @@ def solve_trajectory(dshell_init, particle, bfield, ellipsoid_surf, cfg):
     if (not particle.storetrack) and cfg.store_GC:
         print("Error: cannot calculate the GC trajectory because the particle object does not store its track")
         print("","skipping...")
-        return 2
+        return 2, None
 
     #perform diagnostic initialization on the magnetic equator:
     print("Performing diagnostic initialization")
@@ -642,7 +642,7 @@ def solve_trajectory(dshell_init, particle, bfield, ellipsoid_surf, cfg):
     #identify 3 mirror point indices using the guiding center trajectory:
     tsperorbit_stored = particle.tsperorbit // particle.storeinterval
     idx_reversals, B_mirrpt, mirrpt_above_equator, mirrpt_bounce_phase = get_idx_mirrpt_from_track(track_gyrocentre_time, track_gyrocentre, bfield, tsperorbit_stored, n_mirrpt=3)
-    if not check_trajectory_bounces(idx_reversals, mirrpt_above_equator): return 2
+    if not check_trajectory_bounces(idx_reversals, mirrpt_above_equator): return 2, None
     #we now have an accurate, numerically-derived approximation of bounce time:
     # this is 2x the time between numerically-detected mirror points
     tb_est = 2 * (particle.times[idx_reversals[1]] - particle.times[idx_reversals[0]])
@@ -690,13 +690,15 @@ def solve_trajectory(dshell_init, particle, bfield, ellipsoid_surf, cfg):
     particle.reset(t0_init, pt_init)
 
     if cfg.calculate_initial_invariants:
-        particle.phasespacecoords[0, :] = derive_invariants(particle, bfield, ellipsoid_surf, reverse=reverse)
+        invariants, _ = derive_invariants(particle, bfield, ellipsoid_surf, reverse=reverse)
+        for key, idx in pt_particles.phasespacecoords_idxdict.items():
+            particle.phasespacecoords[0, idx] = invariants[key]
         particle.print_invariants(0)
         # [mu, E, K, aeq, L, iphase_gyro, iphase_bounce, iphase_drift]
 
     if ellipsoid_surf.point_is_within_surface(particle.pt[0][:3]):
         print("Skipping because the particle was initialized within/below Earth's ellipsoid_surf")
-        return 2
+        return 2, None
 
     print("Solving remaining trajectory...")
     if cfg.quit_after_one_drift:
@@ -717,15 +719,17 @@ def solve_trajectory(dshell_init, particle, bfield, ellipsoid_surf, cfg):
 
     if not bfield.range_adequate:
         print("","particle went outside of field domain in time or space, ending simulation")
-        return 2
+        return 2, None
 
     if cfg.calculate_final_invariants:
-        particle.phasespacecoords[1,:] = derive_invariants(particle, bfield, ellipsoid_surf, reverse = reverse)
+        invariants, dshell_final = derive_invariants(particle, bfield, ellipsoid_surf, reverse = reverse)
+        for key, idx in pt_particles.phasespacecoords_idxdict.items():
+            particle.phasespacecoords[1, idx] = invariants[key]
         particle.print_invariants(1)
     exect1 = time.perf_counter()
     print("","finished with execution time of {:.2f}s".format(exect1 - exect0))
     #azimuth is not tracked properly if dt_solve_increment > 1/2 drift orbit period
-    return 1
+    return 1, dshell_final
 
 
 def derive_invariants(particle, bfield, ellipsoid_surf, reverse=False): #called from pt_run
@@ -736,13 +740,13 @@ def derive_invariants(particle, bfield, ellipsoid_surf, reverse=False): #called 
      and it involves tracing the fieldline to the equator, so if the particle is not bouncing adiabatically (following a field line), then equatorial pitch angle will not be defined
     """
     pusher = pushers.boris_fwd #default particle pusher
-    invariants = [-1, -1, -1, -1, -1, -1, -1, -1] #fill values
+    invariants = {}
 
     if len(particle.pt):
         print("Calculating invariants and phases...")
     else:
         print("Error: cannot derive invariants from a particle with no state vector")
-        return invariants
+        return invariants, None
 
     t1 = particle.times[-1] #use this to query the field
     x1 = np.array(particle.pt[-1])[:3]
@@ -760,7 +764,7 @@ def derive_invariants(particle, bfield, ellipsoid_surf, reverse=False): #called 
     #kinetic energy:
     E1_J = (gamma - 1) * particle.m0 * (c ** 2)
     E1 = E1_J / MeV2J  # KE energy in MeV
-    invariants[1] = E1
+    invariants["E [MeV]"] = E1
     #
     #get derivative of the state vector (velocity, force) from Lorentz force at t1:
     dY0dt, _ = dYdt(t1, pt1_fwd, particle.m0, particle.q, bfield)
@@ -790,8 +794,8 @@ def derive_invariants(particle, bfield, ellipsoid_surf, reverse=False): #called 
     elif dshell.params['losscone']:
         print("Warning: could not calculate L*: drift shell entered loss cone")
     else:
-        invariants[4] = dshell.params['Lstar']
         print("", "got Lstar = {:.3f}".format(dshell.params['Lstar']))
+        invariants["L*"] = dshell.params['Lstar']
 
     # import pt_plot
     # plot= pt_plot.Plot_2D_dshell_contour(ellipsoid_surf, dshell.hemisph_to_draw_contour)
@@ -801,8 +805,8 @@ def derive_invariants(particle, bfield, ellipsoid_surf, reverse=False): #called 
 
     #find drift phase of the equatorial crossing of the field line the particle is on:
     #phi_drift = reflexangle_between(np.array([1, 0, 0]), [xe_GC_MAG[0], xe_GC_MAG[1], 0])
-    #invariants[7] = phi_drift / (2*np.pi)
-    invariants[7] = cosys.get_MLT(xe_GC_MAG, ellipsoid_surf.IGRFprops) / 24
+    #invariants["drift phase (0-1)"] = phi_drift / (2*np.pi)
+    invariants["drift phase (0-1)"] = cosys.get_MLT(xe_GC_MAG, ellipsoid_surf.IGRFprops) / 24
 
     #find gyration phase:
     # define an initial guiding center frame located at x1_GC_MAG at t1:
@@ -813,13 +817,13 @@ def derive_invariants(particle, bfield, ellipsoid_surf, reverse=False): #called 
     step_GCtoX_B_GC = np.matmul(R_MAG_to_B_GC, step_GCtoX_MAG)
     # find the phase of step_GCtoX_B_GC, this is the gyrophase:
     phi_gyro = reflexangle_between(np.array([1, 0, 0]), [step_GCtoX_B_GC[0], step_GCtoX_B_GC[1], 0])
-    invariants[5] = phi_gyro / (2*np.pi)
+    invariants["gyration phase (0-1)"] = phi_gyro / (2*np.pi)
 
     #find mu:
     mu_SI = ((p1mag * sin(aloc)) ** 2) / (2 * particle.m0 * np.linalg.norm(Bl_GC))
     #mu_SI = ((p1mag * sin(aeq_est)) ** 2) / (2 * particle.m0 * np.linalg.norm(Be_GC))
     # the above expressions produce the same result because of how aeq_est was derived
-    invariants[0] = mu_SI * constants.G2T / constants.MeV2J #MeV/G
+    invariants["mu [MeV/G]"] = mu_SI * constants.G2T / constants.MeV2J #MeV/G
 
     #push particle with the field frozen to derive other invariants
     #make a backup of some important particle attributes:
@@ -835,7 +839,7 @@ def derive_invariants(particle, bfield, ellipsoid_surf, reverse=False): #called 
     #estimate pitch angle at the equator based on conservation of the first invariant:
     bebl = min([1., np.linalg.norm(Be_GC)/np.linalg.norm(Bl_GC)])
     aeq_est = asin(sqrt(bebl * (sin(aloc)**2)))
-    invariants[3] = aeq_est
+    invariants["aeq [rad]"] = aeq_est
     # this is a hypothetical aeq - contingent on the particle bouncing adiabatically
 
     #visit conjugate mirror points over ~two bounce periods with the field frozen at t1:
@@ -860,7 +864,7 @@ def derive_invariants(particle, bfield, ellipsoid_surf, reverse=False): #called 
 
     J2, I = get_second_invariant_from_GC_bounce(track_gyrocentre_bounce_time, track_gyrocentre_bounce, track_gyrocentre_bounce_p, bfield, freezefield=t1)
     K_ = np.power(np.mean(B_mirrpt[:2]) / G2T, 0.5) * I / RE
-    invariants[2] = K_
+    invariants["K [G^0.5 RE]"] = K_
 
     #restore original particle properties:
     particle.times = stored_times
@@ -880,9 +884,9 @@ def derive_invariants(particle, bfield, ellipsoid_surf, reverse=False): #called 
         phase_b = phase_b + 1
     if reverse:
         phase_b = 1 - phase_b
-    invariants[6] = phase_b
+    invariants["bounce phase (0-1)"] = phase_b
 
-    return invariants
+    return invariants, dshell
 
     #print(invariants)
     # import matplotlib.pyplot as plt

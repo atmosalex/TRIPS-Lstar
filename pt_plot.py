@@ -245,29 +245,29 @@ def plot_invariants(resultfile, ptids, tracklist, axes_invariants_idx = [4, 0, 7
 
 
         #time, pos = resultfile.read_particledata(ptid, verbose = False)
-        phasespacecoords0, phasespacecoords1 = resultfile.read_invariants(ptid)
-        phasespacecoords0[0] = phasespacecoords0[0] * mu_conv
-        phasespacecoords1[0] = phasespacecoords1[0] * mu_conv
-        phasespacecoords0[3] = phasespacecoords0[3] * 180/np.pi
-        phasespacecoords1[3] = phasespacecoords1[3] * 180/np.pi
-        if phasespacecoords1[2] < 0 and phasespacecoords1[0] > 0:
+        phasespacecoords_init, phasespacecoords_final = resultfile.read_invariants(ptid)
+        phasespacecoords_init[0] = phasespacecoords_init[0] * mu_conv
+        phasespacecoords_final[0] = phasespacecoords_final[0] * mu_conv
+        phasespacecoords_init[3] = phasespacecoords_init[3] * 180/np.pi
+        phasespacecoords_final[3] = phasespacecoords_final[3] * 180/np.pi
+        if phasespacecoords_final[2] < 0 and phasespacecoords_final[0] > 0:
             # K = -1 but mu, etc., is valid when bounce orbits could not correctly be ID'd
             # however the particle may not have been 'lost'
             print("pt ID {} has invalid K1".format(ptid))
             # xyc0_lost.append([
-            #     phasespacecoords0[axes_invariants_idx[0]],
-            #     phasespacecoords0[axes_invariants_idx[1]],
-            #     phasespacecoords0[axes_invariants_idx[2]]])
+            #     phasespacecoords_init[axes_invariants_idx[0]],
+            #     phasespacecoords_init[axes_invariants_idx[1]],
+            #     phasespacecoords_init[axes_invariants_idx[2]]])
             continue
         else:
             xyc0.append([
-                phasespacecoords0[axes_invariants_idx[0]],
-                phasespacecoords0[axes_invariants_idx[1]],
-                phasespacecoords0[axes_invariants_idx[2]]])
+                phasespacecoords_init[axes_invariants_idx[0]],
+                phasespacecoords_init[axes_invariants_idx[1]],
+                phasespacecoords_init[axes_invariants_idx[2]]])
             xyc1.append([
-                phasespacecoords1[axes_invariants_idx[0]],
-                phasespacecoords1[axes_invariants_idx[1]],
-                phasespacecoords1[axes_invariants_idx[2]]])
+                phasespacecoords_final[axes_invariants_idx[0]],
+                phasespacecoords_final[axes_invariants_idx[1]],
+                phasespacecoords_final[axes_invariants_idx[2]]])
         nplotted += 1
 
     xyc0 = np.array(xyc0)
@@ -510,38 +510,52 @@ if __name__ == "__main__":
 
 
 
-    for ds_id in info['dshell_ID']:
-        if info['dshell_check'][ds_id] != 1:
-            continue
-
-        # drift shell:
-        params, attrs = resultfile.read_driftshelldata(ds_id)
-        dshell_init = driftshells.Driftshell(Xgc=attrs['Xgc'], aloc_r=attrs['aloc_r'], time=attrs['time'],
-                                             trace_ds=attrs['trace_ds'],
-                                             hemisph_to_draw_contour=attrs['hemisph_to_draw_contour'],
-                                             quit_in_loss_cone=attrs['quit_in_loss_cone'])
-        dshell_init.params = params
+    # for ds_id in info['dshell_ID']:
+    #     if info['dshell_init_check'][ds_id] != 1:
+    #         continue
+    #
+    #
+    #     break #only add one
 
 
-        break #only add one
-
-
-    #plot = Plot_3D_axes(earth_to_add = ellipsoid_surf)
-    plot = Plot_2D_dshell_contour(ellipsoid_surf, dshell_init.hemisph_to_draw_contour)
-    plot.add_dshell(dshell_init, ellipsoid_surf)
-
-    Daa = []
+    #Daa = []
     for pt_id in info['tracklist_ID']:
         if info['tracklist_check'][pt_id] != 1:
             continue
+        ds_id = info['tracklist_dshell_correspondence'][pt_id]
+
         #particle trajectory:
         solved_times, solved_position = resultfile.read_particledata(pt_id, False)
         #interpolate_constant_dt(times, positions, dt_min=-1)
 
-        phasespacecoords0, phasespacecoords1 = resultfile.read_invariants(pt_id)
-        #Daa.append((phasespacecoords1[3]-phasespacecoords0[3])**2)
+        #initial drift shell:
+        params, attrs = resultfile.read_driftshelldata(ds_id, init=True)
+        dshell_init = driftshells.Driftshell(Xgc=attrs['Xgc'], aloc_r=attrs['aloc_r'], time=attrs['time'],
+            trace_ds=attrs['trace_ds'],
+            hemisph_to_draw_contour=attrs['hemisph_to_draw_contour'],
+            quit_in_loss_cone=attrs['quit_in_loss_cone'])
+        dshell_init.params = params
 
-        plot.add_particle(solved_position)#, firstpointsonly=1)
+        #final drift shell:
+        params, attrs = resultfile.read_driftshelldata(ds_id, init=False)
+        dshell_final = driftshells.Driftshell(Xgc=attrs['Xgc'], aloc_r=attrs['aloc_r'], time=attrs['time'],
+            trace_ds=attrs['trace_ds'],
+            hemisph_to_draw_contour=attrs['hemisph_to_draw_contour'],
+            quit_in_loss_cone=attrs['quit_in_loss_cone'])
+        dshell_final.params = params
+
+
+        phasespacecoords_init, phasespacecoords_final = resultfile.read_invariants(pt_id)
+
+        #Daa.append((phasespacecoords_final[3]-phasespacecoords_init[3])**2)
+        break
+
+    # plot = Plot_3D_axes(earth_to_add = ellipsoid_surf)
+    plot = Plot_2D_dshell_contour(ellipsoid_surf, dshell_init.hemisph_to_draw_contour)
+    plot.add_dshell(dshell_init, ellipsoid_surf)
+    plot.add_dshell(dshell_final, ellipsoid_surf)
+
+    plot.add_particle(solved_position)#, firstpointsonly=1)
 
     plot.show_close()
 

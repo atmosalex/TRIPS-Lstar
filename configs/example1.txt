@@ -7,7 +7,8 @@ store_trajectory,y
 store_GC,y
 calculate_initial_invariants,y
 calculate_final_invariants,y
-dipole_mode,n
+add_dipole_background,n
+add_field_from_grid,configs/field_Dstm150_0_11_sph_at301x201x49.h5
 year_month_day, 2015, 1, 1
 ax_Lstar, 4
 ax_aeq, 60
@@ -15,6 +16,4 @@ ax_log10mu, 2.7
 ax_phasedrift, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9
 ax_phasebounce, 0, 0.25, 0.5, 0.75
 ax_phasegyro, 0, 0.5
-perturbation_grid,
-custom_field_grid,configs/field_Dstm150_0_11_sph_at301x201x49.h5
-skipeveryn,10
+storeinterval,10

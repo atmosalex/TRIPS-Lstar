@@ -150,7 +150,6 @@ if cfg.duration_solve_max > bfield.field_time[-1]:
 #instantiate the surface we will trace particles around
 ellipsoid_surf = planet.Earthlikebody(year_dec, h_aboveWGS84=0, surface_n_phi = 24 + 1, surface_n_theta = 48 + 1)
 
-
 #instantiate a particle for each coordinate and solve the track:
 print("Solving...")
 count = 0
@@ -170,14 +169,12 @@ for pt_id in info['tracklist_ID']:
     dshell_ID = info['tracklist_dshell_correspondence'][pt_id]
 
     #drift shell information:
-    dshell_Lstar = info['dshell_Lstar'][dshell_ID]
-    dshell_pa = info['dshell_pa'][dshell_ID]
+    dshell_init_Lstar = info['dshell_init_Lstar'][dshell_ID]
+    dshell_init_pa = info['dshell_init_pa'][dshell_ID]
 
     #particle-specific information:
-    mu = info['tracklist_mu'][pt_id]
-    mu_SI = mu * constants.MeV2J / constants.G2T #change units of mu to SI
-    pa = info['tracklist_pa'][pt_id]
-    pa = pa * pi / 180
+    mu_SI = info['tracklist_mu'][pt_id] * constants.MeV2J / constants.G2T #change units of mu to SI
+    pa = info['tracklist_pa'][pt_id] * pi / 180
     L = info['tracklist_L'][pt_id]
     phase_g = info['tracklist_pg'][pt_id]
     phase_b = info['tracklist_pb'][pt_id]
@@ -202,30 +199,30 @@ for pt_id in info['tracklist_ID']:
 
         #copy invariants from whatever they were in the original file:
         particle.phasespacecoords = resultfile.read_invariants(pt_id)
-        resultfile_GC.add_particledata(pt_id, particle, checkcode=code_success, compressmethod="gzip")
+        resultfile_GC.add_particledata(pt_id, particle, checkcode=code_success)
         count += 1
     else:
         #look up or solve drift shell: #################################################
-        if info['dshell_check'][dshell_ID] == 0:
+        if info['dshell_init_check'][dshell_ID] == 0:
             print("Determining drift shell ID {}".format(dshell_ID))
-            dshell_init = driftshells.find_driftshell_with_given_properties(ellipsoid_surf, dshell_Lstar, dshell_pa*np.pi/180, bfield, 0, dth_quit = 0.003)
+            dshell_init = driftshells.find_driftshell_with_given_properties(ellipsoid_surf, dshell_init_Lstar, dshell_init_pa*np.pi/180, bfield, 0, dth_quit = 0.003)
             if dshell_init is not None:
-                info['dshell_check'][dshell_ID] = 1
+                info['dshell_init_check'][dshell_ID] = 1
             else:
-                info['dshell_check'][dshell_ID] = 2
-            resultfile.add_driftshelldata(dshell_ID, dshell_init, checkcode = info['dshell_check'][dshell_ID])
-        elif info['dshell_check'][dshell_ID] == 1:
+                info['dshell_init_check'][dshell_ID] = 2
+            resultfile.add_driftshelldata_init(dshell_ID, dshell_init, checkcode = info['dshell_init_check'][dshell_ID])
+        elif info['dshell_init_check'][dshell_ID] == 1:
             params, attrs = resultfile.read_driftshelldata(dshell_ID)
             dshell_init = driftshells.Driftshell(Xgc=attrs['Xgc'], aloc_r=attrs['aloc_r'], time=attrs['time'], trace_ds=attrs['trace_ds'], hemisph_to_draw_contour=attrs['hemisph_to_draw_contour'], quit_in_loss_cone=attrs['quit_in_loss_cone'])
             dshell_init.params = dict(params)
         #
-        if info['dshell_check'][dshell_ID] == 2:
+        if info['dshell_init_check'][dshell_ID] == 2:
             print("Could not determine drift shell for track ID {}, skipping...".format(pt_id))
-            resultfile.add_particledata(pt_id, particle, checkcode=2, compressmethod="gzip")
+            resultfile.add_particledata(pt_id, particle, checkcode=2)
             continue
         ################################################################################
 
-        code_success = pt_fp.solve_trajectory(dshell_init, particle, bfield, ellipsoid_surf, cfg)
+        code_success, dshell_final = pt_fp.solve_trajectory(dshell_init, particle, bfield, ellipsoid_surf, cfg)
 
         #code_success will not be 1 if cfg.store_trajectory is False and cfg.store_GC is True
         if cfg.store_GC:
@@ -234,7 +231,8 @@ for pt_id in info['tracklist_ID']:
             particle.pt = particle.gc_pos
 
         #store the particle track in the HDF5 file:
-        resultfile.add_particledata(pt_id, particle, checkcode = code_success, compressmethod = "gzip")
+        resultfile.add_particledata(pt_id, particle, checkcode = code_success)
+        resultfile.add_driftshelldata_final(pt_id, dshell_final)
         print()
         print()
         count += 1

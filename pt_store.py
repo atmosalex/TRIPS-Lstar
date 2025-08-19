@@ -9,11 +9,12 @@ class HDF5_pt:
         self.filepath = filepath
         self.writeprotectroot = existing
         self.group_name_tracks = 'tracks'
-        self.group_name_dshells = 'driftshells'
+        self.group_name_dshells_init = 'driftshells_init'
+        self.group_name_dshells_final = 'driftshells_final'
         self.group_name_extra = 'extra'
-        self.dataset_name_phasespacecoords0 = 'phasespacecoords0'
-        self.dataset_name_phasespacecoords1 = 'phasespacecoords1'
-        self.groupnames = [self.group_name_tracks, self.group_name_dshells, self.group_name_extra]
+        self.dataset_name_phasespacecoords_init = 'phasespacecoords_init'
+        self.dataset_name_phasespacecoords_final = 'phasespacecoords_final'
+        self.groupnames = [self.group_name_tracks, self.group_name_dshells_init, self.group_name_dshells_final, self.group_name_extra]
 
     def setup(self, dict_config={}, dict_tracklist={}, dict_dshells={}, dict_tracklist_dshell_correspondence={}):  # call from pt_handler.py
         """save metadata about the simulation"""
@@ -57,15 +58,15 @@ class HDF5_pt:
         info_keys = list(dict_dshells.keys())
         info_keys.sort()
         dshell_ID = info_keys
-        dshell_Lstar = []
-        dshell_pa = []
+        dshell_init_Lstar = []
+        dshell_init_pa = []
         for key in info_keys:
-            dshell_Lstar.append(dict_dshells[key][0])
-            dshell_pa.append(dict_dshells[key][1])
-        fo.create_dataset('dshell_ID', data=np.array(dshell_ID))
-        fo.create_dataset('dshell_Lstar', data=np.array(dshell_Lstar))
-        fo.create_dataset('dshell_pa', data=np.array(dshell_pa))
-        fo.create_dataset('dshell_check', data=np.zeros(len(dshell_ID)), dtype='i')
+            dshell_init_Lstar.append(dict_dshells[key][0])
+            dshell_init_pa.append(dict_dshells[key][1])
+        fo.create_dataset('dshell_init_ID', data=np.array(dshell_ID))
+        fo.create_dataset('dshell_init_Lstar', data=np.array(dshell_init_Lstar))
+        fo.create_dataset('dshell_init_pa', data=np.array(dshell_init_pa))
+        fo.create_dataset('dshell_init_check', data=np.zeros(len(dshell_ID)), dtype='i')
 
         #create dataset describing which particle belongs on which drift shell:
         info_keys = list(dict_tracklist_dshell_correspondence.keys())
@@ -75,9 +76,10 @@ class HDF5_pt:
             tracklist_dshell_ID.append(dict_tracklist_dshell_correspondence[key])
         fo.create_dataset('tracklist_dshell_correspondence', data=np.array(tracklist_dshell_ID))
 
+        #create groups for storing high level object attributes:
         fo.create_group(self.group_name_tracks)
-        fo.create_group(self.group_name_dshells)
-
+        fo.create_group(self.group_name_dshells_init)
+        fo.create_group(self.group_name_dshells_final)
         fo.close()
 
     def read_root(self):  # call from pt_fp.py, etc.
@@ -146,11 +148,11 @@ class HDF5_pt:
         newgroup.create_dataset('time', data=times, compression=compressmethod)
         newgroup.create_dataset('position', data=pt, compression=compressmethod)
 
-        newgroup.create_dataset(self.dataset_name_phasespacecoords0, data=particle.phasespacecoords[0])
-        newgroup.create_dataset(self.dataset_name_phasespacecoords1, data=particle.phasespacecoords[1])
+        newgroup.create_dataset(self.dataset_name_phasespacecoords_init, data=particle.phasespacecoords[0])
+        newgroup.create_dataset(self.dataset_name_phasespacecoords_final, data=particle.phasespacecoords[1])
         fo.close()
 
-    def add_driftshelldata(self, id, dshell, compressmethod=None, checkcode = 1):
+    def add_driftshelldata_init(self, id, dshell, compressmethod=None, checkcode = 1):
         """add new data corresponding to a drift shell ID"""
         # checkcode = 0 is used to indicate that a solution has not been attempted yet
         # checkcode = 1 is used to indicate a successful solution
@@ -159,9 +161,9 @@ class HDF5_pt:
         print("", "adding drift shell", id, "to", self.filepath)
 
         fo = h5py.File(self.filepath, 'a')
-        checklist = fo['dshell_check']
+        checklist = fo['dshell_init_check']
         checkcode_existing = int(checklist[id])
-        newgroupname = self.group_name_dshells + "/" + str(id)
+        newgroupname = self.group_name_dshells_init + "/" + str(id)
         if (checkcode_existing != 0):
             print("Warning: overwriting an existing drift shell with ID", id, ", check code", checkcode_existing)
             if not newgroupname in fo:
@@ -175,6 +177,40 @@ class HDF5_pt:
             newgroup = fo.create_group(newgroupname)
         checklist[id] = checkcode
         if dshell is None:
+            fo.close()
+            return
+
+        #store all object attributes (except the params dictionary)
+        for key, value in dshell.__dict__.items():
+            if key == 'params':
+                continue
+            newgroup.attrs[key] = value
+        #store the params dictionary values as datasets
+        for key in dshell.params:
+            newgroup.create_dataset('params_{}'.format(key), data=dshell.params[key], compression=compressmethod)
+        fo.close()
+
+    def add_driftshelldata_final(self, id, dshell, compressmethod=None):
+        """
+        add new data corresponding to a drift shell that the particle's final trajectory lies on
+        we don't need a check code here, we are not updating any top-level data in this function
+        """
+
+        print("", "adding drift shell", id, "to", self.filepath)
+
+        fo = h5py.File(self.filepath, 'a')
+
+        newgroupname = self.group_name_dshells_final + "/" + str(id)
+        if not newgroupname in fo:
+            newgroup = fo.create_group(newgroupname)
+        else:
+            print("Warning: overwriting an existing drift shell at {}".format(newgroupname))
+            newgroup = fo[newgroupname]
+            datasets_existing = [name for name in newgroup if isinstance(newgroup[name], h5py.Dataset)]
+            for dset in datasets_existing:
+                del newgroup[dset]
+        if dshell is None:
+            #we created the group just to indicate that the result has been processed
             fo.close()
             return
 
@@ -229,7 +265,7 @@ class HDF5_pt:
             group.create_dataset(qname, data=quantity, compression=compressmethod)
         fo.close()
 
-    def overwrite_extra_group_quantity(self, gname, qname, quantity, compressmethod=None):
+    def overwrite_extra_group_quantity(self, gname, qname, quantity):
         """add new data array to a group"""
 
         print("replacing", qname, "in group", gname, "in", self.filepath, ", of length", len(quantity))
@@ -354,26 +390,28 @@ class HDF5_pt:
         checklist = fo['tracklist_check']
         checkcode = checklist[id][()]
 
-        phasespacecoords0 = fo.get(self.group_name_tracks + "/" + str(id) + '/' + self.dataset_name_phasespacecoords0)
-        if not phasespacecoords0 is None:
-            phasespacecoords0 = phasespacecoords0[()]
-        phasespacecoords1 = fo.get(self.group_name_tracks + "/" + str(id) + '/' + self.dataset_name_phasespacecoords1)
-        if not phasespacecoords1 is None:
-            phasespacecoords1 = phasespacecoords1[()]
+        phasespacecoords_init = fo.get(self.group_name_tracks + "/" + str(id) + '/' + self.dataset_name_phasespacecoords_init)
+        if not phasespacecoords_init is None:
+            phasespacecoords_init = phasespacecoords_init[()]
+        phasespacecoords_final = fo.get(self.group_name_tracks + "/" + str(id) + '/' + self.dataset_name_phasespacecoords_final)
+        if not phasespacecoords_final is None:
+            phasespacecoords_final = phasespacecoords_final[()]
         fo.close()
 
-        return phasespacecoords0, phasespacecoords1
+        return phasespacecoords_init, phasespacecoords_final
 
-    def read_driftshelldata(self, id, verbose=True):
+    def read_driftshelldata(self, id, init=True, verbose=True):
         fo = h5py.File(self.filepath, 'r', swmr=True)
-        checklist = fo['dshell_ID']
-        checkcode = checklist[id][()]
+        #checklist = fo['dshell_init_ID']
+        #checkcode = checklist[id][()]
 
-        if verbose: print("Reading data of drift shell ID", id)
+        if verbose: print("Reading data of {} drift shell ID {}".format(["final", "initial"][init], id))
         #if checkcode != 1:
         #    if verbose: print(" warning: checkcode is ", checkcode)
-
-        groupname = self.group_name_dshells + "/" + str(id)
+        if init:
+            groupname = self.group_name_dshells_init + "/" + str(id)
+        else:
+            groupname = self.group_name_dshells_final + "/" + str(id)
         group = fo[groupname]
 
         #get attributes:
@@ -440,9 +478,9 @@ class HDF5_pt:
 
     def get_existing_dshells(self):
         fo = h5py.File(self.filepath, 'r', swmr=True)
-        ids = fo.get('dshell_ID')[()]
-        dshell_L = fo.get('dshell_Lstar')[()]
-        dshell_pa = fo.get('dshell_pa')[()]
+        ids = fo.get('dshell_init_ID')[()]
+        dshell_L = fo.get('dshell_init_Lstar')[()]
+        dshell_pa = fo.get('dshell_init_pa')[()]
 
         dict_dshells = {}
         for idx in ids:
@@ -450,7 +488,6 @@ class HDF5_pt:
             pa = dshell_pa[idx]
             dict_dshells[idx] = [L, pa]
         fo.close()
-
         return dict_dshells
 
     def get_extra_group_names(self):
