@@ -632,7 +632,7 @@ def solve_trajectory(dshell_init, particle, bfield, ellipsoid_surf, cfg):
     #modify the particle to keep the track for our starting calculation:
     particle.update = particle.update_keep
     #use a static field at t0 to do this: we want to find where the particle would be at t0:
-    pusher(particle, bfield, 2.5 * tb_est_dipole, particle.tsperorbit, t_limit_exact = False, freezefield = t0_init)
+    pusher(particle, bfield, 2.5 * tb_est_dipole, particle.tsperorbit, freezefield = t0_init)
 
     #detect properties of the bounce trajectory:
     print("Interpolating an initial position from the test bounce orbit...")
@@ -701,21 +701,24 @@ def solve_trajectory(dshell_init, particle, bfield, ellipsoid_surf, cfg):
         return 2, None
 
     print("Solving remaining trajectory...")
-    if cfg.quit_after_one_drift:
-        #solve for one drift period:
-        delta_az = 0
-        x0 = pt_init[:3]
-        while abs(delta_az) <= 2*np.pi and bfield.range_adequate:
-            t1, x1, p1 = pusher(particle, bfield, tb_est, particle.tsperorbit)
-            delta_az += angle_between([x0[0], x0[1], 0], [x1[0], x1[1], 0]) #approximation of drift around the MAG frame
-            print("","{:.2f}%".format(100*delta_az/(2*np.pi))) #only works if dt_solve_increment << drift orbit time
-            x0 = x1
-    elif cfg.quit_after_one_bounce:
-        #solve for one bounce period:
-        t1, x1, p1 = pusher(particle, bfield, tb_est, particle.tsperorbit)
-    else:
-        #solve for a pre-determined duration:
-        t1, x1, p1 = pusher(particle, bfield, cfg.duration_solve_max, particle.tsperorbit)
+    # solve for one drift period:
+    delta_az = 0
+    x0 = pt_init[:3]
+    while bfield.range_adequate:
+        dt_solve = min(tb_est, cfg.duration_solve_max - particle.times[-1])
+        t1, x1, p1 = pusher(particle, bfield, dt_solve, particle.tsperorbit)
+
+        delta_az += angle_between([x0[0], x0[1], 0], [x1[0], x1[1], 0])  # approximation of drift around the MAG frame
+        x0 = x1
+
+        print("", "{:.3f} drifts completed".format(delta_az / (2 * np.pi)))
+        if cfg.quit_after_one_bounce:
+            break
+        elif cfg.quit_after_one_drift and abs(delta_az) > 2 * np.pi:
+            break
+        elif t1 >= cfg.duration_solve_max:
+            break
+    print()
 
     if not bfield.range_adequate:
         print("","particle went outside of field domain in time or space, ending simulation")
@@ -840,6 +843,7 @@ def derive_invariants(particle, bfield, ellipsoid_surf, reverse=False): #called 
     bebl = min([1., np.linalg.norm(Be_GC)/np.linalg.norm(Bl_GC)])
     aeq_est = asin(sqrt(bebl * (sin(aloc)**2)))
     invariants["aeq [rad]"] = aeq_est
+    invariants["aeq [deg]"] = aeq_est * 180 / np.pi
     # this is a hypothetical aeq - contingent on the particle bouncing adiabatically
 
     #visit conjugate mirror points over ~two bounce periods with the field frozen at t1:
@@ -847,7 +851,7 @@ def derive_invariants(particle, bfield, ellipsoid_surf, reverse=False): #called 
     #estimate tb:
     L_dip = bfield.get_L(xe_GC_MAG)
     tb_est_dipole = tb_estimate(L_dip * RE, v1mag, aeq_est)
-    pusher(particle, bfield, 2.5 * tb_est_dipole, particle.tsperorbit, t_limit_exact = False, freezefield = t1)
+    pusher(particle, bfield, 2.5 * tb_est_dipole, particle.tsperorbit, freezefield = t1)
 
 
     #first and second invariant

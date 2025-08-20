@@ -3,7 +3,7 @@ from math import cos, sin, tan, acos, asin, atan, atan2, sqrt, pi
 import constants
 c = constants.c  # 29979245
 
-def boris_fwd(particle, bfield, dt_solve, tsperorbit, t_limit_exact = True, freezefield = -1):
+def boris_fwd(particle, bfield, dt_solve, tsperorbit, freezefield = -1):
     """
     Uses boris algorithm to solve the trajectory of the particle
     note: the initial state vector must be stored in the particle object at particle.pt
@@ -39,9 +39,9 @@ def boris_fwd(particle, bfield, dt_solve, tsperorbit, t_limit_exact = True, free
     Bmag = sqrt(pow(bx0,2) + pow(by0,2) + pow(bz0,2))
     dtp = 2 * np.pi * particle.m0*gamma / (tsperorbit * abs(q_)*np.linalg.norm(Bmag))
 
-    if dt_solve < dtp:
-        dtp = dt_solve
-        t_limit_exact = False #won't enter another recursive level
+    # if dt_solve < dtp:
+    #     dtp = dt_solve
+    #     #t_limit_exact = False #won't enter another recursive level
 
     while t1 < t1_aim * bfield.range_adequate:
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -50,6 +50,9 @@ def boris_fwd(particle, bfield, dt_solve, tsperorbit, t_limit_exact = True, free
         #   see https://doi.org/10.1029/2021JA029802
         #
         #
+        #if t1 + dtp > t1_aim: #solve for the exact time remaining
+        #    dtp = t1_aim - t1
+        dtp = min(t1_aim - t1, dtp)
         #ensure t0, x0, p0 are one timestep behind:
         t0 = t1
         x0 = x1
@@ -124,16 +127,16 @@ def boris_fwd(particle, bfield, dt_solve, tsperorbit, t_limit_exact = True, free
         #
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-    if t_limit_exact and bfield.range_adequate: #go back one timestep, then solve for the remaining fraction of a timestep
-        particle.update(t0, [*x0, *p0]) #if storetrack = False, track length is still 1, if storetrack = True, track length is +1
-        particle.pop_track(1) #if storetrack = False, track length is still 1, if storetrack = True, track length is +0
-        particle.pop_track(1) #if storetrack = False, track length is still 1, if storetrack = True, track length is -1
-        dt_remaining = t1_aim - t1
-        t1, x1, p1 = boris_fwd(particle, bfield, dt_remaining, tsperorbit, t_limit_exact = False)
+    # if t_limit_exact and bfield.range_adequate: #go back one timestep, then solve for the remaining fraction of a timestep
+    #     particle.update(t0, [*x0, *p0]) #if storetrack = False, track length is still 1, if storetrack = True, track length is +1
+    #     particle.pop_track(1) #if storetrack = False, track length is still 1, if storetrack = True, track length is +0
+    #     particle.pop_track(1) #if storetrack = False, track length is still 1, if storetrack = True, track length is -1
+    #     dt_remaining = t1_aim - t1
+    #     t1, x1, p1 = boris_fwd(particle, bfield, dt_remaining, tsperorbit, t_limit_exact = False)
 
     return t1, x1, p1
 
-def boris_bkwd(particle, bfield, dt_solve, tsperorbit, t_limit_exact = True, freezefield = -1):
+def boris_bkwd(particle, bfield, dt_solve, tsperorbit, freezefield = -1):
     """
     Uses boris algorithm to solve the trajectory of the particle
     note: the initial state vector must be stored in the particle object at particle.pt
@@ -170,9 +173,9 @@ def boris_bkwd(particle, bfield, dt_solve, tsperorbit, t_limit_exact = True, fre
     Bmag = sqrt(pow(bx0,2) + pow(by0,2) + pow(bz0,2))
     dtp = 2 * np.pi * particle.m0*gamma / (tsperorbit * abs(q_)*np.linalg.norm(Bmag))
 
-    if dt_solve < dtp:
-        dtp = dt_solve
-        t_limit_exact = False #won't enter another recursive level
+    # if dt_solve < dtp:
+    #     dtp = dt_solve
+    #     t_limit_exact = False #won't enter another recursive level
 
     while t1 < t1_aim * bfield.range_adequate:
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -181,6 +184,9 @@ def boris_bkwd(particle, bfield, dt_solve, tsperorbit, t_limit_exact = True, fre
         #   see https://doi.org/10.1029/2021JA029802
         #
         #
+        #if t1 + dtp > t1_aim: #solve for the exact time remaining
+        #    dtp = t1_aim - t1
+        dtp = min(t1_aim - t1, dtp)
         #ensure t0, x0, p0 are one timestep behind:
         t0 = t1
         x0 = x1
@@ -258,11 +264,11 @@ def boris_bkwd(particle, bfield, dt_solve, tsperorbit, t_limit_exact = True, fre
         #
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-    if t_limit_exact and bfield.range_adequate: #go back one timestep, then solve for the remaining fraction of a timestep
-        particle.update(t0, [*x0, *p0]) #if storetrack = False, track length is still 1, if storetrack = True, track length is +1
-        particle.pop_track(1) #if storetrack = False, track length is still 1, if storetrack = True, track length is +0
-        particle.pop_track(1) #if storetrack = False, track length is still 1, if storetrack = True, track length is -1
-        dt_remaining = t1_aim - t1
-        t1, x1, p1 = boris_fwd(particle, bfield, dt_remaining, tsperorbit, t_limit_exact = False)
+    # if t_limit_exact and bfield.range_adequate: #go back one timestep, then solve for the remaining fraction of a timestep
+    #     particle.update(t0, [*x0, *p0]) #if storetrack = False, track length is still 1, if storetrack = True, track length is +1
+    #     particle.pop_track(1) #if storetrack = False, track length is still 1, if storetrack = True, track length is +0
+    #     particle.pop_track(1) #if storetrack = False, track length is still 1, if storetrack = True, track length is -1
+    #     dt_remaining = t1_aim - t1
+    #     t1, x1, p1 = boris_fwd(particle, bfield, dt_remaining, tsperorbit, t_limit_exact = False)
 
     return t1, x1, p1

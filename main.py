@@ -14,6 +14,7 @@ import pt_store
 import driftshells
 import cosys
 import config
+import settings
 
 dict_Particles = {"p": pt_particles.Proton_trace, "e": pt_particles.Electron_trace}
 
@@ -148,7 +149,7 @@ if cfg.duration_solve_max > bfield.field_time[-1]:
     sys.exit(1)
 
 #instantiate the surface we will trace particles around
-ellipsoid_surf = planet.Earthlikebody(year_dec, h_aboveWGS84=0, surface_n_phi = 24 + 1, surface_n_theta = 48 + 1)
+ellipsoid_surf = planet.Earthlikebody(year_dec, h_aboveWGS84=0, surface_n_phi = settings.ellipsoid_surface_n_phi, surface_n_theta = settings.ellipsoid_surface_n_theta)
 
 #instantiate a particle for each coordinate and solve the track:
 print("Solving...")

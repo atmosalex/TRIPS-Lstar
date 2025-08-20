@@ -4,7 +4,8 @@ import numpy as np
 import constants
 from math import cos, sin, tan, acos, asin, atan, atan2, sqrt, pi, floor, log10
 from planet import solve_lambda_intersection
-import curvature
+import settings
+#import curvature
 
 class Driftshell:
     def __init__(self, Xgc, aloc_r, time, trace_ds=3e-3 * constants.RE, hemisph_to_draw_contour=-1, quit_in_loss_cone=True):#, include_conjugate_hemisphere=False):
@@ -484,7 +485,7 @@ def interpolate_contour_index_in_arbitrary_cyclical_coordinates(phi, phi_contour
 
     return idx0, idx1, frac
 
-def find_driftshell_with_given_properties(ellipsoid_surf, target_Lstar, target_aeq_rad, bfield, time_field, searching_for_LCDS=False, dth_quit = 0.001):#, find_contourpts_conj=True):
+def find_driftshell_with_given_properties(ellipsoid_surf, target_Lstar, target_aeq_rad, bfield, time_field, searching_for_LCDS=False, dth_quit = settings.find_driftshell_theta_tolerance):#, find_contourpts_conj=True):
     """
     converge on a drift orbit with Lstar close to what the user specified
     time_field is field time (seconds)
@@ -646,6 +647,8 @@ def find_driftshell_with_given_properties(ellipsoid_surf, target_Lstar, target_a
             return dshell_converge_limits[0]
     elif isinstance(dshell_converge_limits[0], Driftshell) and isinstance(dshell_converge_limits[1], Driftshell):
         #return the closest drift shell in Lstar:
+        #print("0: ", dshell_converge_limits[0].params['Lstar'])
+        #print("1: ", dshell_converge_limits[1].params['Lstar'])
         if abs(target_Lstar - dshell_converge_limits[0].params['Lstar']) < abs(target_Lstar - dshell_converge_limits[1].params['Lstar']):
             return dshell_converge_limits[0]
         else:

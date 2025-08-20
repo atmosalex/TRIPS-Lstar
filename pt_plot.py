@@ -550,10 +550,10 @@ if __name__ == "__main__":
         #Daa.append((phasespacecoords_final[3]-phasespacecoords_init[3])**2)
         break
 
-    # plot = Plot_3D_axes(earth_to_add = ellipsoid_surf)
-    plot = Plot_2D_dshell_contour(ellipsoid_surf, dshell_init.hemisph_to_draw_contour)
-    plot.add_dshell(dshell_init, ellipsoid_surf)
-    plot.add_dshell(dshell_final, ellipsoid_surf)
+    plot = Plot_3D_axes(earth_to_add = ellipsoid_surf)
+    #plot = Plot_2D_dshell_contour(ellipsoid_surf, dshell_init.hemisph_to_draw_contour)
+    #plot.add_dshell(dshell_init, ellipsoid_surf)
+    #plot.add_dshell(dshell_final, ellipsoid_surf)
 
     plot.add_particle(solved_position)#, firstpointsonly=1)
 

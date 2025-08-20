@@ -5,7 +5,7 @@ import constants
 phasespacecoords_idxdict = {"mu [MeV/G]": 0,
     "E [MeV]": 1,
     "K [G^0.5 RE]" : 2,
-    "aeq [rad]" : 3,
+    "aeq [deg]" : 3,
     "L*": 4,
     "gyration phase (0-1)": 5,
     "bounce phase (0-1)": 6,
@@ -41,7 +41,7 @@ class Proton_trace:
         self.gc_pos = []
 
         mu = mu_SI * constants.G2T / constants.MeV2J #MeV/G
-        self.phasespacecoords = np.array([[mu, -1.0, -1.0, aeq, L, iphase_gyro, iphase_bounce, iphase_drift],
+        self.phasespacecoords = np.array([[mu, -1.0, -1.0, aeq*180/np.pi, L, iphase_gyro, iphase_bounce, iphase_drift],
                                           [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]])
 
         self.storeinterval = storeinterval
