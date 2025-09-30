@@ -22,11 +22,16 @@ class HDF5_pt:
             print("Error: could not set up", self.filepath, "using a new configuration - it already exists!")
             sys.exit(1)
         fo = h5py.File(self.filepath, 'w')
-
-        # fo is the root group, we will add our attributes here:
-        for attr_name in Keywords.get_keywords():#dict_config.keys():
-            if attr_name in dict_config:
-                fo.create_dataset(attr_name, data=dict_config[attr_name])
+        #
+        # # fo is the root group, we will add our attributes here:
+        # for attr_name in Keywords.get_keywords():#dict_config.keys():
+        #     if attr_name in dict_config: #only approved keywords
+        #         fo.create_dataset(attr_name, data=dict_config[attr_name])
+        #fo is the root group, we will add our attributes here:
+        for attr_name in dict_config.keys():
+            if not attr_name in Keywords.get_keywords(): #only approved keywords
+                print("Warning: adding unrecognised configuration key {}".format(attr_name))
+            fo.create_dataset(attr_name, data=dict_config[attr_name])
         #fo[config.Keywords.continuefrom] = self.filepath
 
         #create datasets of particle properties for each ID:
@@ -437,7 +442,9 @@ class HDF5_pt:
         dict_config = {}
 
         fo = h5py.File(self.filepath, 'r', swmr=True)
-        for attr_name in Keywords.get_keywords():#dict_config.keys():
+        for attr_name in Keywords.get_keywords():
+            if not attr_name in fo:
+                continue
             value = fo.get(attr_name)[()]
             #change bytes to strings where necessary:
             if isinstance(value, bytes):

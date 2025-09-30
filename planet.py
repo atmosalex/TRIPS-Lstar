@@ -4,6 +4,7 @@ import sys
 import field_tools
 import IGRF_tools
 import cosys
+import constants
 def colat_to_lat(colat): return np.pi / 2 - colat
 
 class Earthlikebody:
@@ -348,7 +349,7 @@ class Earthlikebody:
             # plt.close()
             # sys.exit()
 
-    def get_enclosed_surface_element_fractions(self, dshell, use_conjugate_contour = False):
+    def get_enclosed_surface_element_fractions(self, dshell, use_conjugate_contour = False, calculate_fractional_elements = False):
         """
         determine which surface elements are within the contour passed to this function via a drift shell object
         return the result as a mask with the corresponding fraction of surface element contained
@@ -370,154 +371,164 @@ class Earthlikebody:
 
         dphi = self.dphi_usph
         for i in range(self.phi_m_mesh_GEO.size):
-            #COMPLICATED, MORE ACCURATE SOLUTION:
-            # #interpolate the contour on mesh edges on either side in azimuth:
-            # Xc0_phi_GEO = self.phi_m_mesh_GEO[i] - dphi/2
-            # Xc0_GEO = dshell.interpolate_contour_at_phi_GEO(self, Xc0_phi_GEO)
-            # Xc0_th_usph_GEO, _ = self.get_usph_GEO_colat_long(self.R_G2M @ Xc0_GEO)
-            # # this point may have phi = Xc0_phi_GEO - 180d if the contour went above the pole
-            #
-            # Xc1_phi_GEO = self.phi_m_mesh_GEO[i] + dphi/2
-            # Xc1_GEO = dshell.interpolate_contour_at_phi_GEO(self, Xc1_phi_GEO)
-            # Xc1_th_usph_GEO, _ = self.get_usph_GEO_colat_long(self.R_G2M @ Xc1_GEO)
-            #
-            # if Xc0_th_usph_GEO > Xc1_th_usph_GEO:
-            #     Xc0_phi_GEO, Xc1_phi_GEO = Xc1_phi_GEO, Xc0_phi_GEO
-            #     Xc0_th_usph_GEO, Xc1_th_usph_GEO = Xc1_th_usph_GEO, Xc0_th_usph_GEO
-            #
-            # #compute index of vertices inside contour:
-            # # j0_outside and j1_outside will always be > 0
-            # j0_outside = np.argmin(Xc0_th_usph_GEO >= self.v)
-            # j1_outside = np.argmin(Xc1_th_usph_GEO >= self.v)
-            #
-            # #get gradient of the contour over the mesh surface element:
-            # dthdphi = (Xc1_th_usph_GEO - Xc0_th_usph_GEO)/ dphi #positive
-            #
-            # #begin iterating through the elements that the contour cuts in to:
-            # j = j0_outside
-            # #set mask for fully contained surface elements above:
-            # surface_m_mask[i, :j-1] = 1 - surface_m_mask[i, :j-1]  # flip the mask
-            # #next element to deal with:
-            # edge_top_th = self.v[j - 1]
-            # edge_btm_th = self.v[j]
-            # dS_element = self.get_dS(edge_top_th, dphi, edge_btm_th - edge_top_th)
-            #
-            # if j0_outside == j1_outside:
-            #
-            #     #consider the trapezoidal element:
-            #     #
-            #     #   ------
-            #     #  |@@@@@@|
-            #     #  x------x
-            #     #  |      |
-            #     #   ------
-            #     #contour passes through left and right edges of the same surface mesh element
-            #     #find the rectangular element equivalent to the trapezoid from top edge to contour:
-            #     # average theta of contour points:
-            #     th_c_av = (Xc0_th_usph_GEO + Xc1_th_usph_GEO)/2
-            #     dv_inside = th_c_av - edge_top_th
-            #     dS_inside = self.get_dS(edge_top_th, dphi, dv_inside)
-            #     surface_m_mask[i, j-1] = dS_inside / dS_element
-            #
-            #     p1 = self.get_xyz_surface_from_unitsph(edge_top_th, self.phi_m_mesh_GEO[i] - dphi/2)  # ul
-            #     p2 = self.get_xyz_surface_from_unitsph(edge_top_th, self.phi_m_mesh_GEO[i] - dphi/2 + dphi)  # ur
-            #     p3 = self.get_xyz_surface_from_unitsph(edge_top_th + dv_inside, self.phi_m_mesh_GEO[i] - dphi/2)  # ll
-            #     p4 = self.get_xyz_surface_from_unitsph(edge_top_th + dv_inside, self.phi_m_mesh_GEO[i] - dphi/2 + dphi)  # lr
-            #     fractional_elements.append([p1,p2,p3,p4])
-            # else:
-            #     #contour cuts through the bottom edge of the surface element and into elements below
-            #     #we swapped j0, j1 s.t. we are always going from high latitude (low colatitude) to low latitude (high colatitude)
-            #     #consider the first triangle cut out: find intercept phi through bottom edge at colatitude self.v[j0_outside]
-            #     #
-            #     #  -------
-            #     # |@@@@@@@|
-            #     # x@@@@@@@|<---.
-            #     # |\@@@@@@|    h
-            #     # | \@@@@@|    :
-            #     # x--x---- <---'
-            #     #
-            #
-            #     h = edge_btm_th - Xc0_th_usph_GEO #positive
-            #     phi_hit_bottom_edge = (self.phi_m_mesh_GEO[i] - dphi/2) + h/dthdphi
-            #     # triangle top corner is at Xc0_th_usph_GEO
-            #     dS_tri = self.get_dS(Xc0_th_usph_GEO, phi_hit_bottom_edge - Xc0_phi_GEO, h) / 2 #divide by 2, triangle
-            #     surface_m_mask[i, j-1] = 1 - dS_tri / dS_element
-            #     #points in triangle (negative area):
-            #     # p1 = self.get_xyz_surface_from_unitsph(Xc0_th_usph_GEO, self.phi_m_mesh_GEO[i] - dphi/2)  # ul
-            #     # p2 = p1
-            #     # p3 = self.get_xyz_surface_from_unitsph(edge_btm_th, self.phi_m_mesh_GEO[i] - dphi/2)  # ll
-            #     # p4 = self.get_xyz_surface_from_unitsph(edge_btm_th, phi_hit_bottom_edge)  # lr
-            #     #area we want (split into two quadrilaterals):
-            #     # rectangle above triangle:
-            #     p1 = self.get_xyz_surface_from_unitsph(edge_top_th, self.phi_m_mesh_GEO[i] - dphi/2)  # ul
-            #     p2 = self.get_xyz_surface_from_unitsph(edge_top_th, self.phi_m_mesh_GEO[i] + dphi/2)  # ur
-            #     p3 = self.get_xyz_surface_from_unitsph(Xc0_th_usph_GEO, self.phi_m_mesh_GEO[i] - dphi/2)  # ll
-            #     p4 = self.get_xyz_surface_from_unitsph(Xc0_th_usph_GEO, self.phi_m_mesh_GEO[i] + dphi/2)  # lr
-            #     fractional_elements.append([p1,p2,p3,p4])
-            #     # trapezoid next to triangle:
-            #     p1 = self.get_xyz_surface_from_unitsph(Xc0_th_usph_GEO, self.phi_m_mesh_GEO[i] - dphi/2)  # ul
-            #     p2 = self.get_xyz_surface_from_unitsph(Xc0_th_usph_GEO, self.phi_m_mesh_GEO[i] + dphi/2)  # ur
-            #     p3 = self.get_xyz_surface_from_unitsph(edge_btm_th, phi_hit_bottom_edge)  # ll
-            #     p4 = self.get_xyz_surface_from_unitsph(edge_btm_th, self.phi_m_mesh_GEO[i] + dphi/2)  # lr
-            #     fractional_elements.append([p1,p2,p3,p4])
-            #
-            #     for j in range(j0_outside + 1, j1_outside + 1): #j = up to j1_outside inclusive
-            #         edge_top_th = self.v[j - 1]
-            #         edge_btm_th = self.v[j]
-            #         dS_element = self.get_dS(edge_top_th, dphi, edge_btm_th - edge_top_th)
-            #         phi_hit_top_edge = phi_hit_bottom_edge #from last iteration
-            #         if j != j1_outside:
-            #             #consider the trapezoidal element:
-            #             #
-            #             #   -x-----
-            #             #  |  \@@@@|
-            #             #  |   \@@@|
-            #             #  |    \@@|
-            #             #   -----x-|
-            #             #
-            #             # find the rectangular element equivalent to the trapezoid:
-            #             phi_hit_bottom_edge = phi_hit_top_edge + (edge_btm_th - edge_top_th)/dthdphi
-            #             #print(phi_hit_top_edge, phi_hit_bottom_edge- phi_hit_bottom_edge)
-            #             phi_c_av = (phi_hit_bottom_edge + phi_hit_top_edge)/2
-            #             dS_inside = self.get_dS(edge_top_th, self.phi_m_mesh_GEO[i] + dphi/2 - phi_c_av, edge_btm_th - edge_top_th)
-            #             surface_m_mask[i, j-1] = dS_inside / dS_element
-            #
-            #             p1 = self.get_xyz_surface_from_unitsph(edge_top_th, phi_c_av)  # ul
-            #             p2 = self.get_xyz_surface_from_unitsph(edge_top_th, self.phi_m_mesh_GEO[i] + dphi/2)  # ur
-            #             p3 = self.get_xyz_surface_from_unitsph(edge_btm_th, phi_c_av)  # ll
-            #             p4 = self.get_xyz_surface_from_unitsph(edge_btm_th, self.phi_m_mesh_GEO[i] + dphi/2)  # lr
-            #             fractional_elements.append([p1,p2,p3,p4])
-            #         else:
-            #             #consider the last triangle cut out, which is in the 'upper right' corner of the element:
-            #             # we need to use the top edge, which is the same as the bottom edge in the previous iteration
-            #             #
-            #             #   --x--x <---.
-            #             #  |   \@|     h
-            #             #  |    \|     :
-            #             #  |     x <---'
-            #             #  |     |
-            #             #   -----
-            #             #
-            #             h = Xc1_th_usph_GEO - edge_top_th
-            #             dS_tri = self.get_dS(edge_top_th, Xc1_phi_GEO - phi_hit_top_edge, h) / 2 #divide by 2, triangle
-            #             surface_m_mask[i, j-1] = dS_tri / dS_element
-            #
-            #             p1 = self.get_xyz_surface_from_unitsph(edge_top_th, phi_hit_top_edge)  # ul
-            #             p2 = self.get_xyz_surface_from_unitsph(edge_top_th,  self.phi_m_mesh_GEO[i] + dphi/2) #ur
-            #             p3 = self.get_xyz_surface_from_unitsph(Xc1_th_usph_GEO, self.phi_m_mesh_GEO[i] + dphi/2)  # ll
-            #             p4 = p3 #lr
-            #             fractional_elements.append([p1, p2, p3, p4])
-            #             break
+            if calculate_fractional_elements:
+                #COMPLICATED, MORE ACCURATE SOLUTION:
+                #interpolate the contour on mesh edges on either side in azimuth:
+                Xc0_phi_GEO = self.phi_m_mesh_GEO[i] - dphi/2
+                Xc0_GEO = dshell.interpolate_contour_at_phi_GEO(self, Xc0_phi_GEO)
+                Xc0_th_usph_GEO, _ = self.get_usph_GEO_colat_long(self.R_G2M @ Xc0_GEO)
+                # this point may have phi = Xc0_phi_GEO - 180d if the contour went above the pole
 
-            #SIMPLE, ALMOST AS GOOD SOLUTION:
-            #set all surface elements down to theta equal to true inside the mask (enclosed by contour)
-            Xcm_GEO = dshell.interpolate_contour_at_phi_GEO(self, self.phi_m_mesh_GEO[i])
-            thetacm_GEO = np.arctan2(np.linalg.norm(Xcm_GEO[:2]), Xcm_GEO[2])
-            if thetacm_GEO > self.theta_m_mesh_GEO[-1]:
-                j_within = len(self.theta_m_mesh_GEO) #all within range (i.e. contour is a tiny circle at theta ~ pi
+                Xc1_phi_GEO = self.phi_m_mesh_GEO[i] + dphi/2
+                Xc1_GEO = dshell.interpolate_contour_at_phi_GEO(self, Xc1_phi_GEO)
+                Xc1_th_usph_GEO, _ = self.get_usph_GEO_colat_long(self.R_G2M @ Xc1_GEO)
+
+                if Xc0_th_usph_GEO > Xc1_th_usph_GEO:
+                    Xc0_phi_GEO, Xc1_phi_GEO = Xc1_phi_GEO, Xc0_phi_GEO
+                    Xc0_th_usph_GEO, Xc1_th_usph_GEO = Xc1_th_usph_GEO, Xc0_th_usph_GEO
+
+                #compute index of vertices inside contour:
+                # j0_outside and j1_outside will always be > 0
+                j0_outside = np.argmin(Xc0_th_usph_GEO >= self.v)
+                j1_outside = np.argmin(Xc1_th_usph_GEO >= self.v)
+
+                #get gradient of the contour over the mesh surface element:
+                dthdphi = (Xc1_th_usph_GEO - Xc0_th_usph_GEO)/ dphi #positive
+
+                #begin iterating through the elements that the contour cuts in to:
+                j = j0_outside
+                #set mask for fully contained surface elements above:
+                surface_m_mask[i, :j-1] = 1 - surface_m_mask[i, :j-1]  # flip the mask
+                #next element to deal with:
+                edge_top_th = self.v[j - 1]
+                edge_btm_th = self.v[j]
+                dS_element = self.get_dS(edge_top_th, dphi, edge_btm_th - edge_top_th)
+
+                if j0_outside == j1_outside:
+
+                    #consider the trapezoidal element:
+                    #
+                    #   ------
+                    #  |@@@@@@|
+                    #  x------x
+                    #  |      |
+                    #   ------
+                    #contour passes through left and right edges of the same surface mesh element
+                    #find the rectangular element equivalent to the trapezoid from top edge to contour:
+                    # average theta of contour points:
+                    th_c_av = (Xc0_th_usph_GEO + Xc1_th_usph_GEO)/2
+                    dv_inside = th_c_av - edge_top_th
+                    dS_inside = self.get_dS(edge_top_th, dphi, dv_inside)
+                    surface_m_mask[i, j-1] = dS_inside / dS_element
+
+                    p1 = self.get_xyz_surface_from_unitsph(edge_top_th, self.phi_m_mesh_GEO[i] - dphi/2)  # ul
+                    p2 = self.get_xyz_surface_from_unitsph(edge_top_th, self.phi_m_mesh_GEO[i] - dphi/2 + dphi)  # ur
+                    p3 = self.get_xyz_surface_from_unitsph(edge_top_th + dv_inside, self.phi_m_mesh_GEO[i] - dphi/2)  # ll
+                    p4 = self.get_xyz_surface_from_unitsph(edge_top_th + dv_inside, self.phi_m_mesh_GEO[i] - dphi/2 + dphi)  # lr
+                    fractional_elements.append([p1,p2,p3,p4])
+                else:
+                    #contour cuts through the bottom edge of the surface element and into elements below
+                    #we swapped j0, j1 s.t. we are always going from high latitude (low colatitude) to low latitude (high colatitude)
+                    #consider the first triangle cut out: find intercept phi through bottom edge at colatitude self.v[j0_outside]
+                    #
+                    #  -------
+                    # |@@@@@@@|
+                    # x@@@@@@@|<---.
+                    # |\@@@@@@|    h
+                    # | \@@@@@|    :
+                    # x--x---- <---'
+                    #
+
+                    h = edge_btm_th - Xc0_th_usph_GEO #positive
+                    phi_hit_bottom_edge = (self.phi_m_mesh_GEO[i] - dphi/2) + h/dthdphi
+                    # triangle top corner is at Xc0_th_usph_GEO
+                    dS_tri = self.get_dS(Xc0_th_usph_GEO, phi_hit_bottom_edge - Xc0_phi_GEO, h) / 2 #divide by 2, triangle
+                    surface_m_mask[i, j-1] = 1 - dS_tri / dS_element
+                    #points in triangle (negative area):
+                    # p1 = self.get_xyz_surface_from_unitsph(Xc0_th_usph_GEO, self.phi_m_mesh_GEO[i] - dphi/2)  # ul
+                    # p2 = p1
+                    # p3 = self.get_xyz_surface_from_unitsph(edge_btm_th, self.phi_m_mesh_GEO[i] - dphi/2)  # ll
+                    # p4 = self.get_xyz_surface_from_unitsph(edge_btm_th, phi_hit_bottom_edge)  # lr
+                    #area we want (split into two quadrilaterals):
+                    # rectangle above triangle:
+                    p1 = self.get_xyz_surface_from_unitsph(edge_top_th, self.phi_m_mesh_GEO[i] - dphi/2)  # ul
+                    p2 = self.get_xyz_surface_from_unitsph(edge_top_th, self.phi_m_mesh_GEO[i] + dphi/2)  # ur
+                    p3 = self.get_xyz_surface_from_unitsph(Xc0_th_usph_GEO, self.phi_m_mesh_GEO[i] - dphi/2)  # ll
+                    p4 = self.get_xyz_surface_from_unitsph(Xc0_th_usph_GEO, self.phi_m_mesh_GEO[i] + dphi/2)  # lr
+                    fractional_elements.append([p1,p2,p3,p4])
+                    # trapezoid next to triangle:
+                    p1 = self.get_xyz_surface_from_unitsph(Xc0_th_usph_GEO, self.phi_m_mesh_GEO[i] - dphi/2)  # ul
+                    p2 = self.get_xyz_surface_from_unitsph(Xc0_th_usph_GEO, self.phi_m_mesh_GEO[i] + dphi/2)  # ur
+                    p3 = self.get_xyz_surface_from_unitsph(edge_btm_th, phi_hit_bottom_edge)  # ll
+                    p4 = self.get_xyz_surface_from_unitsph(edge_btm_th, self.phi_m_mesh_GEO[i] + dphi/2)  # lr
+                    fractional_elements.append([p1,p2,p3,p4])
+
+                    for j in range(j0_outside + 1, j1_outside + 1): #j = up to j1_outside inclusive
+                        edge_top_th = self.v[j - 1]
+                        edge_btm_th = self.v[j]
+                        dS_element = self.get_dS(edge_top_th, dphi, edge_btm_th - edge_top_th)
+                        phi_hit_top_edge = phi_hit_bottom_edge #from last iteration
+                        if j != j1_outside:
+                            #consider the trapezoidal element:
+                            #
+                            #   -x-----
+                            #  |  \@@@@|
+                            #  |   \@@@|
+                            #  |    \@@|
+                            #   -----x-|
+                            #
+                            # find the rectangular element equivalent to the trapezoid:
+                            phi_hit_bottom_edge = phi_hit_top_edge + (edge_btm_th - edge_top_th)/dthdphi
+                            #print(phi_hit_top_edge, phi_hit_bottom_edge- phi_hit_bottom_edge)
+                            phi_c_av = (phi_hit_bottom_edge + phi_hit_top_edge)/2
+                            dS_inside = self.get_dS(edge_top_th, self.phi_m_mesh_GEO[i] + dphi/2 - phi_c_av, edge_btm_th - edge_top_th)
+                            surface_m_mask[i, j-1] = dS_inside / dS_element
+
+                            p1 = self.get_xyz_surface_from_unitsph(edge_top_th, phi_c_av)  # ul
+                            p2 = self.get_xyz_surface_from_unitsph(edge_top_th, self.phi_m_mesh_GEO[i] + dphi/2)  # ur
+                            p3 = self.get_xyz_surface_from_unitsph(edge_btm_th, phi_c_av)  # ll
+                            p4 = self.get_xyz_surface_from_unitsph(edge_btm_th, self.phi_m_mesh_GEO[i] + dphi/2)  # lr
+                            fractional_elements.append([p1,p2,p3,p4])
+                        else:
+                            #consider the last triangle cut out, which is in the 'upper right' corner of the element:
+                            # we need to use the top edge, which is the same as the bottom edge in the previous iteration
+                            #
+                            #   --x--x <---.
+                            #  |   \@|     h
+                            #  |    \|     :
+                            #  |     x <---'
+                            #  |     |
+                            #   -----
+                            #
+                            h = Xc1_th_usph_GEO - edge_top_th
+                            dS_tri = self.get_dS(edge_top_th, Xc1_phi_GEO - phi_hit_top_edge, h) / 2 #divide by 2, triangle
+                            surface_m_mask[i, j-1] = dS_tri / dS_element
+
+                            p1 = self.get_xyz_surface_from_unitsph(edge_top_th, phi_hit_top_edge)  # ul
+                            p2 = self.get_xyz_surface_from_unitsph(edge_top_th,  self.phi_m_mesh_GEO[i] + dphi/2) #ur
+                            p3 = self.get_xyz_surface_from_unitsph(Xc1_th_usph_GEO, self.phi_m_mesh_GEO[i] + dphi/2)  # ll
+                            p4 = p3 #lr
+                            fractional_elements.append([p1, p2, p3, p4])
+                            break
             else:
-                j_within = np.argmax(self.theta_m_mesh_GEO > thetacm_GEO)
-            surface_m_mask[i, :j_within] = 1 - surface_m_mask[i, :j_within]  # flip the mask
+                #SIMPLE, ALMOST AS GOOD SOLUTION:
+                #set all surface elements down to theta equal to true inside the mask (enclosed by contour)
+                Xcm_GEO = dshell.interpolate_contour_at_phi_GEO(self, self.phi_m_mesh_GEO[i])
+                thetacm_GEO = np.arctan2(np.linalg.norm(Xcm_GEO[:2]), Xcm_GEO[2])
+                if thetacm_GEO > self.theta_m_mesh_GEO[-1]:
+                    j_within = len(self.theta_m_mesh_GEO) #all within range (i.e. contour is a tiny circle at theta ~ pi
+                else:
+                    j_within = np.argmax(self.theta_m_mesh_GEO > thetacm_GEO)
+                surface_m_mask[i, :j_within] = 1 - surface_m_mask[i, :j_within]  # flip the mask
+
+                #add whole elements of the surface mesh:
+                #for j in range(1, j_within+1):
+                j = j_within
+                p1 = self.get_xyz_surface_from_unitsph(self.v[j - 1], self.phi_m_mesh_GEO[i] - dphi/2)  # ul
+                p2 = self.get_xyz_surface_from_unitsph(self.v[j - 1], self.phi_m_mesh_GEO[i] + dphi/2)  # ur
+                p3 = self.get_xyz_surface_from_unitsph(self.v[j], self.phi_m_mesh_GEO[i] - dphi/2)  # ll
+                p4 = self.get_xyz_surface_from_unitsph(self.v[j], self.phi_m_mesh_GEO[i] + dphi/2)  # lr
+                fractional_elements.append([p1, p2, p3, p4])
 
         if np.sum(surface_m_mask) > (surface_m_mask.size//2):
            surface_m_mask = 1 - surface_m_mask
@@ -573,7 +584,7 @@ class Earthlikebody:
 
         ###### CRITICAL PARAMETERS #######
         #define the initial colatitude range to probe the unitsphere for an appropriate field line:
-        # theta_usph_GEO_explore_range = np.pi / 8 #near the SSA, etc., the coutour can veer to different latitudes
+        # theta_usph_GEO_explore_range = np.pi / 8 #near the SSA, etc., the contour can veer to different latitudes
         # this will be scaled based on the azimuthal resolution of the ellipsoid surface
         #define the resolution at which to identify colatitude of an appropriate field line:
         theta_usph_GEO_converge_resolution = self.dtheta_usph / 2 #latitudinal resolution of the unit sphere transformed to the ellipsoid divided by 2
@@ -837,9 +848,6 @@ class Earthlikebody:
             idx_eq1 = np.argmin(traceB1)
             It1 = field_tools.calculate_I(Bm, traceB1, idx_eq1, trace_ds, It_min_numerical=0)
 
-        #print(It0, I_target, It1)
-        #print(len(tracepath0), len(tracepath1))
-
         #check that I_ is somewhere in the middle:
         if It0 <= I_target and I_target < It1 or It0 > I_target and I_target >= It1:
             pass
@@ -848,8 +856,12 @@ class Earthlikebody:
             #print("","this error could be caused by a colatitude search range passing over the pole to the other side of Earth")
             if It0 == np.inf and It1 == np.inf:
                 print("","both field lines were found to be untraceable (out of range)")
-            else:
-                print("","field line loops, from theta0: {:.2f}; from theta1: {:.2f}".format(field_tools.get_tracepath_nloops(tracepath0), field_tools.get_tracepath_nloops(tracepath1)))
+            #else:
+            #    print("","field line loops, from theta0: {:.2f}; from theta1: {:.2f}".format(field_tools.get_tracepath_nloops(tracepath0), field_tools.get_tracepath_nloops(tracepath1)))
+            if It0 < np.inf and It0 > I_target:
+                losscone = True
+                #we will call this the loss cone because the path on the field line from Xt0 to conjugate Bm is the smallest possible, yet too large
+                # this means I_target is not supported when searching with Bm provided
             return None, losscone
 
         #keep halving the domain until we have our desired accuracy:
@@ -1142,3 +1154,59 @@ def haversine(r, phi1, phi2, theta1, theta2):
     dlat = lat2 - lat1
     dphi = phi2 - phi1
     return 2 * r * asin(sqrt((1-cos(dlat) + cos(lat1) * cos(lat2) * (1-cos(dphi)))/2))
+
+
+def dipolelc(L, alt=0):
+    ra = (constants.RE + alt) / constants.RE
+    approx = np.arcsin(((ra ** 3) / ((((4 - 3 * ra / L)) ** 0.5) * (L ** 3))) ** (0.5)) * 180 / np.pi
+    return approx
+
+def fit_0km(L_):
+    fit_0km_1 = 5.538818729021305
+    fit_0km_2 = 0.09700889384979633
+    fit_0km_3 = -0.0008115966181656604
+    fit_0km_4 = 3.8319902212833926e-06
+    x = np.exp(fit_0km_1 / (L_))
+    return dipolelc(L_) + fit_0km_2 * x + fit_0km_3 * (x ** 2) + fit_0km_4 * (x ** 3)
+
+def get_lc(L_, alt):
+    """
+    loss cone model from Lozinski et al., 2024, https://doi.org/10.1029/2023JA032377
+     there is mistake in the paper: the values for a_1, b_1 and c_1 should be as shown below
+     result is returned in degrees
+    """
+    ra = (constants.RE + alt) / constants.RE
+
+    a_1 = 8.712429475440635e-08
+    #a_1 = 0.0653
+    a_2 = -5.314852441749575
+
+    b_1 = -5.355451442791294e-07
+    #b_1 = -0.402
+    b_2 = -11.699977235315584
+
+    c_1 = -9.672400282940455e-07
+    #c_1 = -0.725
+    c_2 = -17.982414972607888
+
+    a_ = 10 ** (a_1 * alt + a_2)
+    b_ = 10 ** (b_1 * alt + b_2)
+    c_ = 10 ** (c_1 * alt + c_2)
+
+    z = alt / (L_ - 1)
+    return min(fit_0km(L_) + a_ * z - b_ * (z ** 2) + c_ * (z ** 3), 90)
+
+# def make_lc_plot():
+#     import matplotlib.pyplot as plt
+#     fig, ax = plt.subplots(1)
+#     ax_L = np.linspace(1, 10, 50)
+#     ax_h = [0, 150, 300, 450, 600]
+#     for h in ax_h:
+#         aeq = []
+#         for L in ax_L:
+#             lc = get_lc(L, h*1000)
+#             aeq.append(lc)
+#         ax.plot(ax_L, aeq)
+#     ax.set_ylim([0, 90])
+#     ax.grid()
+#     plt.show()

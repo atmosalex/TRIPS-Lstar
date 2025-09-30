@@ -16,6 +16,16 @@ def moving_average(a, n) :
     ret[n:] = ret[n:] - ret[:-n]
     return ret[n - 1:] / n
 
+def get_solved_momenta_from_track(particle_m0, solved_position, solved_times):
+    """
+    infer momentum from previously calculated trajectory
+    returns a numpy array nt-1 x 3, where nt is the length of solved_position
+    """
+    velocity = (solved_position[1:] - solved_position[:-1]) / (solved_times[1:, np.newaxis] - solved_times[:-1, np.newaxis])
+    gamma = 1.0 / (np.sqrt(1 - velocity * velocity / (constants.c ** 2)))
+    momenta = gamma * particle_m0 * velocity
+    return momenta
+
 class Proton_trace:
     def __init__(self, mu_SI, aeq, L, iphase_gyro=0, iphase_bounce=0, iphase_drift=0, storetrack = True, storeinterval = 1, tsperorbit=300):#, add_dipole_background=False):
         #proton properties:
@@ -37,8 +47,8 @@ class Proton_trace:
 
         self.times = []
         self.pt = []
-        self.gc_times = []
-        self.gc_pos = []
+        #self.gc_times = []
+        #self.gc_pos = []
 
         mu = mu_SI * constants.G2T / constants.MeV2J #MeV/G
         self.phasespacecoords = np.array([[mu, -1.0, -1.0, aeq*180/np.pi, L, iphase_gyro, iphase_bounce, iphase_drift],

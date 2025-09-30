@@ -18,6 +18,7 @@ class Driftshell:
                        'Bm': None,
                        'aeq': None,
                        'contourpts': [],
+                       'contourpts_MLT': [],
                        'Phi': None,
                        'Lstar': None,
                        'Lstar_err': None,
@@ -39,15 +40,22 @@ class Driftshell:
         traces = [] #store each field line
         traces_B = [] #store each field line
         for pt in self.params['contourpts']:
-            tracepath, traceB = field.trace_until_conjugate_surface_intersections_from_outside(ellipsoid_surf, pt, self.time, trace_ds=self.trace_ds)
-            if np.linalg.norm(pt - tracepath[0]) < np.linalg.norm(pt - tracepath[1]):
-                pt_conj = tracepath[-1]
+            tracepath, traceB = field.trace_until_conjugate_surface_intersections_from_outside(ellipsoid_surf, pt, self.time, trace_ds=self.trace_ds, actoninterr=0)
+            if not field.range_adequate:
+                print("Warning: could not retrace a field line found to be on the drift shell contour, skipping...")
+                pt_conj = [np.nan, np.nan, np.nan]
+                tracepath = []
+                traceB = []
+                field._reset_range_warning()
             else:
-                pt_conj = tracepath[0]
+                if np.linalg.norm(pt - tracepath[0]) < np.linalg.norm(pt - tracepath[1]):
+                    pt_conj = tracepath[-1]
+                else:
+                    pt_conj = tracepath[0]
+
             pts_conj.append(pt_conj)
             traces.append(tracepath)
             traces_B.append(traceB)
-            # B_pt_conj = np.linalg.norm(self.getBE(*pt_conj, time)[:3])
         pts_conj = np.array(pts_conj)
         self.params['contourpts_conj'] = pts_conj
         return traces, traces_B
@@ -59,6 +67,7 @@ class Driftshell:
          - the path went out of the field's range
          - the path went into the loss cone
          - some other error trying to locate two field lines with neighbouring I (contour tracing error), which has numerous causes
+         the calling function should reset the range warning!!
         """
         Xgc = self.Xgc
         time = self.time
@@ -79,10 +88,10 @@ class Driftshell:
         Bm = Bgc / (sin(self.aloc_r) ** 2)
 
         self.params['Bm'] = Bm
-        self.params['aeq'] = asin(min(1, sqrt(Be / Bm)))
+        self.params['aeq'] = asin(min(1, sqrt(Be / Bm))) #the equatorial pitch angle attribute parameter can change here!
         # aeq_deg = asin(np.clip(sqrt(Be/Bm), 0, 1)) * 180/np.pi
 
-        # check both ends of the bfield line trace have a magnetic bfield strength that exceeds Bm:
+        #ensure both ends of the bfield line trace have a magnetic bfield strength that exceeds Bm:
         self.params['losscone'] = False
         if traceB[0] < Bm or traceB[-1] < Bm:
             self.params['losscone'] = True
@@ -90,7 +99,12 @@ class Driftshell:
                 if verbose: print("Warning: did not calculate a drift shell because the mirror point for this pitch angle is in the bounce loss cone")
                 return False
             else:
+                #trace to conjugate points potentially inside the ellipsoid:
                 _, _, _, traceB = bfield.trace_until_conjugate_field_strength(Bm, Xgc, time, trace_ds=self.trace_ds, actoninterr=0)
+                if not bfield.range_adequate:
+                    self.params['range_warning'] = True
+                    if verbose: print("Warning: could not calculate a drift shell because the fieldline is untraceable to conjugate Bm")
+                    return False
                 idx_eq = np.argmin(traceB)
 
         # calculate I for this particle:
@@ -116,16 +130,17 @@ class Driftshell:
         idx_phi_m_mesh_GEO = np.argmin(Xs_GEO_phi > ellipsoid_surf.phi_m_mesh_GEO) % ellipsoid_surf.phi_m_mesh_GEO.size
         while remaining_longitude > 1e-10:
             Xf, losscone_encountered = ellipsoid_surf._search_surface_meridian_for_fieldline(bfield, idx_phi_m_mesh_GEO, time, Ip, Bm, hemisph_Xs, trace_ds=self.trace_ds)
+            if losscone_encountered:
+                #this could be True at one longitude, False at another, but need to set params['losscone'] permanently
+                self.params['losscone'] = True
 
             if Xf is None:
                 if verbose: print("Warning: could not calculate a drift shell due to contour tracing error")
                 self.params['range_warning'] = bfield.range_adequate
                 return False
-            elif losscone_encountered:
-                self.params['losscone'] = True
-                if self.quit_in_loss_cone:
-                    if verbose: print("Warning: did not calculate a drift shell because the contour entered the loss cone")
-                    return False
+            elif losscone_encountered and self.quit_in_loss_cone:
+                if verbose: print("Warning: did not calculate a drift shell because the contour entered the loss cone")
+                return False
 
             remaining_longitude = remaining_longitude - ellipsoid_surf.dphi_usph
             idx_phi_m_mesh_GEO = (idx_phi_m_mesh_GEO + surface_meridians_to_step) % ellipsoid_surf.phi_m_mesh_GEO.size
@@ -174,7 +189,7 @@ class Driftshell:
         #     print("Warning: could not calculate a drift shell because the contour was not drawn correctly")
         #     return
 
-    def _calculate_Lstar(self, ellipsoid_surf, use_conjugate_contour=False):
+    def _calculate_Lstar(self, ellipsoid_surf, use_conjugate_contour=False, calculate_fractional_elements=False):
         # #calculate Lstar according to eq. 3.6 from Roederer, 1970:
         # longs_r = []
         # igrnd = []
@@ -193,7 +208,7 @@ class Driftshell:
 
         # get flux mask:
         # sum B.n dS across the portion of the surface enclosed by the contour:
-        flux_mask, _ = ellipsoid_surf.get_enclosed_surface_element_fractions(self, use_conjugate_contour)
+        flux_mask, _ = ellipsoid_surf.get_enclosed_surface_element_fractions(self, use_conjugate_contour, calculate_fractional_elements=calculate_fractional_elements)
         # flux_mask = flux_masks[0]
         M = ellipsoid_surf.IGRFprops.B0 * constants.RE ** 3
         flux = (flux_mask * ellipsoid_surf.flux_IGRF).flatten()
@@ -239,13 +254,17 @@ class Driftshell:
             # therefore, we removed the first and last points so the space is always self.trace_ds
             #assert(np.allclose(np.ones(trace.shape[0]-1)*self.trace_ds,np.linalg.norm(trace[1:] - trace[:-1], axis=1)))
 
-            curve_params = field_tools.get_curvature_of_fieldline_trace_with_constant_ds(trace, trace_B, self.trace_ds)
-
-            if len(curve_params):
-                RC, dRCdS, d2RCdS2, dBdS, d2BdS2, B = curve_params
-            else:
-                RC, dRCdS, d2RCdS2, dBdS, d2BdS2, B = [np.nan]*6
+            if not len(trace):
+                RC, dRCdS, d2RCdS2, dBdS, d2BdS2, B = [np.nan] * 6
                 valid_all = False
+            else:
+                curve_params = field_tools.get_curvature_of_fieldline_trace_with_constant_ds(trace, trace_B, self.trace_ds)
+
+                if len(curve_params):
+                    RC, dRCdS, d2RCdS2, dBdS, d2BdS2, B = curve_params
+                else:
+                    RC, dRCdS, d2RCdS2, dBdS, d2BdS2, B = [np.nan]*6
+                    valid_all = False
             contourpts_RC.append(RC)
             contourpts_dRCdS.append(dRCdS)
             contourpts_d2RCdS2.append(d2RCdS2)
@@ -264,16 +283,19 @@ class Driftshell:
         print()
         return valid_all
 
-    def solve(self, bfield, ellipsoid_surf, surface_meridians_to_step=1, compute_curvature_parameters=False, verbose=True):
+    def solve(self, bfield, ellipsoid_surf, surface_meridians_to_step=1, verbose=True): #compute_curvature_parameters=False,
         bfield.verbal_range_warning = False  # suppress warnings until after this calculation!
         contour_successful = self._attempt_contour(bfield, ellipsoid_surf, surface_meridians_to_step=surface_meridians_to_step, verbose=verbose)
         # we wrap _attempt_contour in this function so we can disable then re-enable warnings conveniently
         bfield._reset_range_warning()  # just in case it was triggered
         bfield.verbal_range_warning = True
         if contour_successful:
-            self._calculate_Lstar(ellipsoid_surf)
-            if compute_curvature_parameters:
-                self.compute_curvature_from_solved_contourpts(bfield, ellipsoid_surf)
+            self._calculate_Lstar(ellipsoid_surf, calculate_fractional_elements=settings.calculate_fractional_elements_of_surface_mesh_enclosed_by_driftshell)
+            #if compute_curvature_parameters:
+            #    self.compute_curvature_from_solved_contourpts(bfield, ellipsoid_surf)
+            #store the MLT of each contour point:
+            MLT = self.get_MLT_of_contourpts(ellipsoid_surf.IGRFprops)
+            self.params['contourpts_MLT'] = MLT
         return contour_successful
 
     def get_MLT_of_contourpts(self, IGRFprops):
@@ -456,6 +478,7 @@ class Driftshell:
 
 def interpolate_contour_index_in_arbitrary_cyclical_coordinates(phi, phi_contour):
     """
+    phi values must be cyclical in the range [0 to 2pi]
     this function is NOT reference frame-specific but phi and pts MUST be in the same reference frame
     this function assumes:
      - a contour of points goes around the MAG frame Z axis anticlockwise, such that...
@@ -494,9 +517,8 @@ def find_driftshell_with_given_properties(ellipsoid_surf, target_Lstar, target_a
     if searching_for_LCDS:
         dLstar_tolerate = np.inf
     else:
-        # how close we need to get in L*:
+        #how close we need to get in L* for a solution to be worth of keeping:
         # dLstar_tolerate = (target_Lstar + 5) * 0.075  # i.e. 1.2+-0.046, 5+-0.075
-        # if we are in a dipole, find the closest we can get to finding L given our dtheta convergence limit (dth_quit):
         theta_dipL = np.pi / 2 - acos(sqrt(1 / target_Lstar))
         target_L_down = 1 / (cos(np.pi / 2 - (theta_dipL + dth_quit)) ** 2)
         target_L_up = 1 / (cos(np.pi / 2 - (theta_dipL - dth_quit)) ** 2)
@@ -534,6 +556,7 @@ def find_driftshell_with_given_properties(ellipsoid_surf, target_Lstar, target_a
 
     #find the colatitude limits for the northern magnetic hemisphere:
     idx_next_phi = np.argmin(search_GEO_phi > ellipsoid_surf.phi_m_mesh_GEO)
+    #print(search_GEO_phi, ellipsoid_surf.phi_m_mesh_GEO[0], "...", ellipsoid_surf.phi_m_mesh_GEO[-1])
     theta_usph_GEO_explore_limits = ellipsoid_surf._find_colatitude_limits_of_magnetic_hemisph_on_surface_unitsph(bfield, idx_next_phi, hemisph=-1, time=time_field, actoninterr=1)
 
     #probe starting from this point, going downward in L, jumping small changes in unitsphere colatitude
@@ -589,11 +612,6 @@ def find_driftshell_with_given_properties(ellipsoid_surf, target_Lstar, target_a
             dth = dth/2
         else: #Lstar is not None
             print("", "", "found L*={:.5f}".format(Lstar))
-            # #keep track of the last closed drift shell object:
-            # if LCDS is None:
-            #     LCDS = dshell
-            # elif Lstar > LCDS.params['Lstar']:
-            #     LCDS = dshell
 
             #record successful L* determination and corresponding theta:
             if Lstar > target_Lstar:
@@ -616,6 +634,16 @@ def find_driftshell_with_given_properties(ellipsoid_surf, target_Lstar, target_a
                 frac_L = (target_Lstar - Lstar0) / (Lstar1 - Lstar0)
                 th = theta_usph_GEO_converge_limits[0] + frac_L * (theta_usph_GEO_converge_limits[1] - theta_usph_GEO_converge_limits[0])
                 dth = th - theta
+
+                #unfortunately we found a bug whereby lower L* can be found at higher latitude
+                # this is difficult to deal with because previous L* calculations only persist under certain conditions,
+                # so we just have to compare to what we have stored now to check for this scenario
+                #the bug causes a problem in this code block because dth goes the wrong way,
+                # so we will add a check here to hopefully catch it:
+                if np.sign(Lstar1 - Lstar0) == np.sign(theta_usph_GEO_converge_limits[1] - theta_usph_GEO_converge_limits[0]):
+                    print("Error: found a higher L* at lower altitude, quitting convergence early...")
+                    break
+
             else:
                 #make a guess at the best step based on invariant latitudes:
                 # assume the difference between Lstars (in terms of colatitude) is the same as the difference between dipole L shells
@@ -640,13 +668,15 @@ def find_driftshell_with_given_properties(ellipsoid_surf, target_Lstar, target_a
 
     #return a drift shell if we got one:
     if isinstance(dshell_converge_limits[1], Driftshell) and dshell_converge_limits[0] is None:
+        #we only got one drift shell
         if abs(dshell_converge_limits[1].params['Lstar'] - target_Lstar) <= dLstar_tolerate:
             return dshell_converge_limits[1]
     elif isinstance(dshell_converge_limits[0], Driftshell) and dshell_converge_limits[1] is None:
+        # we only got one drift shell
         if abs(dshell_converge_limits[0].params['Lstar'] - target_Lstar) <= dLstar_tolerate:
             return dshell_converge_limits[0]
     elif isinstance(dshell_converge_limits[0], Driftshell) and isinstance(dshell_converge_limits[1], Driftshell):
-        #return the closest drift shell in Lstar:
+        # we got two drift shells, return the closest in Lstar to the target:
         #print("0: ", dshell_converge_limits[0].params['Lstar'])
         #print("1: ", dshell_converge_limits[1].params['Lstar'])
         if abs(target_Lstar - dshell_converge_limits[0].params['Lstar']) < abs(target_Lstar - dshell_converge_limits[1].params['Lstar']):

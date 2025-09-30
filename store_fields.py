@@ -51,7 +51,7 @@ class HDF5_field:
         return success
 
 
-    def add_dataset(self, gname_full, dsname, dataset, compressmethod="gzip"):
+    def add_dataset(self, gname_full, dsname, dataset, compressmethod=None):
 
         """add new data array to a group"""
         success = 0

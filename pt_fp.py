@@ -424,27 +424,6 @@ def converge_on_first_crossing_idx(xyz, ti, bfield, idx_jump, count_index=0, tim
     else:
         return -1
 
-def extract_GC_only(particle, bfield, solved_times, solved_position, solved_momenta = None, existing_storeinterval=1):
-    #set up the particle:
-    if solved_momenta is None:
-        # infer momentum from previously calculated trajectory:
-        velocity = (solved_position[1:] - solved_position[:-1]) / (solved_times[1:, np.newaxis] - solved_times[:-1, np.newaxis])
-        gamma = 1.0 / (np.sqrt(1 - velocity * velocity / (c ** 2)))
-        momenta = gamma * particle.m0 * velocity
-        particle.times = solved_times[:-1]
-        particle.pt = np.hstack((solved_position[:-1], momenta))
-    else:
-        particle.times = solved_times
-        particle.pt = np.hstack((solved_position, solved_momenta))
-
-    if (not particle.storetrack or len(particle.pt) == 0):
-        print("Error: cannot calculate the GC trajectory because the particle object has no track stored")
-        print("", "skipping...")
-        return 2
-
-    track_gyrocentre_time, track_gyrocentre, _ = get_instantaneous_GC_from_track(bfield, particle)
-    return track_gyrocentre_time, track_gyrocentre
-
 def construct_guiding_center_frame(x_GC_MAG, B_GC):
     """
     Zn in direction of B_GC
@@ -475,8 +454,8 @@ def diagnostic_initialization(dshell, particle, bfield, ellipsoid_surf):
     iphase_drift_MLT = 24*iphase_drift_d/360
     Xc = dshell.interpolate_contour_at_MLT(ellipsoid_surf, iphase_drift_MLT)
 
-    # import pt_plot
-    # plot = pt_plot.Plot_2D_dshell_contour(ellipsoid_surf, dshell.hemisph_to_draw_contour)
+    # import plotting
+    # plot = plotting.Plot_2D_dshell_contour(ellipsoid_surf, dshell.hemisph_to_draw_contour)
     # for MLT in np.linspace(0, 24, 20):
     #     pt = dshell.interpolate_contour_at_MLT(ellipsoid_surf, MLT)
     #     plot.ax.scatter([pt[0]], [pt[1]], marker='x', color='r')
@@ -800,8 +779,8 @@ def derive_invariants(particle, bfield, ellipsoid_surf, reverse=False): #called 
         print("", "got Lstar = {:.3f}".format(dshell.params['Lstar']))
         invariants["L*"] = dshell.params['Lstar']
 
-    # import pt_plot
-    # plot= pt_plot.Plot_2D_dshell_contour(ellipsoid_surf, dshell.hemisph_to_draw_contour)
+    # import plotting
+    # plot= plotting.Plot_2D_dshell_contour(ellipsoid_surf, dshell.hemisph_to_draw_contour)
     # plot.add_dshell(dshell, ellipsoid_surf, 0)
     # plot.show_close()
     # sys.exit(1)

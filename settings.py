@@ -1,9 +1,18 @@
 import numpy as np
 from math import acos, cos, sqrt
-#a few key settings that affect the balance between precision and computation time:
-find_driftshell_theta_tolerance = 0.001
-ellipsoid_surface_n_phi = 24 + 1
-ellipsoid_surface_n_theta = 48 + 1
+
+#how precisely we vary theta to look for a drift shell at exactly the correct L*:
+find_driftshell_theta_tolerance = 0.0005
+
+#the resolution of our ellipsoid surface meshes:
+ellipsoid_surface_n_phi = 48 + 1
+ellipsoid_surface_n_theta = 96 + 1
+
+#whether or not we use a more precise integration technique for area encompassed by a drift shell:
+calculate_fractional_elements_of_surface_mesh_enclosed_by_driftshell = True
+
+#number of points to look for along a field line when fitting a circle for radius of curvature:
+field_line_curvature_fitting_n_include = 20
 
 def print_Lstar_tolerance():
     print("How closely will we converge in L* with a setting of dtheta={:.2E}?".format(find_driftshell_theta_tolerance))

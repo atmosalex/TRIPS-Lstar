@@ -1,4 +1,4 @@
-import field_store
+import store_fields
 import field_tools
 import IGRF_tools
 import numpy as np
@@ -168,7 +168,7 @@ def solvefield_pulse(pulse, fpath_sol, t0_ts, dur, resolution):
     print("E0 = ", pulse.E0, "V/m")
     # solution storage on disk:
     file_exists = os.path.exists(fpath_sol)
-    disk = field_store.HDF5_field(fpath_sol, existing=file_exists, delete=True)
+    disk = store_field.HDF5_field(fpath_sol, existing=file_exists, delete=True)
     disk.add_dataset(disk.group_name_data, "t0", t0_ts)
 
     # solve time evolution:
@@ -238,8 +238,7 @@ def solvefield_pulse(pulse, fpath_sol, t0_ts, dur, resolution):
     disk.add_dataset(disk.group_name_data, "Bwy", sol_Bwy)
     disk.add_dataset(disk.group_name_data, "Bwz", sol_Bwz)
 
-
-def burn_IRBEM_field_to_grid_sph(dpar, times=[1420070400.0], Rmax=7, resolution=(101, 49, 25), field_ext=11, field_int=0, redo=True, dir_out="configs", name=""):#, use_spacepy=False):
+def burn_IRBEM_field_to_grid_sph(dpar, times, Rmax=7, resolution=(101, 49, 25), field_ext=11, field_int=0, redo=True, dir_out="configs", name=""):#, use_spacepy=False):
     from datetime import timezone, datetime
     # if use_spacepy:
     #     #EXPERIMENTAL and not recommended
@@ -311,21 +310,25 @@ def burn_IRBEM_field_to_grid_sph(dpar, times=[1420070400.0], Rmax=7, resolution=
         return output
 
     #parse driving parameters into maginput:
-    maginput = {'Kp': 5.0}
-    keys_needed = ['Dst', 'Pdyn','ByIMF','BzIMF','W1','W2','W3','W4','W5','W6']
+    maginput = {}
+
+    #currently implemented: TS04, T89
+    keys_needed = {11: ['Dst', 'Pdyn','ByIMF','BzIMF','W1','W2','W3','W4','W5','W6'],#TS04
+                   4: ['Kp']}
+
     for key in dpar:
         key_clean = key.lstrip('<').rstrip('>').rstrip('IMF')
         if key_clean == 'By':
             key_clean = 'ByIMF'
         if key_clean == 'Bz':
             key_clean = 'BzIMF'
-        if key_clean in keys_needed:
+        if key_clean in keys_needed[field_ext]:
             maginput[key_clean] = dpar[key]
     # Pdyn has units nPa
     # By, Bz is in the GSM frame, nT
 
 
-    def getB(ib_dict, xMAG, rot_GEO_to_MAG, ib_field = mf_MAG, ib_maginput = maginput):
+    def getB(ib_dict, xMAG, rot_GEO_to_MAG, ib_field, ib_maginput):
         xp_MAG, yp_MAG, zp_MAG = xMAG
         # get field at the midpoint:
         ib_dict['x1'] = xp_MAG / constants.RE
@@ -352,8 +355,6 @@ def burn_IRBEM_field_to_grid_sph(dpar, times=[1420070400.0], Rmax=7, resolution=
     assert np.all(rr[:, 0, 0] == r)
     assert np.all(tt[0, :, 0] == th)
     assert np.all(pp[0, 0, :] == phi)
-    # finite difference elements:
-    #dt = times[1] - times[0]
 
     # background perturbation in B:
     sol_Bx = np.zeros((times.size, nr, nth, nphi))
@@ -363,7 +364,8 @@ def burn_IRBEM_field_to_grid_sph(dpar, times=[1420070400.0], Rmax=7, resolution=
     print("memory/storeage required for field (mb) > 3 x {:.2f}mb".format(sol_Bx.nbytes / 1024 / 1024))
 
     # solution storage on disk:
-    disk = field_store.HDF5_field(output, existing=os.path.exists(output), delete=True)
+    disk = store_fields.HDF5_field(output, existing=os.path.exists(output), delete=True)
+    print(times, disk.group_name_data)
     disk.add_dataset(disk.group_name_data, "t0", times[0])
     disk.add_dataset(disk.group_name_data, "co_grid", "sph")
     disk.add_dataset(disk.group_name_data, "co_vec", "cart")
@@ -374,12 +376,12 @@ def burn_IRBEM_field_to_grid_sph(dpar, times=[1420070400.0], Rmax=7, resolution=
     for t in range(0, times.size):
         # t_datetime = datetime.datetime.utcfromtimestamp(tn + t0_ts)
         t_datetime = datetime.fromtimestamp(times[t], tz=timezone.utc)
-        print("", "solving", t_datetime)
+        print("", "burning field at time:", t_datetime)
 
         # calculate the rotation matrix from GEO to MAG at this time:
         #rot_GEO_to_MAG = coords.transform([t_datetime, t_datetime, t_datetime], [[1, 0, 0], [0, 1, 0], [0, 0, 1]],'GEO', 'MAG').T
         IGRFprops = IGRF_tools.IGRFproperties(cosys.dt_to_dec(t_datetime))
-        rot_GEO_to_MAG = field_tools.cosys.get_rotation_GEO_to_MAG(IGRFprops)
+        rot_GEO_to_MAG = cosys.get_rotation_GEO_to_MAG(IGRFprops)
 
         # if use_spacepy:
         #     sptick = spt.Ticktock([t_datetime],'UTC')
@@ -539,7 +541,7 @@ def burn_IRBEM_field_to_grid_cart(dpar, times=[1420070400.0], Rmax=7, resolution
     print("memory/storeage required for field (mb) > 3 x {:.2f}mb".format(sol_Bx.nbytes / 1024 / 1024))
 
     # solution storage on disk:
-    disk = field_store.HDF5_field(output, existing=os.path.exists(output), delete=True)
+    disk = store_fields.HDF5_field(output, existing=os.path.exists(output), delete=True)
     disk.add_dataset(disk.group_name_data, "t0", times[0])
     disk.add_dataset(disk.group_name_data, "co_grid", "cart")
     disk.add_dataset(disk.group_name_data, "co_vec", "cart")
@@ -651,7 +653,7 @@ def burn_IRBEM_field_to_grid_cart(dpar, times=[1420070400.0], Rmax=7, resolution
 #     print("memory/storeage required for field (mb) > 3 x {:.2f}mb".format(sol_Bx.nbytes / 1024 / 1024))
 #
 #     # solution storage on disk:
-#     disk = field_store.HDF5_field(output, existing=file_exists, delete=True)
+#     disk = store_field.HDF5_field(output, existing=file_exists, delete=True)
 #     disk.add_dataset(disk.group_name_data, "t0", t0_ts)
 #     disk.add_dataset(disk.group_name_data, "co_grid", "cart")
 #     disk.add_dataset(disk.group_name_data, "co_vec", "cart")
@@ -747,7 +749,7 @@ def burn_IRBEM_field_to_grid_cart(dpar, times=[1420070400.0], Rmax=7, resolution
 #     print("memory/storeage required for field (mb) > 16 x {:.2f}mb".format(sol_Br.nbytes / 1024 / 1024))
 #     #solution storage on disk:
 #     file_exists = os.path.exists(fpath_sol)
-#     disk = field_store.HDF5_field(fpath_sol, existing = file_exists, delete = file_exists)
+#     disk = store_field.HDF5_field(fpath_sol, existing = file_exists, delete = file_exists)
 
 #     #march91pulse = field_tools.Epulse(240e-3, 0.8, 0.8, 8.0, 2000e3, 80, pi / 8, 30000e3)
 #     #Ephimax, *_ = np.abs(march91pulse.Ephi_dEphidr(0, 25 * field_tools.constants.RE, pi / 8))  # get the maximum amplitude of the pulse

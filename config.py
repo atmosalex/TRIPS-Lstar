@@ -12,6 +12,7 @@ class Keywords:
     storegc = "store_GC"
     calculate_initial_invariants = "calculate_initial_invariants"
     calculate_final_invariants = "calculate_final_invariants"
+    calculate_initial_dshell_curvature = "calculate_initial_dshell_curvature"
     add_dipole_background = "add_dipole_background"
     year_month_day = "year_month_day"
     ax_lstar = "ax_Lstar"
@@ -22,6 +23,7 @@ class Keywords:
     ax_phasegyro = "ax_phasegyro"
     add_field_from_grid = "add_field_from_grid"
     storeinterval = "storeinterval"
+    skip_all_particles = "skip_all_particles"
 
     @staticmethod
     def get_keywords():
@@ -48,22 +50,22 @@ class Keywords:
 
 
 class Configuration:
-    def __init__(self, filename=None, fromdict={}, check_required_keys_present=False):
+    def __init__(self, filename=None, fromdict={}, check_standard_keys_present=False):
         if filename is None and not len(fromdict):
             print("Error: when creating a configuration instance, must pass a filename to read from or a dictionary of parameters")
             sys.exit()
         elif len(fromdict):
             self.datadic = dict(fromdict)
-            if check_required_keys_present:
+            if check_standard_keys_present:
                 keys_check = Keywords.get_keywords()
                 for key in keys_check:
                     if not key in self.datadic.keys():
-                        print("Error: key {} is required but not present in the supplied dictionary")
+                        print("Error: key {} is required but not present in the supplied dictionary".format(key))
                         sys.exit(1)
             #set attributes from datadic:
             for key, value in self.datadic.items():
                 setattr(self, key, value)
-        else:
+        else: #from file, standard keys expected:
             self.datadic = {}
             print("Reading", filename)
             count = 1
@@ -88,10 +90,16 @@ class Configuration:
                 if not self.datadic:
                     return 0
 
+            keys_check = Keywords.get_keywords()
+            for key in keys_check:
+                if not key in self.datadic.keys():
+                    print("Error: key {} is required but not present in the supplied dictionary".format(key))
+                    sys.exit(1)
+
             # convert each data type:
             convert_OK = self._convert_types_in_data_dictionary()
             if not convert_OK:
-                print("Error reading configuration file - ensure every parameter is present and of the correct type")
+                print("Error reading configuration file - ensure every parameter is of the correct type")
                 sys.exit(1)
 
             #process some of these attributes from 'raw' values
@@ -116,6 +124,7 @@ class Configuration:
             self.datadic[Keywords.storegc] = str(self.datadic[Keywords.storegc][0])
             self.datadic[Keywords.calculate_initial_invariants] = str(self.datadic[Keywords.calculate_initial_invariants][0])
             self.datadic[Keywords.calculate_final_invariants] = str(self.datadic[Keywords.calculate_final_invariants][0])
+            self.datadic[Keywords.calculate_initial_dshell_curvature] = str(self.datadic[Keywords.calculate_initial_dshell_curvature][0])
             self.datadic[Keywords.add_dipole_background] = str(self.datadic[Keywords.add_dipole_background][0])
 
             #phase space coordinates:
@@ -130,6 +139,7 @@ class Configuration:
             self.datadic[Keywords.add_field_from_grid] = str(self.datadic[Keywords.add_field_from_grid][0])
 
             self.datadic[Keywords.storeinterval] = int(self.datadic[Keywords.storeinterval][0])
+            self.datadic[Keywords.skip_all_particles] = str(self.datadic[Keywords.skip_all_particles][0])
         except Exception as e:
             print(e)
             return 0
@@ -183,6 +193,11 @@ class Configuration:
             else:
                 self.datadic[Keywords.calculate_final_invariants] = False
 
+            if self.datadic[Keywords.calculate_initial_dshell_curvature][0].lower() in ["y", "t"]:
+                self.datadic[Keywords.calculate_initial_dshell_curvature] = True
+            else:
+                self.datadic[Keywords.calculate_initial_dshell_curvature] = False
+
             if self.datadic[Keywords.add_dipole_background][0].lower() in ["y", "t"]:
                 self.datadic[Keywords.add_dipole_background] = True
             else:
@@ -192,6 +207,11 @@ class Configuration:
                 self.datadic[Keywords.reverse] = True
             else:
                 self.datadic[Keywords.reverse] = False
+
+            if self.datadic[Keywords.skip_all_particles][0].lower() in ["y", "t"]:
+                self.datadic[Keywords.skip_all_particles] = True
+            else:
+                self.datadic[Keywords.skip_all_particles] = False
         except Exception as e:
             print(e)
             return 0

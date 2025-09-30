@@ -1,4 +1,4 @@
-import field_store
+import store_fields
 import numpy as np
 import IGRF_tools
 from datetime import datetime, timezone
@@ -7,6 +7,7 @@ import sys
 from math import cos, sin, tan, acos, asin, atan, atan2, sqrt, pi, floor, log10
 import cosys
 import curvature
+import settings
 trace_ds_default = 1e-4 * constants.RE
 
 def calculate_I(Bm, traceB, idx_eq, trace_ds, It_min_numerical=0):
@@ -31,7 +32,11 @@ def calculate_I(Bm, traceB, idx_eq, trace_ds, It_min_numerical=0):
         # fraction of field line to integrate prior to idx1-1:
         fracds1 = 1 - (traceB[idx1] - Bm) / (traceB[idx1] - traceB[idx1 - 1])
         Itfrac1 = np.trapz([(1 - traceB[idx1 - 1] / Bm) ** 0.5, 0], dx=fracds1 * trace_ds)
-        It = It + Itfrac0 + Itfrac1
+    else:
+        Itfrac0 = 0
+        Itfrac1 = 0
+    #print(Itfrac0, It, Itfrac1)
+    It = It + Itfrac0 + Itfrac1
     return It
 
 class _Geomagneticfield:
@@ -419,7 +424,7 @@ class _Geomagneticfield:
         # sys.exit()
         return tracepath_wholefieldline, traceB_wholefieldline
 
-    def _trace_until_threshold_B(self, d, xs, ys, zs, ti, Bhit, trace_ds=0.75e-3 * constants.RE, force_direction=None, return_tracepath=False, actoninterr = 1):
+    def _trace_until_threshold_B(self, d, xs, ys, zs, ti, Bhit, trace_ds=0.75e-3 * constants.RE, force_direction=None, return_tracepath=False, distance_traced_max=408595245, actoninterr = 1): #distance_traced_max corresponds to the length of a fieldline at >20RE in a dipole
         """
         d is the direction of the threshold: 1 trace to higher B, -1 trace to lower B
         xs, ys, zs is the starting point of the trace
@@ -465,14 +470,20 @@ class _Geomagneticfield:
                 B1 = self.getBE(*p1, ti, actoninterr=actoninterr)[:3]
                 absB1 = np.linalg.norm(B1)
 
+        distance_traced = trace_ds
         while self.range_adequate:
             if return_tracepath:
                 tracepath.append(np.array(p1))
                 traceB.append(absB1)
 
-            # keep some distance from the surface so we can pass the end result back to this algorith without it crashing
+            # keep some distance from the surface so as to not crash other algorithms
             if absB1 * d >= Bhit * d:
                 found_Bhit = True
+                break
+            elif distance_traced > distance_traced_max:
+                self.range_adequate = False
+                if self.verbal_range_warning: print("Warning: field trace reached maximum distance allowed")
+                self.warned_range = True
                 break
 
 
@@ -486,6 +497,7 @@ class _Geomagneticfield:
             p1[2] = p0[2] + direction * trace_ds * B0[2] / absB0
             B1 = self.getBE(*p1, ti, actoninterr=actoninterr)
             absB1 = np.linalg.norm(B1)
+            distance_traced = distance_traced + trace_ds
 
         if found_Bhit:
             if return_tracepath:
@@ -985,7 +997,7 @@ class Griddedfield(_Geomagneticfield):
         print("Loading B field from", fileload)
         precision = np.float32
 
-        disk = field_store.HDF5_field(fileload, existing=True)
+        disk = store_fields.HDF5_field(fileload, existing=True)
 
         #instantiate time, dipolar elements
         t0_ts = disk.read_dataset(disk.group_name_data, "t0")
@@ -1328,49 +1340,144 @@ def solve_plane(coords, xx, yy):
     # assert (np.allclose(np.ravel(xx).reshape(xx.shape), xx))
     return z
 
-def project_fieldline_trace_onto_2d_surface(pts, idx_eq):
-    """
-    project a set of 3D points onto a plane
-    then create a new coordinate system in which to present the points in 2D
-    the new coordinate system will have axes ax1, ax2 in the coordinate system of pts
-    the transformed coordinates enable calculation of curvature which takes place in 2D, etc.
-    """
-    #reduce dimensionality to 2
-    pts_plane_z = solve_plane(pts, np.array([pts[:, 0]]), np.array([pts[:, 1]])).T
-    pts_plane = np.hstack((pts[:, :2], pts_plane_z))
-    # find plane normal:
-    p1 = pts_plane[0]
-    p2 = pts_plane[pts_plane.shape[0] // 2]
-    p3 = pts_plane[-1]
-    nvec = np.cross(p2 - p1, p3 - p1)
-    nvec = nvec / np.linalg.norm(nvec)  # normal to plane
-    # define plane axis 1 from MAG origin to equator:
-    peq = pts_plane[idx_eq]
-    ax1 = peq / np.linalg.norm(peq)
-    # define plane axis 2:
-    ax2 = np.cross(nvec, ax1)
-    #take dot product of axis with every point in each direction:
-    pts_plane_myframe = np.matmul(np.vstack((ax1[np.newaxis, :], ax2[np.newaxis, :])), pts_plane.T).T
-    #long way:
-    # pts_plane_myframex = []
-    # pts_plane_myframey = []
-    # for idx in range(pts_plane.shape[0]):
-    #     pts_plane_myframex.append(np.dot(ax1, pts_plane[idx]))
-    #     pts_plane_myframey.append(np.dot(ax2, pts_plane[idx]))
-    # pts_plane_myframe2 = np.vstack((pts_plane_myframex, pts_plane_myframey)).T
-    # print(np.allclose(pts_plane_myframe, pts_plane_myframe2))
-    return pts_plane_myframe, ax1, ax2
+# def project_fieldline_trace_onto_2d_surface(pts, idx_eq):
+#     """
+#     project a set of 3D points onto a plane
+#     then create a new coordinate system in which to present the points in 2D
+#     the new coordinate system will have axes ax1, ax2 in the coordinate system of pts
+#     the transformed coordinates enable calculation of curvature which takes place in 2D, etc.
+#     """
+#     #reduce dimensionality to 2
+#     pts_plane_z = solve_plane(pts, np.array([pts[:, 0]]), np.array([pts[:, 1]])).T
+#     pts_plane = np.hstack((pts[:, :2], pts_plane_z))
+#     # find plane normal:
+#     p1 = pts_plane[0]
+#     p2 = pts_plane[pts_plane.shape[0] // 2]
+#     p3 = pts_plane[-1]
+#     nvec = np.cross(p2 - p1, p3 - p1)
+#     nvec = nvec / np.linalg.norm(nvec)  # normal to plane
+#     # define plane axis 1 from MAG origin to equator:
+#     peq = pts_plane[idx_eq]
+#     ax1 = peq / np.linalg.norm(peq)
+#     # define plane axis 2:
+#     ax2 = np.cross(nvec, ax1)
+#     #take dot product of axis with every point in each direction:
+#     pts_plane_myframe = np.matmul(np.vstack((ax1[np.newaxis, :], ax2[np.newaxis, :])), pts_plane.T).T
+#     #long way:
+#     # pts_plane_myframex = []
+#     # pts_plane_myframey = []
+#     # for idx in range(pts_plane.shape[0]):
+#     #     pts_plane_myframex.append(np.dot(ax1, pts_plane[idx]))
+#     #     pts_plane_myframey.append(np.dot(ax2, pts_plane[idx]))
+#     # pts_plane_myframe2 = np.vstack((pts_plane_myframex, pts_plane_myframey)).T
+#     # print(np.allclose(pts_plane_myframe, pts_plane_myframe2))
+#     return pts_plane_myframe, ax1, ax2
 
-def project_fieldline_trace_onto_2d_surface_using_PCA(pts):
-    pts_plane_z = solve_plane(pts, np.array([pts[:, 0]]), np.array([pts[:, 1]])).T
-    pts_plane = np.hstack((pts[:, :2], pts_plane_z))
-    eigenvalues, eigenvectors = np.linalg.eig(np.cov(pts_plane.T))
-    # eigenvalues = eigenvalues.reshape(-1, 1)
-    # eigenvalues_mat = np.tile(eigenvalues, [1, len(eigenvalues)])
-    # eigenvalues_mat = np.diag(np.diag(eigenvalues_mat))
-    # reconstruct = np.matmul(np.matmul(eigenvectors, eigenvalues_mat), eigenvectors.T)
-    V_red = eigenvectors[:, :2]  # nx2
-    return np.matmul(V_red.T, pts_plane.T).T
+def rotate_set_of_points_to_x_axis(pts):
+    """
+    rotate a set of 3D points onto the x axis:
+    """
+    var_x = np.var(pts[:, 0])
+    var_y = np.var(pts[:, 1])
+    var_ratio = var_x / var_y
+    if var_ratio > 1:  # more variance in x coordinates
+        # fit x to model y as a straight line:
+        idx_fit = 0
+        idx_predict = 1
+    else:  # more variance in y coordinates
+        # fit y to model x as a straight line:
+        idx_fit = 1
+        idx_predict = 0
+
+    # find a line of best fit through the points, here X and Y refer to a design matrix and target:
+    X = np.array([np.ones(pts.shape[0]), pts[:, idx_fit]]).T
+    Y = pts[:, idx_predict]  # y
+    params = (np.linalg.inv(X.T @ X) @ X.T) @ Y
+
+    rotation_origin = [0, 0]
+    rotation_origin[idx_predict] = params[0]
+
+    if var_ratio > 1:
+        m = params[1] #dy/dx
+    else:
+        m = 1 / params[1] #also dy/dx
+
+    angle_aligned_r = atan(m) * -1 + np.pi/2
+    rotate = np.array([[cos(angle_aligned_r), -1 * sin(angle_aligned_r)], [sin(angle_aligned_r), cos(angle_aligned_r)]])
+
+    # translate the set of points to the origin of the straight line fit:
+    pts_rotated = np.array(pts)
+    pts_rotated[:, :2] = pts_rotated[:, :2] - rotation_origin
+    # rotate them:
+    pts_rotated[:, :2] = np.einsum('ij,kj->ki', rotate, pts_rotated[:, :2])
+
+    return pts_rotated
+
+def project_fieldline_trace_onto_2d_surface(pts):
+    pts_rotated_along_x = rotate_set_of_points_to_x_axis(pts)
+    #return pts_rotated_along_x
+
+    #find a line of best fit through the points Y and Z:
+    X = np.array([np.ones(pts.shape[0]), pts_rotated_along_x[:, 0]]).T #1, x
+    Y = pts_rotated_along_x[:, 2] #z
+    params = (np.linalg.inv(X.T @ X) @ X.T) @ Y
+
+    rotation_origin = [0, params[0]]
+    m = params[1] #dz/dx - might be very steep
+    angle_aligned_r = atan(m) * -1 + np.pi/2
+    rotate = np.array([[cos(angle_aligned_r), -1 * sin(angle_aligned_r)], [sin(angle_aligned_r), cos(angle_aligned_r)]])
+
+    # translate the set of points to the origin of the straight line fit:
+    pts_rotated = np.array(pts_rotated_along_x)[:, slice(0, 3, 2)] #keep y, z
+    pts_rotated[:, :] = pts_rotated[:, :] - rotation_origin
+    # rotate them:
+    pts_rotated[:, :] = np.einsum('ij,kj->ki', rotate, pts_rotated[:, :])
+    #return pts_rotated
+
+    #now x~0
+    #copy the y values back into the rotated points:
+    pts_rotated[:, 0] = pts_rotated_along_x[:, 1]
+    return pts_rotated
+    pts_rotated3d = np.array(pts_rotated_along_x)
+    pts_rotated3d[:, 0] = pts_rotated[:,0]
+    pts_rotated3d[:, 2] = pts_rotated[:,1]
+    return pts_rotated3d
+    # import matplotlib.pyplot as plt
+    # plt.close()
+    # fig, ax = plt.subplots(1)
+    # ax.scatter(pts_rotated_along_x[:, 1], pts_rotated_along_x[:, 2]) #y, z
+    # ax.scatter(pts_rotated[:, 1], pts_rotated[:, 2]) #y, z
+    #
+    # xlim = max(np.abs(ax.get_xlim()))
+    # ylim = max(np.abs(ax.get_ylim()))
+    # lim = max([xlim, ylim])
+    # ax.set_xlim([-1*lim, lim])
+    # ax.set_ylim([-1*lim, lim])
+    #
+    # coord0 = [-1*lim, lim]
+    # coord1 = [params[0] - params[1]*lim, params[0] + params[1]*lim]
+    # ax.plot(coord0, coord1, color='red')
+    #
+    # ax.set_aspect('equal')
+    # ax.grid()
+    # plt.show()
+    # sys.exit()
+
+
+
+
+# def project_fieldline_trace_onto_2d_surface_using_PCA(pts):
+#     #pts_plane_z = solve_plane(pts, np.array([pts[:, 0]]), np.array([pts[:, 1]])).T
+#     #pts_plane = np.hstack((pts[:, :2], pts_plane_z))
+#     #eigenvalues, eigenvectors = np.linalg.eig(np.cov(pts_plane.T))
+#     eigenvalues, eigenvectors = np.linalg.eig(np.cov(pts.T))
+#     # eigenvalues = eigenvalues.reshape(-1, 1)
+#     # eigenvalues_mat = np.tile(eigenvalues, [1, len(eigenvalues)])
+#     # eigenvalues_mat = np.diag(np.diag(eigenvalues_mat))
+#     # reconstruct = np.matmul(np.matmul(eigenvectors, eigenvalues_mat), eigenvectors.T)
+#     V_red = eigenvectors[:, :2]  # nx2
+#     #return np.matmul(V_red.T, pts_plane.T).T
+#     return np.matmul(V_red.T, pts.T).T
 
 def project_sph2car(r, th, phi, vr, vth, vphi):
     return (sin(th) * cos(phi) * vr + cos(th) * cos(phi) * vth - sin(phi) * vphi,
@@ -1470,19 +1577,24 @@ def get_tracepath_nloops(path):
     totalangle = np.sum(np.abs(dtheta))
     return totalangle/(2*np.pi)
 
-def get_curvature_of_fieldline_trace_with_constant_ds(trace, trace_B, trace_ds, use_Bmin_point=False):
+def get_curvature_of_fieldline_trace_with_constant_ds(trace, trace_B, trace_ds, use_Bmin_point=True):
     valid = True
     # be aware: the min radius of curvature point is not necessarily the same as min B point
     idx_eq = np.argmin(trace_B)
 
+    # # DELETE THIS:
+    # trace[:, 1] += constants.RE
+    # trace[:, 1] += trace[:, 2]
     # project the 3D field line trace onto a 2D plane s.t. RMSE in 3D is minimized
-    trace_2D, ax1, ax2 = project_fieldline_trace_onto_2d_surface(trace, idx_eq)
+    # trace_2D, ax1, ax2 = project_fieldline_trace_onto_2d_surface(trace, idx_eq)
+    trace_2D = project_fieldline_trace_onto_2d_surface(trace)
 
     # import matplotlib.pyplot as plt
     # fig = plt.figure()
     # ax = fig.add_subplot(projection='3d')
     # ax.plot(trace[:,0], trace[:,1], trace[:, 2])
-    # ax.plot(trace_2D[:,0], np.zeros(trace_2D[:,0].size), trace_2D[:,1])
+    # #ax.plot(trace_2D[:,0], np.zeros(trace_2D[:,0].size), trace_2D[:,1])
+    # ax.plot(trace_2Db[:,0], trace_2Db[:,1], trace_2Db[:,2])
     # plt.show()
     # sys.exit()
 
@@ -1496,11 +1608,14 @@ def get_curvature_of_fieldline_trace_with_constant_ds(trace, trace_B, trace_ds, 
 
     # RC, fit RC and locate the minimum:
     comp_curv = curvature.ComputeCurvature()
-    n_include = 20
+    n_include = settings.field_line_curvature_fitting_n_include #20
     if use_Bmin_point:
         idx_curv = idx_eq
         idxf0 = idx_curv - n_include // 2
         idxf1 = idx_curv + n_include // 2
+        if idxf0 < 0 or idxf1 > len(trace_2D):
+            print("Error: field line trace is not long enough to fit at minimum B point")
+            return []
         comp_curv.fit(trace_2D[idxf0:idxf1, 0], trace_2D[idxf0:idxf1, 1])
         RC = comp_curv.r
     else:
@@ -1508,13 +1623,21 @@ def get_curvature_of_fieldline_trace_with_constant_ds(trace, trace_B, trace_ds, 
             valid = False
         else:
             RCfol = []
-            for idxfol in np.arange(n_include // 2, trace_2D.shape[0] - 1 * n_include // 2):
+            for idxfol in np.arange(n_include // 2, trace_2D.shape[0] - 1 * n_include // 2 + 1): #last plus 1 ensures iteration if len(trace_2D) == n_include
                 idxf0 = idxfol - n_include // 2
                 idxf1 = idxfol + n_include // 2
                 comp_curv.fit(trace_2D[idxf0:idxf1, 0], trace_2D[idxf0:idxf1, 1])
                 RCfol.append(comp_curv.r)
             # find the index of min RC along the trace (Smax):
             idxfol_min = np.argmin(RCfol)
+
+            # import matplotlib.pyplot as plt
+            # fig, axs = plt.subplots(2)
+            # axs[0].plot(np.arange(len(RCfol)), RCfol)
+            # axs[0].set_yscale('log')
+            # axs[1].plot(trace_2D[:,0], trace_2D[:,1])
+            # plt.show()
+            # sys.exit()
 
             # if the index is the first (last) point considered, move it to the next (previous) point so we can calculate the finite difference (if we want):
             if idxfol_min == 0:
@@ -1530,21 +1653,30 @@ def get_curvature_of_fieldline_trace_with_constant_ds(trace, trace_B, trace_ds, 
         if not valid:
             return []
 
-    fdsize = 10
-    idxf0 = idx_curv - fdsize - n_include // 2
-    idxf1 = idx_curv - fdsize + n_include // 2
-    comp_curv.fit(trace_2D[:, 0][idxf0:idxf1], trace_2D[:, 1][idxf0:idxf1])
-    RC_u = comp_curv.r
+    #check if we have enough elements to calculate other finite difference quantities, and if so, what difference we can use:
+    fd_sep_halfw = min([settings.field_line_curvature_fitting_n_include//2,
+                        idx_curv - n_include // 2, #if this is the smallest, idxf0_u will be zero
+                        len(trace_2D) - (idx_curv + n_include // 2)]) #if this is smallest, idxf1_d will be len(trace2D)
 
-    idxf0 = idx_curv + fdsize - n_include // 2
-    idxf1 = idx_curv + fdsize + n_include // 2
-    comp_curv.fit(trace_2D[:, 0][idxf0:idxf1], trace_2D[:, 1][idxf0:idxf1])
-    RC_d = comp_curv.r
+    #print("half width for finite diff:", fd_sep_halfw, "; array len({}) index of interest:".format(len(trace_2D)), idx_curv)
+    if fd_sep_halfw < 1:
+        dRCdS = np.nan
+        d2RCdS2 = np.nan
+    else:
+        idxf0_u = idx_curv - fd_sep_halfw - n_include // 2
+        idxf1_u = idx_curv - fd_sep_halfw + n_include // 2
+        comp_curv.fit(trace_2D[:, 0][idxf0_u:idxf1_u], trace_2D[:, 1][idxf0_u:idxf1_u])
+        RC_u = comp_curv.r
 
-    dRCdS_hu = (RC_u - RC) / (fdsize*trace_ds)
-    dRCdS_hd = (RC - RC_d) / (fdsize*trace_ds)
-    dRCdS = dRCdS_hu#(dRCdS_hu + dRCdS_hd) / 2 #average
-    d2RCdS2 = abs(dRCdS_hu - dRCdS_hd)/(fdsize*trace_ds) #(RC_u - 2 * RC + RC_d) / (trace_ds * trace_ds) #
+        idxf0_d = idx_curv + fd_sep_halfw - n_include // 2
+        idxf1_d = idx_curv + fd_sep_halfw + n_include // 2
+        comp_curv.fit(trace_2D[:, 0][idxf0_d:idxf1_d], trace_2D[:, 1][idxf0_d:idxf1_d])
+        RC_d = comp_curv.r
+
+        dRCdS_hu = (RC_u - RC) / (fd_sep_halfw*trace_ds)
+        dRCdS_hd = (RC - RC_d) / (fd_sep_halfw*trace_ds)
+        dRCdS = min(dRCdS_hu, dRCdS_hd) #(dRCdS_hu + dRCdS_hd) / 2 #average
+        d2RCdS2 = abs(dRCdS_hu - dRCdS_hd)/(fd_sep_halfw*trace_ds) #(RC_u - 2 * RC + RC_d) / (trace_ds * trace_ds) #
 
     dBdS = dBdS[idx_curv]
     d2BdS2 = d2BdS2[idx_curv]

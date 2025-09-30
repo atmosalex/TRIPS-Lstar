@@ -10,15 +10,16 @@ from math import pi
 import constants
 import planet
 import pt_particles
-import pt_store
+import store_particles
 import driftshells
 import cosys
 import config
 import settings
+from pt_particles import Proton_trace
 
 dict_Particles = {"p": pt_particles.Proton_trace, "e": pt_particles.Electron_trace}
 
-#Organise the generation of particle tracks
+#Organise the calculation of particle trajectories and drift shells
 
 def parseargs():
     #set up parser and arguments
@@ -41,7 +42,7 @@ def parseargs():
         print("Error: cannot specify solution to continue solving and extract the guiding center simultaneously")
         sys.exit()
     elif args.repair >= 0 and args.extractgcfrom:
-        print("Error: cannot repair a solved trajcetory whilst extracting guiding centers simultaneously")
+        print("Error: cannot repair a solved trajectory whilst extracting guiding centers simultaneously")
         sys.exit()
     elif args.repair >= 0 and args.config:
         print("Warning: repair argument will be ignored when creating a new solution from a configuration file")
@@ -55,7 +56,7 @@ def get_resultfile_existing(filename_hdf5):
     if not os.path.exists(filename_hdf5):
         print("Error: the solutions file does not exist at", filename_hdf5)
         sys.exit(1)
-    resultfile = pt_store.HDF5_pt(filename_hdf5, existing = True)
+    resultfile = store_particles.HDF5_pt(filename_hdf5, existing = True)
     print()
     return resultfile
 
@@ -65,7 +66,7 @@ def get_resultfile_GC_new_from_resultfile_existing(resultfile, cfg):
     filename_hdf5_GC = filename_hdf5.replace(".h5", "_GC.h5")
     # write the basic structure and metadata of the HDF5 GC file:
     tracklist_existing = resultfile.get_existing_tracklist()
-    resultfile_GC = pt_store.HDF5_pt(filename_hdf5_GC)
+    resultfile_GC = store_particles.HDF5_pt(filename_hdf5_GC)
     resultfile_GC.setup(cfg.datadic, dict_tracklist = tracklist_existing)
     if cfg.storeinterval > 1:
         print("Warning: cfg.storeinterval was set to {} in original trajectory calculation...".format(cfg.storeinterval))
@@ -92,7 +93,7 @@ def get_resultfile_new(cfg, args):
     dict_tracklist, dict_dshells, dict_tracklist_dshell_correspondence = cfg.get_particle_and_dshell_initialization_parameters()
 
     #write the basic structure and metadata of the HDF5 results file:
-    resultfile = pt_store.HDF5_pt(filename_hdf5)
+    resultfile = store_particles.HDF5_pt(filename_hdf5)
     resultfile.setup(cfg.datadic, dict_tracklist, dict_dshells, dict_tracklist_dshell_correspondence)
     print()
     return resultfile
@@ -108,11 +109,11 @@ args = parseargs()
 #get a database ready to save/load our solutions:
 if args.continuefrom:
     resultfile = get_resultfile_existing(args.continuefrom)
-    cfg = config.Configuration(fromdict=resultfile.get_existing_config_dict(), check_required_keys_present=True)
+    cfg = config.Configuration(fromdict=resultfile.get_existing_config_dict(), check_standard_keys_present=True)
 elif args.extractgcfrom:
     resultfile = get_resultfile_existing(args.extractgcfrom)
     #a = resultfile.get_existing_tracklist_dshell_correspondence()
-    cfg = config.Configuration(fromdict=resultfile.get_existing_config_dict(), check_required_keys_present=True)
+    cfg = config.Configuration(fromdict=resultfile.get_existing_config_dict(), check_standard_keys_present=True)
     resultfile_GC = get_resultfile_GC_new_from_resultfile_existing(resultfile, cfg)
 else:
     # read configuration file and create a configuration object:
@@ -121,6 +122,9 @@ else:
 
 if args.extractgcfrom and cfg.store_GC:
     print("Error: guiding center cannot be extracted separately if it is already stored")
+    sys.exit()
+elif args.extractgcfrom and not cfg.store_trajectory:
+    print("Error: guiding center cannot be extracted if the particle's track was not stored originally")
     sys.exit()
 
 info = resultfile.read_root()
@@ -184,15 +188,21 @@ for pt_id in info['tracklist_ID']:
     #instantiate particle:
     particle = dict_Particles[cfg.species](mu_SI, pa, L, phase_g, phase_b, phase_d, storetrack=cfg.store_trajectory, storeinterval=cfg.storeinterval)
 
+
     if args.extractgcfrom:
         # extract guiding center from previously-completed simulation:
         if info['tracklist_check'][pt_id] == 1: #if the track has been successfully calculated
             solved_times, solved_position = resultfile.read_particledata(pt_id, False)
 
-            particle.gc_times, particle.gc_pos = (pt_fp.extract_GC_only(particle, bfield, solved_times, solved_position))
+            #particle.gc_times, particle.gc_pos = (pt_fp.extract_GC_only(particle, bfield, solved_times, solved_position))
+            momenta = pt_particles.get_solved_momenta_from_track(particle.m0, solved_position, solved_times)
+            particle.times = solved_times[:-1]
+            particle.pt = np.hstack((solved_position[:-1], momenta))
 
-            particle.times = particle.gc_times
-            particle.pt = particle.gc_pos
+            track_gyrocentre_time, track_gyrocentre, track_gyrocentre_p = pt_fp.get_instantaneous_GC_from_track(bfield, particle)
+
+            particle.times = track_gyrocentre_time #particle.gc_times
+            particle.pt = np.hstack((track_gyrocentre, track_gyrocentre_p))
             code_success = 1
         else:
             print("Warning: could not extract GC for particle track ID {}".format(pt_id))
@@ -206,9 +216,12 @@ for pt_id in info['tracklist_ID']:
         #look up or solve drift shell: #################################################
         if info['dshell_init_check'][dshell_ID] == 0:
             print("Determining drift shell ID {}".format(dshell_ID))
-            dshell_init = driftshells.find_driftshell_with_given_properties(ellipsoid_surf, dshell_init_Lstar, dshell_init_pa*np.pi/180, bfield, 0, dth_quit = 0.003)
+            dshell_init = driftshells.find_driftshell_with_given_properties(ellipsoid_surf, dshell_init_Lstar, dshell_init_pa*np.pi/180, bfield, 0)
             if dshell_init is not None:
                 info['dshell_init_check'][dshell_ID] = 1
+                if cfg.calculate_initial_dshell_curvature:
+                    #compute curvature along every field line at the azimuthal resolution of the ellipsoid surface
+                    dshell_init.compute_curvature_from_solved_contourpts(bfield, ellipsoid_surf)
             else:
                 info['dshell_init_check'][dshell_ID] = 2
             resultfile.add_driftshelldata_init(dshell_ID, dshell_init, checkcode = info['dshell_init_check'][dshell_ID])
@@ -223,13 +236,20 @@ for pt_id in info['tracklist_ID']:
             continue
         ################################################################################
 
+        if cfg.skip_all_particles:
+            # we added the initial drift shell to the file but will skip particles
+            resultfile.add_particledata(pt_id, particle, checkcode=1)
+            count += 1
+            continue
+
         code_success, dshell_final = pt_fp.solve_trajectory(dshell_init, particle, bfield, ellipsoid_surf, cfg)
 
         #code_success will not be 1 if cfg.store_trajectory is False and cfg.store_GC is True
         if cfg.store_GC:
-            particle.gc_times, particle.gc_pos = pt_fp.extract_GC_only(particle, bfield, particle.times, np.array(particle.pt)[:,:3], solved_momenta = np.array(particle.pt)[:,3:])
-            particle.times = particle.gc_times
-            particle.pt = particle.gc_pos
+            #particle.gc_times, particle.gc_pos = pt_fp.extract_GC_only(particle, bfield, particle.times, np.array(particle.pt)[:,:3], solved_momenta = np.array(particle.pt)[:,3:])
+            track_gyrocentre_time, track_gyrocentre, track_gyrocentre_p = pt_fp.get_instantaneous_GC_from_track(bfield, particle)
+            particle.times = track_gyrocentre_time#particle.gc_times
+            particle.pt = np.hstack((track_gyrocentre, track_gyrocentre_p)) #particle.gc_pos
 
         #store the particle track in the HDF5 file:
         resultfile.add_particledata(pt_id, particle, checkcode = code_success)
