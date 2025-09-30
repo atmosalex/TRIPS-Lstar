@@ -1,6 +1,6 @@
-## **Trajectory Redistribution In Phase Space**
+# **Trajectory Redistribution In Phase Space**
 
-Trajectory Redistribution in Phase Space with L*: a Python library for solving radiation belt particle redistribution in phase space, and more. [Click here to see a video introduction](https://www.youtube.com/watch?v=zznKuUaCZns).
+A Python library for solving radiation belt particle redistribution in phase space, and more. [Click here to see a video introduction](https://www.youtube.com/watch?v=zznKuUaCZns).
 
 # Authorship and Citation 
 
