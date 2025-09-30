@@ -21,5 +21,5 @@ howpublished = {url{https://github.com/atmosalex/pt}}
 
 # Documentation will be added here soon!
 
-In the meantime, enquiries can be directed to [mailto:alozinski@ucla.edu](alozinski@ucla.edu).
+In the meantime, enquiries can be directed to alozinski@ucla.edu.
 
