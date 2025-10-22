@@ -39,13 +39,13 @@ Thumbs.db
 # PyCharm
 .idea
 
-# TRiPS specific:
+# TRIPS specific:
 pt_solutions/*
 !pt_solutions/thisdir.txt
 configs/*
 !configs/example1.txt
 test*
-__pycache__/
+__pycache__
 misc/*
 plot_fieldonly.py
 incredible_amazing_algorithm_that_will_make_100000000_USD.py

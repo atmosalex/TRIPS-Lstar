@@ -1,13 +1,12 @@
 import numpy as np
 from math import cos, sin, tan, acos, asin, atan, atan2, sqrt, pi, floor
 import sys
-import cosys
-import driftshells
-import pt_pushers
-import pt_particles
+from TRIPS import cosys
+from TRIPS import driftshells
+from TRIPS import pt_pushers
+from TRIPS import pt_particles
 import time
-import pt_pushers as pushers
-import constants
+from TRIPS import constants
 G2T = constants.G2T
 c = constants.c  # 299792458
 RE = constants.RE  # 6.3712e6
@@ -591,7 +590,7 @@ def check_trajectory_bounces(idx_reversals, mirrpt_above_equator, reversals_requ
 
 def solve_trajectory(dshell_init, particle, bfield, ellipsoid_surf, cfg):
     reverse = cfg.reverse_time
-    pusher = pushers.boris_fwd #default particle pusher
+    pusher = pt_pushers.boris_fwd #default particle pusher
     exect0 = time.perf_counter()
 
     if (not particle.storetrack) and cfg.store_GC:
@@ -721,7 +720,7 @@ def derive_invariants(particle, bfield, ellipsoid_surf, reverse=False): #called 
     note: equatorial pitch angle is defined relative to the guiding center magnetic field
      and it involves tracing the fieldline to the equator, so if the particle is not bouncing adiabatically (following a field line), then equatorial pitch angle will not be defined
     """
-    pusher = pushers.boris_fwd #default particle pusher
+    pusher = pt_pushers.boris_fwd #default particle pusher
     invariants = {}
 
     if len(particle.pt):

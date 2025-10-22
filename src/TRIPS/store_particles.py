@@ -1,7 +1,7 @@
 import h5py
 import numpy as np
 import sys
-from config import Keywords
+from TRIPS.config import Keywords
 
 class HDF5_pt:
     def __init__(self, filepath, existing=False):

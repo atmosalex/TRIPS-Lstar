@@ -1,6 +1,9 @@
 import numpy as np
 from math import acos, cos, sqrt
 
+#dir_data = os.path.join("data")
+IGRF_FILE = 'IGRF13.shc'
+
 #how precisely we vary theta to look for a drift shell at exactly the correct L*:
 find_driftshell_theta_tolerance = 0.0005
 

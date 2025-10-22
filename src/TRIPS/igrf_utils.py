@@ -17,6 +17,7 @@ import numpy as np
 from numpy import degrees, radians
 from math import pi
 import warnings
+import importlib.resources
 
 r2d = np.rad2deg
 d2r = np.deg2rad
@@ -71,9 +72,10 @@ def load_shcfile(filepath, leap_year=None):
         piecewise polynomial with ``breaks = time[::step]``.
 
     """
-    leap_year = True if leap_year is None else leap_year
 
-    with open(filepath, 'r') as f:
+    leap_year = True if leap_year is None else leap_year
+    with importlib.resources.open_text('TRIPS.data', filepath) as f:
+    #with open(filepath, 'r') as f:
 
         data = np.array([])
         for line in f.readlines():

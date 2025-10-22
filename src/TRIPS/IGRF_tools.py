@@ -1,11 +1,11 @@
 from scipy import interpolate
 import numpy as np
 from math import sqrt, pi
-import constants
-import igrf_utils as iut
+from TRIPS import constants
+from TRIPS import igrf_utils as iut
+from TRIPS.settings import IGRF_FILE
 
-IGRF_FILE = r'./IGRF13.shc'
-igrf = iut.load_shcfile(IGRF_FILE, None)
+igrf = iut.load_shcfile(IGRF_FILE)
 
 class IGRFproperties:
     def __init__(self, year_dec):

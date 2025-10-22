@@ -1,6 +1,6 @@
 import numpy as np
 from math import cos, sin, tan, acos, asin, atan, atan2, sqrt, pi
-import constants
+from TRIPS import constants
 c = constants.c  # 29979245
 
 def boris_fwd(particle, bfield, dt_solve, tsperorbit, freezefield = -1):

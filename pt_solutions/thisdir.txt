@@ -1,1 +1,0 @@
-this directory is used by TRIPS to output solution .h5 files

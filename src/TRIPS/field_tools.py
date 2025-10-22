@@ -1,13 +1,13 @@
-import store_fields
+from TRIPS import store_fields
 import numpy as np
-import IGRF_tools
+from TRIPS import IGRF_tools
 from datetime import datetime, timezone
-import constants
+from TRIPS import constants
 import sys
 from math import cos, sin, tan, acos, asin, atan, atan2, sqrt, pi, floor, log10
-import cosys
-import curvature
-import settings
+from TRIPS import cosys
+from TRIPS import curvature
+from TRIPS import settings
 trace_ds_default = 1e-4 * constants.RE
 
 def calculate_I(Bm, traceB, idx_eq, trace_ds, It_min_numerical=0):
