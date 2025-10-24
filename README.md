@@ -4,6 +4,24 @@ A Python library for solving radiation belt particle redistribution in phase spa
 
 [![Video](https://img.youtube.com/vi/zznKuUaCZns/hqdefault.jpg)](https://www.youtube.com/watch?v=zznKuUaCZns)
 
+
+# Installation
+
+Clone the repository and `cd` to its root directory.
+
+Build the package:
+```
+python setup.py sdist bdist_wheel
+```
+
+Install using `pip`:
+```
+pip install .
+```
+
+You can now `import TRIPS` from Python scripts!
+
+
 # Authorship and Citation 
 
 This project was developed by Alexander R. Lozinski with contributions from Ravindra T. Desai. It is an updated and extended version of the [TRIPS-dipoleL](https://github.com/atmosalex/TRIPS-dipoleL) code used for the publication [Lozinski et al., 2025](https://doi.org/10.1029/2025JA033871). If using this code please including the following citation:
