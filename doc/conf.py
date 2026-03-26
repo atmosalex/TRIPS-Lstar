@@ -18,12 +18,12 @@ release = '0.1'
 extensions = ['myst_parser', "autodoc2"]
 
 autodoc2_packages = [
-    "../src/TRIPS",
+    {
+        "path": "../src/TRIPS",
+        "exclude_files": ["igrf_utils.py"],
+    }
 ]
 
-autodoc2_exclude_patterns = [
-    "igrf_utils.py"
-]
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
