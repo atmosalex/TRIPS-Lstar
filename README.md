@@ -1,6 +1,9 @@
+![My Banner](./assets/logo.png)
+
 # **Trajectory Redistribution In Phase Space**
 
-A Python library for solving radiation belt particle redistribution in phase space, and more. Click [here for a video introduction!](https://www.youtube.com/watch?v=zznKuUaCZns)
+A Python library for solving radiation belt particle redistribution in phase space, and more. [Click here for a video introduction!](https://www.youtube.com/watch?v=zznKuUaCZns)
+
 
 
 # Installation
