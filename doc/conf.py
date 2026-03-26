@@ -6,10 +6,10 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'Example'
-copyright = 'workshop participant'
-author = 'workshop participant'
-release = '0.1'
+project = 'Trajectory Redistribution in Phase Space (TRIPS)'
+copyright = ''
+author = 'Alexander Lozinski'
+release = '1.0.0'
 
 
 # -- General configuration ---------------------------------------------------

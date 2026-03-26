@@ -1,8 +1,6 @@
 # **Trajectory Redistribution In Phase Space**
 
-A Python library for solving radiation belt particle redistribution in phase space, and more. Click below to see a video introduction!
-
-[![Video](https://img.youtube.com/vi/zznKuUaCZns/hqdefault.jpg)](https://www.youtube.com/watch?v=zznKuUaCZns)
+A Python library for solving radiation belt particle redistribution in phase space, and more. Click [here for a video introduction!](https://www.youtube.com/watch?v=zznKuUaCZns)
 
 
 # Installation
@@ -44,7 +42,5 @@ year = {2025}
 }
 ```
 
-# Documentation will be added here soon!
-
-In the meantime, enquiries can be directed to alozinski@ucla.edu.
+# Documentation and API reference in Progress at [https://atmosalex.github.io/TRIPS-Lstar](https://atmosalex.github.io/TRIPS-Lstar)
 
