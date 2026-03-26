@@ -39,7 +39,11 @@ Thumbs.db
 # PyCharm
 .idea
 
+#docs
+_build
+
 # TRIPS specific:
+build
 pt_solutions/*
 !pt_solutions/thisdir.txt
 configs/*
