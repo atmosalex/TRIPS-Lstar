@@ -3,9 +3,10 @@ import numpy as np
 from math import sqrt, pi
 from TRIPS import constants
 from TRIPS import igrf_utils as iut
-from TRIPS.settings import IGRF_FILE
+#from TRIPS.settings import IGRF_FILE
+from TRIPS import settings
 
-igrf = iut.load_shcfile(IGRF_FILE)
+igrf = iut.load_shcfile(settings.get_IGRF_filepath())
 
 class IGRFproperties:
     def __init__(self, year_dec):

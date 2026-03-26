@@ -8,6 +8,7 @@ documentation.
 :maxdepth: 2
 :caption: Contents:
 some-feature.md
+IGRF.md
 another-feature.md
 apidocs/index
 ```

@@ -1,8 +1,15 @@
 import numpy as np
 from math import acos, cos, sqrt
+import importlib.resources
+import json
 
 #dir_data = os.path.join("data")
-IGRF_FILE = 'IGRF13.shc'
+#IGRF_FILE = 'IGRF13.shc'
+
+def get_IGRF_filepath():
+    with importlib.resources.open_text('TRIPS.data', 'specify_IGRFfile.json') as f:
+        data = json.load(f)
+        return data["filename"]
 
 #how precisely we vary theta to look for a drift shell at exactly the correct L*:
 find_driftshell_theta_tolerance = 0.0005
