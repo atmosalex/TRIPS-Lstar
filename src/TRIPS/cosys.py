@@ -22,40 +22,40 @@ def dec_to_dt(dec):
 
     return year_start + timedelta(seconds=frac_sec)
 
-def get_rotation_GEO_to_MAG(IGRFprops):
-    """
-    year_dec : date as a decimal of year, i.e. 2015.25
+# def get_rotation_GEO_to_MAG(IGRFprops):
+#     """
+#     year_dec : date as a decimal of year, i.e. 2015.25
 
-    returns rotation matrix from GEO to MAG frame
+#     returns rotation matrix from GEO to MAG frame
 
-    from the Spenvis help page (https://www.spenvis.oma.be/help/background/coortran/coortran.html),
-    the equation to solve is:
-        T_5 = <phi - 90d, Y> * <lambda, Z>
+#     from the Spenvis help page (https://www.spenvis.oma.be/help/background/coortran/coortran.html),
+#     the equation to solve is:
+#         T_5 = <phi - 90d, Y> * <lambda, Z>
 
-    <lambda, Z> is a rotation in the plane of the Earth's equator form the Greenwich meridian to the meridian containing the dipole pole
-    <phi - 90d, Y> is a rotation in that meridian from the geographic pole to the dipole pole
-    """
-    g, h, _ = IGRFprops.arrange_IGRF_coeffs()
-    #B0_2 = g[1][0] ** 2 + g[1][1] ** 2 + h[1][1] ** 2
+#     <lambda, Z> is a rotation in the plane of the Earth's equator form the Greenwich meridian to the meridian containing the dipole pole
+#     <phi - 90d, Y> is a rotation in that meridian from the geographic pole to the dipole pole
+#     """
+#     g, h, _ = IGRFprops.arrange_IGRF_coeffs()
+#     #B0_2 = g[1][0] ** 2 + g[1][1] ** 2 + h[1][1] ** 2
 
-    lmbda = atan(h[1][1]/g[1][1])
-    phi = np.pi/2 - atan((g[1][1]*cos(lmbda) + h[1][1]*sin(lmbda)) / g[1][0])
+#     lmbda = atan(h[1][1]/g[1][1])
+#     phi = np.pi/2 - atan((g[1][1]*cos(lmbda) + h[1][1]*sin(lmbda)) / g[1][0])
 
-    R_mer = np.array([[cos(lmbda), -1*sin(lmbda), 0], [sin(lmbda), cos(lmbda), 0], [0,0,1]])
-    R_pole = np.array([[cos(phi-np.pi/2), 0, sin(phi-np.pi/2)],
-                       [0, 1, 0],
-                       [-1 * sin(phi-np.pi/2), 0, cos(phi-np.pi/2)]])
-    T5 = R_pole @ (R_mer @ np.identity(3)).T
-    return T5 #validated using IRBEM
+#     R_mer = np.array([[cos(lmbda), -1*sin(lmbda), 0], [sin(lmbda), cos(lmbda), 0], [0,0,1]])
+#     R_pole = np.array([[cos(phi-np.pi/2), 0, sin(phi-np.pi/2)],
+#                        [0, 1, 0],
+#                        [-1 * sin(phi-np.pi/2), 0, cos(phi-np.pi/2)]])
+#     T5 = R_pole @ (R_mer @ np.identity(3)).T
+#     return T5 #validated using IRBEM
 
-    ###validation using IRBEM for year_dec = 2015.0:
-    # import datetime
-    # from datetime import timezone
-    # import IRBEM as ib
-    # t_datetime = datetime.datetime(year=2015, month=1, day=1, tzinfo=timezone.utc)
-    # coords = ib.Coords()
-    # rot_GEO_to_MAG = coords.transform([t_datetime, t_datetime, t_datetime], [[1, 0, 0], [0, 1, 0], [0, 0, 1]], 'GEO', 'MAG').T
-    # print(rot_GEO_to_MAG)
+#     ###validation using IRBEM for year_dec = 2015.0:
+#     # import datetime
+#     # from datetime import timezone
+#     # import IRBEM as ib
+#     # t_datetime = datetime.datetime(year=2015, month=1, day=1, tzinfo=timezone.utc)
+#     # coords = ib.Coords()
+#     # rot_GEO_to_MAG = coords.transform([t_datetime, t_datetime, t_datetime], [[1, 0, 0], [0, 1, 0], [0, 0, 1]], 'GEO', 'MAG').T
+#     # print(rot_GEO_to_MAG)
 
 def get_eccentric_centre_GEO(IGRFprops):
     """return vector from origin to eccentric dipole centre in GEO frame [m] """
