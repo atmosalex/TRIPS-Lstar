@@ -1,0 +1,26 @@
+[build-system]
+requires = ["uv_build >= 0.10.10, <0.11.0"]
+build-backend = "uv_build"
+
+[project]
+name='trips-lstar'
+version='0.1.0'
+authors=[
+{name = 'Alexander Lozinski', email = "alozinski@spacewx.com"}
+]
+description='A Python library for solving radiation belt particle redistribution in phase space, and more.'
+readme = "README.md"
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
+keywords = ["radiation belt", "adiabatic", "space", "physics", "L*"]
+packages=['trips-lstar']
+package_dir={'trips-lstar'= 'src/trips_lstar'}
+requires-python='>=3.8'
+dependencies = [
+  "numpy",
+  "scipy",
+  "h5py",
+]
+
+[tool.uv_build]
+package-data = {"trips-lstar" = ['data/*']}

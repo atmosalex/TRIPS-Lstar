@@ -10,9 +10,9 @@ A Python library for solving radiation belt particle redistribution in phase spa
 
 Clone the repository and `cd` to its root directory.
 
-Build the package:
+Build the package, this step uses the `uv_build` build backend as defined in `pyproject.toml`:
 ```
-python setup.py sdist bdist_wheel
+python -m build
 ```
 
 Install using `pip`:
@@ -20,7 +20,7 @@ Install using `pip`:
 pip install .
 ```
 
-You can now `import TRIPS` from Python scripts!
+You can now `import trips_lstar` from Python scripts!
 
 
 # Authorship and Citation 

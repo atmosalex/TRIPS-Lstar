@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'Trajectory Redistribution in Phase Space (TRIPS)'
+project = 'Trajectory Redistribution in Phase Space (trips-lstar)'
 copyright = ''
 author = 'Alexander Lozinski'
 release = '1.0.0'
@@ -19,7 +19,7 @@ extensions = ['myst_parser', "autodoc2"]
 
 autodoc2_packages = [
     {
-        "path": "../src/TRIPS",
+        "path": "../src/trips_lstar",
         "exclude_files": ["igrf_utils.py"],
     }
 ]

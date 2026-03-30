@@ -1,12 +1,12 @@
 import numpy as np
 from math import cos, sin, tan, acos, asin, atan, atan2, sqrt, pi, floor
 import sys
-from TRIPS import cosys
-from TRIPS import driftshells
-from TRIPS import pt_pushers
-from TRIPS import pt_particles
+from trips_lstar import cosys
+from trips_lstar import driftshells
+from trips_lstar import pt_pushers
+from trips_lstar import pt_particles
 import time
-from TRIPS import constants
+from trips_lstar import constants
 G2T = constants.G2T
 c = constants.c  # 299792458
 RE = constants.RE  # 6.3712e6

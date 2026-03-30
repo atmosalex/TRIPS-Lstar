@@ -1,10 +1,10 @@
 from scipy import interpolate
 import numpy as np
 from math import sqrt, pi
-from TRIPS import constants
-from TRIPS import igrf_utils as iut
-#from TRIPS.settings import IGRF_FILE
-from TRIPS import settings
+from trips_lstar import constants
+from trips_lstar import igrf_utils as iut
+#from trips_lstar.settings import IGRF_FILE
+from trips_lstar import settings
 
 igrf = iut.load_shcfile(settings.get_IGRF_filepath())
 

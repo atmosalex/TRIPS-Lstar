@@ -1,4 +1,4 @@
-from TRIPS import constants
+from trips_lstar import constants
 import numpy as np
 from math import cos, sin, tan, acos, asin, atan, atan2, sqrt, pi, floor, log10
 from datetime import datetime, timezone, timedelta

@@ -1,11 +1,11 @@
-from TRIPS import store_fields
-from TRIPS import field_tools
-from TRIPS import IGRF_tools
+from trips_lstar import store_fields
+from trips_lstar import field_tools
+from trips_lstar import IGRF_tools
 import numpy as np
-from TRIPS import constants
+from trips_lstar import constants
 from math import cos, sin, tan, acos, asin, atan, atan2, sqrt, pi, floor, log10
 import os
-from TRIPS import cosys
+from trips_lstar import cosys
 
 
 class Epulse:  # method of Li et al, 1993

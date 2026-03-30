@@ -7,7 +7,7 @@ import json
 #IGRF_FILE = 'IGRF13.shc'
 
 def get_IGRF_filepath():
-    with importlib.resources.open_text('TRIPS.data', 'specify_IGRFfile.json') as f:
+    with importlib.resources.open_text('trips_lstar.data', 'specify_IGRFfile.json') as f:
         data = json.load(f)
         return data["filename"]
 

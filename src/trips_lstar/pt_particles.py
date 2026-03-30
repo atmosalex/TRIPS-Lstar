@@ -1,6 +1,6 @@
 import numpy as np
 from math import cos, sin, tan, acos, asin, atan, atan2, sqrt, pi, floor
-from TRIPS import constants
+from trips_lstar import constants
 
 phasespacecoords_idxdict = {"mu [MeV/G]": 0,
     "E [MeV]": 1,

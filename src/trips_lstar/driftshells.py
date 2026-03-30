@@ -1,10 +1,10 @@
-from TRIPS import cosys
-from TRIPS import field_tools
+from trips_lstar import cosys
+from trips_lstar import field_tools
 import numpy as np
-from TRIPS import constants
+from trips_lstar import constants
 from math import cos, sin, tan, acos, asin, atan, atan2, sqrt, pi, floor, log10
-from TRIPS.planet import solve_lambda_intersection
-from TRIPS import settings
+from trips_lstar.planet import solve_lambda_intersection
+from trips_lstar import settings
 #import curvature
 
 class Driftshell:

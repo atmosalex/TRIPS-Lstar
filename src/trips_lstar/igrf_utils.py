@@ -74,7 +74,7 @@ def load_shcfile(filepath, leap_year=None):
     """
 
     leap_year = True if leap_year is None else leap_year
-    with importlib.resources.open_text('TRIPS.data', filepath) as f:
+    with importlib.resources.open_text('trips_lstar.data', filepath) as f:
     #with open(filepath, 'r') as f:
 
         data = np.array([])

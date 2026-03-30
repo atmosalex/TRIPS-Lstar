@@ -1,10 +1,10 @@
 from math import cos, sin, sqrt, atan2, tan, atan, radians, log, asin
 import numpy as np
 import sys
-from TRIPS import field_tools
-from TRIPS import IGRF_tools
-from TRIPS import cosys
-from TRIPS import constants
+from trips_lstar import field_tools
+from trips_lstar import IGRF_tools
+from trips_lstar import cosys
+from trips_lstar import constants
 def colat_to_lat(colat): return np.pi / 2 - colat
 
 class Earthlikebody:

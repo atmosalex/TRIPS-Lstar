@@ -1,15 +1,15 @@
 import sys
 import numpy as np
-from TRIPS import pt_fp
-from TRIPS import field_tools
-from TRIPS import constants
-from TRIPS import planet
-from TRIPS import pt_particles
-from TRIPS import store_particles
-from TRIPS import driftshells
-from TRIPS import cosys
-from TRIPS import config
-from TRIPS import settings
+from trips_lstar import pt_fp
+from trips_lstar import field_tools
+from trips_lstar import constants
+from trips_lstar import planet
+from trips_lstar import pt_particles
+from trips_lstar import store_particles
+from trips_lstar import driftshells
+from trips_lstar import cosys
+from trips_lstar import config
+from trips_lstar import settings
 from datetime import datetime, timezone
 import argparse
 import os
