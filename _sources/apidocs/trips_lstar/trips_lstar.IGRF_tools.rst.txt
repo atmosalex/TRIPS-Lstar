@@ -1,0 +1,65 @@
+:py:mod:`trips_lstar.IGRF_tools`
+================================
+
+.. py:module:: trips_lstar.IGRF_tools
+
+.. autodoc2-docstring:: trips_lstar.IGRF_tools
+   :allowtitles:
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`IGRFproperties <trips_lstar.IGRF_tools.IGRFproperties>`
+     - .. autodoc2-docstring:: trips_lstar.IGRF_tools.IGRFproperties
+          :summary:
+
+Data
+~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`igrf <trips_lstar.IGRF_tools.igrf>`
+     - .. autodoc2-docstring:: trips_lstar.IGRF_tools.igrf
+          :summary:
+
+API
+~~~
+
+.. py:data:: igrf
+   :canonical: trips_lstar.IGRF_tools.igrf
+   :value: 'load_shcfile(...)'
+
+   .. autodoc2-docstring:: trips_lstar.IGRF_tools.igrf
+
+.. py:class:: IGRFproperties(year_dec)
+   :canonical: trips_lstar.IGRF_tools.IGRFproperties
+
+   .. autodoc2-docstring:: trips_lstar.IGRF_tools.IGRFproperties
+
+   .. rubric:: Initialization
+
+   .. autodoc2-docstring:: trips_lstar.IGRF_tools.IGRFproperties.__init__
+
+   .. py:method:: get_B0_m(year)
+      :canonical: trips_lstar.IGRF_tools.IGRFproperties.get_B0_m
+
+      .. autodoc2-docstring:: trips_lstar.IGRF_tools.IGRFproperties.get_B0_m
+
+   .. py:method:: arrange_IGRF_coeffs(N=13)
+      :canonical: trips_lstar.IGRF_tools.IGRFproperties.arrange_IGRF_coeffs
+
+      .. autodoc2-docstring:: trips_lstar.IGRF_tools.IGRFproperties.arrange_IGRF_coeffs
+
+   .. py:method:: get_B_GEO(r_GEO_km, colat_geocen_d, lon_d)
+      :canonical: trips_lstar.IGRF_tools.IGRFproperties.get_B_GEO
+
+      .. autodoc2-docstring:: trips_lstar.IGRF_tools.IGRFproperties.get_B_GEO

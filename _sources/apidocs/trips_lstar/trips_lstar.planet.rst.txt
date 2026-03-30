@@ -1,0 +1,182 @@
+:py:mod:`trips_lstar.planet`
+============================
+
+.. py:module:: trips_lstar.planet
+
+.. autodoc2-docstring:: trips_lstar.planet
+   :allowtitles:
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`Earthlikebody <trips_lstar.planet.Earthlikebody>`
+     - .. autodoc2-docstring:: trips_lstar.planet.Earthlikebody
+          :summary:
+
+Functions
+~~~~~~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`colat_to_lat <trips_lstar.planet.colat_to_lat>`
+     - .. autodoc2-docstring:: trips_lstar.planet.colat_to_lat
+          :summary:
+   * - :py:obj:`solve_lambda_intersection <trips_lstar.planet.solve_lambda_intersection>`
+     - .. autodoc2-docstring:: trips_lstar.planet.solve_lambda_intersection
+          :summary:
+   * - :py:obj:`solve_dist_point_line <trips_lstar.planet.solve_dist_point_line>`
+     - .. autodoc2-docstring:: trips_lstar.planet.solve_dist_point_line
+          :summary:
+   * - :py:obj:`haversine <trips_lstar.planet.haversine>`
+     - .. autodoc2-docstring:: trips_lstar.planet.haversine
+          :summary:
+   * - :py:obj:`dipolelc <trips_lstar.planet.dipolelc>`
+     - .. autodoc2-docstring:: trips_lstar.planet.dipolelc
+          :summary:
+   * - :py:obj:`fit_0km <trips_lstar.planet.fit_0km>`
+     - .. autodoc2-docstring:: trips_lstar.planet.fit_0km
+          :summary:
+   * - :py:obj:`get_lc <trips_lstar.planet.get_lc>`
+     - .. autodoc2-docstring:: trips_lstar.planet.get_lc
+          :summary:
+
+API
+~~~
+
+.. py:function:: colat_to_lat(colat)
+   :canonical: trips_lstar.planet.colat_to_lat
+
+   .. autodoc2-docstring:: trips_lstar.planet.colat_to_lat
+
+.. py:class:: Earthlikebody(year_dec, h_aboveWGS84=0, surface_n_phi=12 + 1, surface_n_theta=24 + 1)
+   :canonical: trips_lstar.planet.Earthlikebody
+
+   .. autodoc2-docstring:: trips_lstar.planet.Earthlikebody
+
+   .. rubric:: Initialization
+
+   .. autodoc2-docstring:: trips_lstar.planet.Earthlikebody.__init__
+
+   .. py:method:: get_usph_GEO_colat_long(X_MAG)
+      :canonical: trips_lstar.planet.Earthlikebody.get_usph_GEO_colat_long
+
+      .. autodoc2-docstring:: trips_lstar.planet.Earthlikebody.get_usph_GEO_colat_long
+
+   .. py:method:: get_xyz_surface_from_unitsph(th_unitsph_GEO, phi_GEO)
+      :canonical: trips_lstar.planet.Earthlikebody.get_xyz_surface_from_unitsph
+
+      .. autodoc2-docstring:: trips_lstar.planet.Earthlikebody.get_xyz_surface_from_unitsph
+
+   .. py:method:: get_dS(v, du, dv)
+      :canonical: trips_lstar.planet.Earthlikebody.get_dS
+
+      .. autodoc2-docstring:: trips_lstar.planet.Earthlikebody.get_dS
+
+   .. py:method:: _derive_discrete_surface_parameters(n_phi, n_theta)
+      :canonical: trips_lstar.planet.Earthlikebody._derive_discrete_surface_parameters
+
+      .. autodoc2-docstring:: trips_lstar.planet.Earthlikebody._derive_discrete_surface_parameters
+
+   .. py:method:: get_surface_area()
+      :canonical: trips_lstar.planet.Earthlikebody.get_surface_area
+
+      .. autodoc2-docstring:: trips_lstar.planet.Earthlikebody.get_surface_area
+
+   .. py:method:: _derive_locatation_of_IGRF_poles(IGRFprops)
+      :canonical: trips_lstar.planet.Earthlikebody._derive_locatation_of_IGRF_poles
+
+      .. autodoc2-docstring:: trips_lstar.planet.Earthlikebody._derive_locatation_of_IGRF_poles
+
+   .. py:method:: get_enclosed_surface_element_fractions(dshell, use_conjugate_contour=False, calculate_fractional_elements=False)
+      :canonical: trips_lstar.planet.Earthlikebody.get_enclosed_surface_element_fractions
+
+      .. autodoc2-docstring:: trips_lstar.planet.Earthlikebody.get_enclosed_surface_element_fractions
+
+   .. py:method:: _find_colatitude_limits_of_magnetic_hemisph_on_surface_unitsph(bfield, idx_phi, hemisph, time, actoninterr=1)
+      :canonical: trips_lstar.planet.Earthlikebody._find_colatitude_limits_of_magnetic_hemisph_on_surface_unitsph
+
+      .. autodoc2-docstring:: trips_lstar.planet.Earthlikebody._find_colatitude_limits_of_magnetic_hemisph_on_surface_unitsph
+
+   .. py:method:: _search_surface_meridian_for_fieldline(bfield, idx_phi_m_mesh_GEO, time, I_target, Bm, hemisph_Xs, trace_ds)
+      :canonical: trips_lstar.planet.Earthlikebody._search_surface_meridian_for_fieldline
+
+      .. autodoc2-docstring:: trips_lstar.planet.Earthlikebody._search_surface_meridian_for_fieldline
+
+   .. py:method:: get_normal(px)
+      :canonical: trips_lstar.planet.Earthlikebody.get_normal
+
+      .. autodoc2-docstring:: trips_lstar.planet.Earthlikebody.get_normal
+
+   .. py:method:: point_is_within_xy_bounds(px)
+      :canonical: trips_lstar.planet.Earthlikebody.point_is_within_xy_bounds
+
+      .. autodoc2-docstring:: trips_lstar.planet.Earthlikebody.point_is_within_xy_bounds
+
+   .. py:method:: point_within_xy_bounds_is_within_surface(px)
+      :canonical: trips_lstar.planet.Earthlikebody.point_within_xy_bounds_is_within_surface
+
+      .. autodoc2-docstring:: trips_lstar.planet.Earthlikebody.point_within_xy_bounds_is_within_surface
+
+   .. py:method:: point_is_within_surface(px)
+      :canonical: trips_lstar.planet.Earthlikebody.point_is_within_surface
+
+      .. autodoc2-docstring:: trips_lstar.planet.Earthlikebody.point_is_within_surface
+
+   .. py:method:: get_height_above_surface(px)
+      :canonical: trips_lstar.planet.Earthlikebody.get_height_above_surface
+
+      .. autodoc2-docstring:: trips_lstar.planet.Earthlikebody.get_height_above_surface
+
+   .. py:method:: get_xyz_justabovesurface_from_unitsph(th_unitsphere_GEO, phi_GEO, meters=0.01)
+      :canonical: trips_lstar.planet.Earthlikebody.get_xyz_justabovesurface_from_unitsph
+
+      .. autodoc2-docstring:: trips_lstar.planet.Earthlikebody.get_xyz_justabovesurface_from_unitsph
+
+   .. py:method:: intersect_from_outside(p0, p1, keep_distance=0)
+      :canonical: trips_lstar.planet.Earthlikebody.intersect_from_outside
+
+      .. autodoc2-docstring:: trips_lstar.planet.Earthlikebody.intersect_from_outside
+
+   .. py:method:: intersect_from_inside(p0, p1, keep_distance=0)
+      :canonical: trips_lstar.planet.Earthlikebody.intersect_from_inside
+
+      .. autodoc2-docstring:: trips_lstar.planet.Earthlikebody.intersect_from_inside
+
+.. py:function:: solve_lambda_intersection(o, l, Q, c)
+   :canonical: trips_lstar.planet.solve_lambda_intersection
+
+   .. autodoc2-docstring:: trips_lstar.planet.solve_lambda_intersection
+
+.. py:function:: solve_dist_point_line(x1, x2, x0)
+   :canonical: trips_lstar.planet.solve_dist_point_line
+
+   .. autodoc2-docstring:: trips_lstar.planet.solve_dist_point_line
+
+.. py:function:: haversine(r, phi1, phi2, theta1, theta2)
+   :canonical: trips_lstar.planet.haversine
+
+   .. autodoc2-docstring:: trips_lstar.planet.haversine
+
+.. py:function:: dipolelc(L, alt=0)
+   :canonical: trips_lstar.planet.dipolelc
+
+   .. autodoc2-docstring:: trips_lstar.planet.dipolelc
+
+.. py:function:: fit_0km(L_)
+   :canonical: trips_lstar.planet.fit_0km
+
+   .. autodoc2-docstring:: trips_lstar.planet.fit_0km
+
+.. py:function:: get_lc(L_, alt)
+   :canonical: trips_lstar.planet.get_lc
+
+   .. autodoc2-docstring:: trips_lstar.planet.get_lc

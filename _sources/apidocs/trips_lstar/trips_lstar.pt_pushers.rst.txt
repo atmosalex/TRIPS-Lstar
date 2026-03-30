@@ -1,0 +1,54 @@
+:py:mod:`trips_lstar.pt_pushers`
+================================
+
+.. py:module:: trips_lstar.pt_pushers
+
+.. autodoc2-docstring:: trips_lstar.pt_pushers
+   :allowtitles:
+
+Module Contents
+---------------
+
+Functions
+~~~~~~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`boris_fwd <trips_lstar.pt_pushers.boris_fwd>`
+     - .. autodoc2-docstring:: trips_lstar.pt_pushers.boris_fwd
+          :summary:
+   * - :py:obj:`boris_bkwd <trips_lstar.pt_pushers.boris_bkwd>`
+     - .. autodoc2-docstring:: trips_lstar.pt_pushers.boris_bkwd
+          :summary:
+
+Data
+~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`c <trips_lstar.pt_pushers.c>`
+     - .. autodoc2-docstring:: trips_lstar.pt_pushers.c
+          :summary:
+
+API
+~~~
+
+.. py:data:: c
+   :canonical: trips_lstar.pt_pushers.c
+   :value: None
+
+   .. autodoc2-docstring:: trips_lstar.pt_pushers.c
+
+.. py:function:: boris_fwd(particle, bfield, dt_solve, tsperorbit, freezefield=-1)
+   :canonical: trips_lstar.pt_pushers.boris_fwd
+
+   .. autodoc2-docstring:: trips_lstar.pt_pushers.boris_fwd
+
+.. py:function:: boris_bkwd(particle, bfield, dt_solve, tsperorbit, freezefield=-1)
+   :canonical: trips_lstar.pt_pushers.boris_bkwd
+
+   .. autodoc2-docstring:: trips_lstar.pt_pushers.boris_bkwd

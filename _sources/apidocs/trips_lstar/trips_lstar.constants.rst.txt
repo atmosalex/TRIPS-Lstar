@@ -1,0 +1,111 @@
+:py:mod:`trips_lstar.constants`
+===============================
+
+.. py:module:: trips_lstar.constants
+
+.. autodoc2-docstring:: trips_lstar.constants
+   :allowtitles:
+
+Module Contents
+---------------
+
+Data
+~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`c <trips_lstar.constants.c>`
+     - .. autodoc2-docstring:: trips_lstar.constants.c
+          :summary:
+   * - :py:obj:`MeV2J <trips_lstar.constants.MeV2J>`
+     - .. autodoc2-docstring:: trips_lstar.constants.MeV2J
+          :summary:
+   * - :py:obj:`G2T <trips_lstar.constants.G2T>`
+     - .. autodoc2-docstring:: trips_lstar.constants.G2T
+          :summary:
+   * - :py:obj:`nT2T <trips_lstar.constants.nT2T>`
+     - .. autodoc2-docstring:: trips_lstar.constants.nT2T
+          :summary:
+   * - :py:obj:`mu0 <trips_lstar.constants.mu0>`
+     - .. autodoc2-docstring:: trips_lstar.constants.mu0
+          :summary:
+   * - :py:obj:`RE <trips_lstar.constants.RE>`
+     - .. autodoc2-docstring:: trips_lstar.constants.RE
+          :summary:
+   * - :py:obj:`mass0_proton <trips_lstar.constants.mass0_proton>`
+     - .. autodoc2-docstring:: trips_lstar.constants.mass0_proton
+          :summary:
+   * - :py:obj:`mass0_electron <trips_lstar.constants.mass0_electron>`
+     - .. autodoc2-docstring:: trips_lstar.constants.mass0_electron
+          :summary:
+   * - :py:obj:`charge_proton <trips_lstar.constants.charge_proton>`
+     - .. autodoc2-docstring:: trips_lstar.constants.charge_proton
+          :summary:
+   * - :py:obj:`charge_electron <trips_lstar.constants.charge_electron>`
+     - .. autodoc2-docstring:: trips_lstar.constants.charge_electron
+          :summary:
+
+API
+~~~
+
+.. py:data:: c
+   :canonical: trips_lstar.constants.c
+   :value: 299792458
+
+   .. autodoc2-docstring:: trips_lstar.constants.c
+
+.. py:data:: MeV2J
+   :canonical: trips_lstar.constants.MeV2J
+   :value: 1.60218e-13
+
+   .. autodoc2-docstring:: trips_lstar.constants.MeV2J
+
+.. py:data:: G2T
+   :canonical: trips_lstar.constants.G2T
+   :value: 0.0001
+
+   .. autodoc2-docstring:: trips_lstar.constants.G2T
+
+.. py:data:: nT2T
+   :canonical: trips_lstar.constants.nT2T
+   :value: 1e-09
+
+   .. autodoc2-docstring:: trips_lstar.constants.nT2T
+
+.. py:data:: mu0
+   :canonical: trips_lstar.constants.mu0
+   :value: 1.25663706e-06
+
+   .. autodoc2-docstring:: trips_lstar.constants.mu0
+
+.. py:data:: RE
+   :canonical: trips_lstar.constants.RE
+   :value: 6371200.0
+
+   .. autodoc2-docstring:: trips_lstar.constants.RE
+
+.. py:data:: mass0_proton
+   :canonical: trips_lstar.constants.mass0_proton
+   :value: 1.67262189821e-27
+
+   .. autodoc2-docstring:: trips_lstar.constants.mass0_proton
+
+.. py:data:: mass0_electron
+   :canonical: trips_lstar.constants.mass0_electron
+   :value: 9.10938356e-31
+
+   .. autodoc2-docstring:: trips_lstar.constants.mass0_electron
+
+.. py:data:: charge_proton
+   :canonical: trips_lstar.constants.charge_proton
+   :value: 1.602176620898e-19
+
+   .. autodoc2-docstring:: trips_lstar.constants.charge_proton
+
+.. py:data:: charge_electron
+   :canonical: trips_lstar.constants.charge_electron
+   :value: None
+
+   .. autodoc2-docstring:: trips_lstar.constants.charge_electron

@@ -1,0 +1,386 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>trips_lstar.planet &mdash; Trajectory Redistribution in Phase Space (trips-lstar) 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="trips_lstar.run" href="trips_lstar.run.html" />
+    <link rel="prev" title="trips_lstar.IGRF_tools" href="trips_lstar.IGRF_tools.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Trajectory Redistribution in Phase Space (trips-lstar)
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../some-feature.html">Some feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../IGRF.html">TRIPS and the International Geomagnetic Reference Field (IGRF)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../another-feature.html">More features here</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="trips_lstar.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="trips_lstar.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.constants.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.constants</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.driftshells.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.driftshells</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.pt_pushers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.pt_pushers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.field_burning.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.field_burning</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.store_particles.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.store_particles</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.store_fields.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.store_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.pt_particles.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.pt_particles</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.field_tools.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.field_tools</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.settings.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.settings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.IGRF_tools.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.IGRF_tools</span></code></a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.planet</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.run.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.run</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.curvature.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.curvature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.pt_fp.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.pt_fp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.cosys.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.cosys</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Trajectory Redistribution in Phase Space (trips-lstar)</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="trips_lstar.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.planet</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/apidocs/trips_lstar/trips_lstar.planet.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-trips_lstar.planet">
+<span id="trips-lstar-planet"></span><h1><a class="reference internal" href="#module-trips_lstar.planet" title="trips_lstar.planet"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.planet</span></code></a><a class="headerlink" href="#module-trips_lstar.planet" title="Link to this heading"></a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.planet.Earthlikebody" title="trips_lstar.planet.Earthlikebody"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Earthlikebody</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.planet.colat_to_lat" title="trips_lstar.planet.colat_to_lat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">colat_to_lat</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trips_lstar.planet.solve_lambda_intersection" title="trips_lstar.planet.solve_lambda_intersection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">solve_lambda_intersection</span></code></a></p></td>
+<td><dl class="simple">
+<dt>calculates lambda for an intersecting line, ellipsoid given by:</dt><dd><p>x = o + lambda * l,
+(x - c).T * Q * (x - c) = 1</p>
+</dd>
+<dt>respectively, where:</dt><dd><p>o is the origin of the line in the MAG frame;
+c is centre of the ellipsoid in the MAG frame;
+l is direction vector of the line in the MAG frame;
+lambda is parametric distance along the line from o;
+Q is the ellipsoid matrix in the MAG frame.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.planet.solve_dist_point_line" title="trips_lstar.planet.solve_dist_point_line"><code class="xref py py-obj docutils literal notranslate"><span class="pre">solve_dist_point_line</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trips_lstar.planet.haversine" title="trips_lstar.planet.haversine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">haversine</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.planet.dipolelc" title="trips_lstar.planet.dipolelc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dipolelc</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trips_lstar.planet.fit_0km" title="trips_lstar.planet.fit_0km"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit_0km</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.planet.get_lc" title="trips_lstar.planet.get_lc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_lc</span></code></a></p></td>
+<td><dl class="simple">
+<dt>loss cone model from Lozinski et al., 2024, <a class="reference external" href="https://doi.org/10.1029/2023JA032377">https://doi.org/10.1029/2023JA032377</a></dt><dd><p>there is mistake in the paper: the values for a_1, b_1 and c_1 should be as shown below
+result is returned in degrees</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading"></a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.planet.colat_to_lat">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.planet.</span></span><span class="sig-name descname"><span class="pre">colat_to_lat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">colat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.colat_to_lat" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="trips_lstar.planet.Earthlikebody">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">trips_lstar.planet.</span></span><span class="sig-name descname"><span class="pre">Earthlikebody</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year_dec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_aboveWGS84</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_n_phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span> <span class="pre">+</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_n_theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">24</span> <span class="pre">+</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.Earthlikebody" title="Link to this definition"></a></dt>
+<dd><p class="rubric">Initialization</p>
+<p>create a static (frozen in time) model of Earth’s surface plus some altitude
+using general parameters defined by the WGS84 system
+calculate a surface mesh
+calculate normals and IGRF magnetic field through each surface element’s center</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.planet.Earthlikebody.get_usph_GEO_colat_long">
+<span class="sig-name descname"><span class="pre">get_usph_GEO_colat_long</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_MAG</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.Earthlikebody.get_usph_GEO_colat_long" title="Link to this definition"></a></dt>
+<dd><p>each point on the surface of the ellipsoid has corresponding GEO coordinates on a unitsphere which was transformed by the semiminor and semimajor axis scaling factors to the ellipsoid surface
+this function takes a point presumed to be on the ellipsoid surface in the MAG frame, then returns those coordinates</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.planet.Earthlikebody.get_xyz_surface_from_unitsph">
+<span class="sig-name descname"><span class="pre">get_xyz_surface_from_unitsph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">th_unitsph_GEO</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi_GEO</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.Earthlikebody.get_xyz_surface_from_unitsph" title="Link to this definition"></a></dt>
+<dd><p>inverse of get_usph_GEO_colat_long(…)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.planet.Earthlikebody.get_dS">
+<span class="sig-name descname"><span class="pre">get_dS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">du</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dv</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.Earthlikebody.get_dS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.planet.Earthlikebody._derive_discrete_surface_parameters">
+<span class="sig-name descname"><span class="pre">_derive_discrete_surface_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_phi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_theta</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.Earthlikebody._derive_discrete_surface_parameters" title="Link to this definition"></a></dt>
+<dd><p>calculate surface points, surface midpoints, surface element areas and surface normals at each midpoint
+calculate using the GEO frame but results are all transformed into the MAG frame:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.planet.Earthlikebody.get_surface_area">
+<span class="sig-name descname"><span class="pre">get_surface_area</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.Earthlikebody.get_surface_area" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.planet.Earthlikebody._derive_locatation_of_IGRF_poles">
+<span class="sig-name descname"><span class="pre">_derive_locatation_of_IGRF_poles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IGRFprops</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.Earthlikebody._derive_locatation_of_IGRF_poles" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.planet.Earthlikebody.get_enclosed_surface_element_fractions">
+<span class="sig-name descname"><span class="pre">get_enclosed_surface_element_fractions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dshell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_conjugate_contour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calculate_fractional_elements</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.Earthlikebody.get_enclosed_surface_element_fractions" title="Link to this definition"></a></dt>
+<dd><p>determine which surface elements are within the contour passed to this function via a drift shell object
+return the result as a mask with the corresponding fraction of surface element contained</p>
+<p>this works by interpolating the contour point at each surface element phi, then finding which indicies of theta at this phi are above/below the contour</p>
+<dl class="simple">
+<dt>it doesn’t matter if the mask is above or below the contour because of the divergence theorem:</dt><dd><p>sum the magnetic flux within the contour mask
+sum the magnetic flux outside the contour mask (flipped mask)
+take the average to reduce integration error</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.planet.Earthlikebody._find_colatitude_limits_of_magnetic_hemisph_on_surface_unitsph">
+<span class="sig-name descname"><span class="pre">_find_colatitude_limits_of_magnetic_hemisph_on_surface_unitsph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bfield</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_phi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hemisph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actoninterr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.Earthlikebody._find_colatitude_limits_of_magnetic_hemisph_on_surface_unitsph" title="Link to this definition"></a></dt>
+<dd><p>find the colatitudes between which field lines are all heading from Earth’s surface to the opposite hemisphere
+we know the colatitude nearest to the magnetic pole, we will start here and converge on the other limit</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.planet.Earthlikebody._search_surface_meridian_for_fieldline">
+<span class="sig-name descname"><span class="pre">_search_surface_meridian_for_fieldline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bfield</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_phi_m_mesh_GEO</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">I_target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Bm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hemisph_Xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace_ds</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.Earthlikebody._search_surface_meridian_for_fieldline" title="Link to this definition"></a></dt>
+<dd><p>locate another field line with the same I(Bm) on the surface meridian defined by idx_phi_m_mesh_GEO
+this will involve converging on an appropriate colatitude
+we will make use of coordinates on the unitsphere (abbreviated usph) that is transformed to the ellipsoid surface</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.planet.Earthlikebody.get_normal">
+<span class="sig-name descname"><span class="pre">get_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">px</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.Earthlikebody.get_normal" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.planet.Earthlikebody.point_is_within_xy_bounds">
+<span class="sig-name descname"><span class="pre">point_is_within_xy_bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">px</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.Earthlikebody.point_is_within_xy_bounds" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.planet.Earthlikebody.point_within_xy_bounds_is_within_surface">
+<span class="sig-name descname"><span class="pre">point_within_xy_bounds_is_within_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">px</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.Earthlikebody.point_within_xy_bounds_is_within_surface" title="Link to this definition"></a></dt>
+<dd><p>detects if a point which lies inside the semimajor circle when projected onto the Z=0 plane is inside the surface</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.planet.Earthlikebody.point_is_within_surface">
+<span class="sig-name descname"><span class="pre">point_is_within_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">px</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.Earthlikebody.point_is_within_surface" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.planet.Earthlikebody.get_height_above_surface">
+<span class="sig-name descname"><span class="pre">get_height_above_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">px</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.Earthlikebody.get_height_above_surface" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.planet.Earthlikebody.get_xyz_justabovesurface_from_unitsph">
+<span class="sig-name descname"><span class="pre">get_xyz_justabovesurface_from_unitsph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">th_unitsphere_GEO</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi_GEO</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.Earthlikebody.get_xyz_justabovesurface_from_unitsph" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>this function returns a point in MAG coordinates just above the ellipsoid surface at GEO longitude phi_GEO,</dt><dd><p>with latitude corresponding to latitude th_unitsphere_GEO on the unit sphere, transformed using the scaling parameters of the ellipsoid</p>
+</dd>
+</dl>
+<p>usage: this function is used by step_contour to derive the coordinates of points to probe when numerically searching for adjacent field lines with certain properties</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.planet.Earthlikebody.intersect_from_outside">
+<span class="sig-name descname"><span class="pre">intersect_from_outside</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.Earthlikebody.intersect_from_outside" title="Link to this definition"></a></dt>
+<dd><p>p0 and p1 must be numpy arrays
+calculate the intersection point pX between p0 and p1 at Earth’s surface, if there is one
+p0 MUST be outside Earth’s surface!</p>
+<blockquote>
+<div><dl class="simple">
+<dt>.p0</dt><dd><dl class="simple">
+<dt>—-x— Earth</dt><dd><p>.p1</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<p>if keep_distance is set high, pX may not be between p0 and p1</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.planet.Earthlikebody.intersect_from_inside">
+<span class="sig-name descname"><span class="pre">intersect_from_inside</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.Earthlikebody.intersect_from_inside" title="Link to this definition"></a></dt>
+<dd><p>same as above, but…
+p0 MUST be inside Earth’s surface!</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.planet.solve_lambda_intersection">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.planet.</span></span><span class="sig-name descname"><span class="pre">solve_lambda_intersection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.solve_lambda_intersection" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>calculates lambda for an intersecting line, ellipsoid given by:</dt><dd><p>x = o + lambda * l,
+(x - c).T * Q * (x - c) = 1</p>
+</dd>
+<dt>respectively, where:</dt><dd><p>o is the origin of the line in the MAG frame;
+c is centre of the ellipsoid in the MAG frame;
+l is direction vector of the line in the MAG frame;
+lambda is parametric distance along the line from o;
+Q is the ellipsoid matrix in the MAG frame.</p>
+</dd>
+</dl>
+<p>all parameters must be defined in the same coordinate system
+only real values are returned as we are dealing with physical space</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.planet.solve_dist_point_line">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.planet.</span></span><span class="sig-name descname"><span class="pre">solve_dist_point_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.solve_dist_point_line" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.planet.haversine">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.planet.</span></span><span class="sig-name descname"><span class="pre">haversine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.haversine" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.planet.dipolelc">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.planet.</span></span><span class="sig-name descname"><span class="pre">dipolelc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.dipolelc" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.planet.fit_0km">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.planet.</span></span><span class="sig-name descname"><span class="pre">fit_0km</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.fit_0km" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.planet.get_lc">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.planet.</span></span><span class="sig-name descname"><span class="pre">get_lc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.planet.get_lc" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>loss cone model from Lozinski et al., 2024, <a class="reference external" href="https://doi.org/10.1029/2023JA032377">https://doi.org/10.1029/2023JA032377</a></dt><dd><p>there is mistake in the paper: the values for a_1, b_1 and c_1 should be as shown below
+result is returned in degrees</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="trips_lstar.IGRF_tools.html" class="btn btn-neutral float-left" title="trips_lstar.IGRF_tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="trips_lstar.run.html" class="btn btn-neutral float-right" title="trips_lstar.run" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,484 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>trips_lstar.field_tools &mdash; Trajectory Redistribution in Phase Space (trips-lstar) 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="trips_lstar.settings" href="trips_lstar.settings.html" />
+    <link rel="prev" title="trips_lstar.pt_particles" href="trips_lstar.pt_particles.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Trajectory Redistribution in Phase Space (trips-lstar)
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../some-feature.html">Some feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../IGRF.html">TRIPS and the International Geomagnetic Reference Field (IGRF)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../another-feature.html">More features here</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="trips_lstar.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="trips_lstar.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.constants.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.constants</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.driftshells.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.driftshells</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.pt_pushers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.pt_pushers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.field_burning.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.field_burning</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.store_particles.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.store_particles</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.store_fields.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.store_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.pt_particles.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.pt_particles</span></code></a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.field_tools</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.settings.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.settings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.IGRF_tools.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.IGRF_tools</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.planet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.planet</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.run.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.run</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.curvature.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.curvature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.pt_fp.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.pt_fp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.cosys.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.cosys</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Trajectory Redistribution in Phase Space (trips-lstar)</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="trips_lstar.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.field_tools</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/apidocs/trips_lstar/trips_lstar.field_tools.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-trips_lstar.field_tools">
+<span id="trips-lstar-field-tools"></span><h1><a class="reference internal" href="#module-trips_lstar.field_tools" title="trips_lstar.field_tools"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.field_tools</span></code></a><a class="headerlink" href="#module-trips_lstar.field_tools" title="Link to this heading"></a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.field_tools._Geomagneticfield" title="trips_lstar.field_tools._Geomagneticfield"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_Geomagneticfield</span></code></a></p></td>
+<td><p>this is a base class describing an eccentric, tilted dipole
+we work in the MAG frame because:</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trips_lstar.field_tools.Dipolefield" title="trips_lstar.field_tools.Dipolefield"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dipolefield</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.field_tools.Griddedfield" title="trips_lstar.field_tools.Griddedfield"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Griddedfield</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trips_lstar.field_tools.IRBEMfield" title="trips_lstar.field_tools.IRBEMfield"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IRBEMfield</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.field_tools.calculate_I" title="trips_lstar.field_tools.calculate_I"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_I</span></code></a></p></td>
+<td><p>calculate I along a field line between Bm
+this function presumes that the field line leads into conjugate regions of field strength Bm or greater
+this should be checked first by the calling function</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trips_lstar.field_tools.solve_plane" title="trips_lstar.field_tools.solve_plane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">solve_plane</span></code></a></p></td>
+<td><p>solve the normal equation to derive the parameters of a plane across X, Y domain best containing Z coords
+use these parameters to solve the z coordinate of xx, yy on the plane
+this can be used to visualize the magnetic equator</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.field_tools.rotate_set_of_points_to_x_axis" title="trips_lstar.field_tools.rotate_set_of_points_to_x_axis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rotate_set_of_points_to_x_axis</span></code></a></p></td>
+<td><p>rotate a set of 3D points onto the x axis:</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trips_lstar.field_tools.project_fieldline_trace_onto_2d_surface" title="trips_lstar.field_tools.project_fieldline_trace_onto_2d_surface"><code class="xref py py-obj docutils literal notranslate"><span class="pre">project_fieldline_trace_onto_2d_surface</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.field_tools.project_sph2car" title="trips_lstar.field_tools.project_sph2car"><code class="xref py py-obj docutils literal notranslate"><span class="pre">project_sph2car</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trips_lstar.field_tools.get_peak_from_series" title="trips_lstar.field_tools.get_peak_from_series"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_peak_from_series</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.field_tools.get_fieldline_turnbacks" title="trips_lstar.field_tools.get_fieldline_turnbacks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_fieldline_turnbacks</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trips_lstar.field_tools.get_tracepath_nloops" title="trips_lstar.field_tools.get_tracepath_nloops"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_tracepath_nloops</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.field_tools.get_curvature_of_fieldline_trace_with_constant_ds" title="trips_lstar.field_tools.get_curvature_of_fieldline_trace_with_constant_ds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_curvature_of_fieldline_trace_with_constant_ds</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.field_tools.trace_ds_default" title="trips_lstar.field_tools.trace_ds_default"><code class="xref py py-obj docutils literal notranslate"><span class="pre">trace_ds_default</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading"></a></h3>
+<dl class="py data">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.trace_ds_default">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_tools.</span></span><span class="sig-name descname"><span class="pre">trace_ds_default</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#trips_lstar.field_tools.trace_ds_default" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.calculate_I">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_tools.</span></span><span class="sig-name descname"><span class="pre">calculate_I</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Bm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traceB</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_eq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace_ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">It_min_numerical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.calculate_I" title="Link to this definition"></a></dt>
+<dd><p>calculate I along a field line between Bm
+this function presumes that the field line leads into conjugate regions of field strength Bm or greater
+this should be checked first by the calling function</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="trips_lstar.field_tools._Geomagneticfield">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">trips_lstar.field_tools.</span></span><span class="sig-name descname"><span class="pre">_Geomagneticfield</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year_dec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools._Geomagneticfield" title="Link to this definition"></a></dt>
+<dd><p>this is a base class describing an eccentric, tilted dipole
+we work in the MAG frame because:</p>
+<blockquote>
+<div><p>we can transform between GEO and MAG using only three IGRF parameters (no IRBEM dependence, etc.)
+the convenient transformation between MAG and GEO allows us to include models of Earth’s surface
+the transformation between the MAG frame and an offset, eccentric dipole frame (i.e. magnetic equator) is a simple translation, to which vectors are invariant</p>
+</div></blockquote>
+<p class="rubric">Initialization</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools._Geomagneticfield.getBE">
+<span class="sig-name descname"><span class="pre">getBE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools._Geomagneticfield.getBE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools._Geomagneticfield._reset_range_warning">
+<span class="sig-name descname"><span class="pre">_reset_range_warning</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools._Geomagneticfield._reset_range_warning" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools._Geomagneticfield.get_dipolelc">
+<span class="sig-name descname"><span class="pre">get_dipolelc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Lb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atm_height</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools._Geomagneticfield.get_dipolelc" title="Link to this definition"></a></dt>
+<dd><p>pretty useless because it’s a total underestimate of the actual drift lost cone
+use the model from Lozinski et al., 2021 appendix for a better approximation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools._Geomagneticfield.getB_dipole">
+<span class="sig-name descname"><span class="pre">getB_dipole</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xh_MAG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yh_MAG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zh_MAG</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools._Geomagneticfield.getB_dipole" title="Link to this definition"></a></dt>
+<dd><p>input: coordinates in m</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools._Geomagneticfield.get_L">
+<span class="sig-name descname"><span class="pre">get_L</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x1_MAG</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools._Geomagneticfield.get_L" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools._Geomagneticfield.get_dipoleLambda">
+<span class="sig-name descname"><span class="pre">get_dipoleLambda</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x1_MAG</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools._Geomagneticfield.get_dipoleLambda" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools._Geomagneticfield.get_aclockw_angle_around_dipole_z">
+<span class="sig-name descname"><span class="pre">get_aclockw_angle_around_dipole_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x1_MAG</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools._Geomagneticfield.get_aclockw_angle_around_dipole_z" title="Link to this definition"></a></dt>
+<dd><p>get anticlockwise angle of x1 around z MAG axis from [1, 0]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools._Geomagneticfield.find_magequator">
+<span class="sig-name descname"><span class="pre">find_magequator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace_ds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span> <span class="pre">*</span> <span class="pre">constants.RE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_tracepath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tracepath_continue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tracepath_absB_continue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actoninterr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools._Geomagneticfield.find_magequator" title="Link to this definition"></a></dt>
+<dd><p>finds the first minimum in field strength along the current field line
+xs, ys, zs is the starting point of the trace
+returns tracepath as a list
+direction is the direction to head in relative to the field: direction = 1 means follow the field lines
+if we pass a point that is already on the equator, tracepath will have len 0
+tracepath will not include the starting point, but it will include the ending point if this is not the same as the starting point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools._Geomagneticfield.find_magequator_z">
+<span class="sig-name descname"><span class="pre">find_magequator_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace_ds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span> <span class="pre">*</span> <span class="pre">constants.RE</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools._Geomagneticfield.find_magequator_z" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools._Geomagneticfield._trace_until_surface_intersection">
+<span class="sig-name descname"><span class="pre">_trace_until_surface_intersection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trace_field_direction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fn_intersect</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace_ds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.00075</span> <span class="pre">*</span> <span class="pre">constants.RE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_tracepath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actoninterr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools._Geomagneticfield._trace_until_surface_intersection" title="Link to this definition"></a></dt>
+<dd><p>trace a field line towards a surface, assuming field strength increases towards the surface
+xs, ys, zs is the starting point of the trace
+tracepath is a numpy array
+the tracepath returned will INCLUDE the starting point (xs, ys, zs) AND the final intersection pX
+this means the minimum length returned is 2 unless the field goes out of interpolation range:
+example: when Xs is already the intersection point, force_direction = 1 (from outside Earth):</p>
+<blockquote>
+<div><p>go along the field line from Xs by dS
+find that we are moving away from the intersection point, then switch direction
+go back along the field line to Xs, which is pX, then return</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools._Geomagneticfield.trace_until_surface_intersection_from_inside">
+<span class="sig-name descname"><span class="pre">trace_until_surface_intersection_from_inside</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace_ds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span> <span class="pre">*</span> <span class="pre">constants.RE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_tracepath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actoninterr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools._Geomagneticfield.trace_until_surface_intersection_from_inside" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools._Geomagneticfield.trace_until_surface_intersection_from_outside">
+<span class="sig-name descname"><span class="pre">trace_until_surface_intersection_from_outside</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace_ds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span> <span class="pre">*</span> <span class="pre">constants.RE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_tracepath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actoninterr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools._Geomagneticfield.trace_until_surface_intersection_from_outside" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools._Geomagneticfield.trace_until_conjugate_surface_intersections_from_outside">
+<span class="sig-name descname"><span class="pre">trace_until_conjugate_surface_intersections_from_outside</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ellipsoid_surf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace_ds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span> <span class="pre">*</span> <span class="pre">constants.RE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actoninterr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools._Geomagneticfield.trace_until_conjugate_surface_intersections_from_outside" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools._Geomagneticfield._trace_until_threshold_B">
+<span class="sig-name descname"><span class="pre">_trace_until_threshold_B</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Bhit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace_ds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.00075</span> <span class="pre">*</span> <span class="pre">constants.RE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_tracepath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_traced_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">408595245</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actoninterr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools._Geomagneticfield._trace_until_threshold_B" title="Link to this definition"></a></dt>
+<dd><p>d is the direction of the threshold: 1 trace to higher B, -1 trace to lower B
+xs, ys, zs is the starting point of the trace
+tracepath is a list
+if we pass a point that already satisfies the condition, tracepath will have len 0
+tracepath will not include the starting point, but it will include the ending point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools._Geomagneticfield.trace_until_weak_B">
+<span class="sig-name descname"><span class="pre">trace_until_weak_B</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Bhit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace_ds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.00075</span> <span class="pre">*</span> <span class="pre">constants.RE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_tracepath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actoninterr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools._Geomagneticfield.trace_until_weak_B" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools._Geomagneticfield.trace_until_strong_B">
+<span class="sig-name descname"><span class="pre">trace_until_strong_B</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Bhit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace_ds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.00075</span> <span class="pre">*</span> <span class="pre">constants.RE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_tracepath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actoninterr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools._Geomagneticfield.trace_until_strong_B" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools._Geomagneticfield.trace_until_conjugate_field_strength">
+<span class="sig-name descname"><span class="pre">trace_until_conjugate_field_strength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Bhit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace_ds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span> <span class="pre">*</span> <span class="pre">constants.RE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actoninterr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools._Geomagneticfield.trace_until_conjugate_field_strength" title="Link to this definition"></a></dt>
+<dd><p>trace the field line up and down from Xs until Bhit
+trace_until_conjugate_surface_intersections returns a tracepath that INCLUDES the start point
+this function returns a tracepath that does NOT include the start point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools._Geomagneticfield.get_Bdotn_surf">
+<span class="sig-name descname"><span class="pre">get_Bdotn_surf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ellipsoid_surf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actoninterr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools._Geomagneticfield.get_Bdotn_surf" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools._Geomagneticfield.get_hemisph">
+<span class="sig-name descname"><span class="pre">get_hemisph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ellipsoid_surf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actoninterr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools._Geomagneticfield.get_hemisph" title="Link to this definition"></a></dt>
+<dd><p>pX is assumed to be on the surface of ellipsoid_surf
+returns the magnetic hemisphere that pX lies in, -1 is north, 1 is south</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.Dipolefield">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">trips_lstar.field_tools.</span></span><span class="sig-name descname"><span class="pre">Dipolefield</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year_dec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.Dipolefield" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#trips_lstar.field_tools._Geomagneticfield" title="trips_lstar.field_tools._Geomagneticfield"><code class="xref py py-obj docutils literal notranslate"><span class="pre">trips_lstar.field_tools._Geomagneticfield</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.Dipolefield.getBE">
+<span class="sig-name descname"><span class="pre">getBE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xh_MAG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yh_MAG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zh_MAG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actoninterr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.Dipolefield.getBE" title="Link to this definition"></a></dt>
+<dd><p>input: coordinates in m</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.Dipolefield.find_magequator">
+<span class="sig-name descname"><span class="pre">find_magequator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ti</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.Dipolefield.find_magequator" title="Link to this definition"></a></dt>
+<dd><p>some arguments are unused but exist to match the function signature of child classes</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.Dipolefield.find_magequator_z">
+<span class="sig-name descname"><span class="pre">find_magequator_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.Dipolefield.find_magequator_z" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.Griddedfield">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">trips_lstar.field_tools.</span></span><span class="sig-name descname"><span class="pre">Griddedfield</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulation_t0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reversetime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_dip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.Griddedfield" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#trips_lstar.field_tools._Geomagneticfield" title="trips_lstar.field_tools._Geomagneticfield"><code class="xref py py-obj docutils literal notranslate"><span class="pre">trips_lstar.field_tools._Geomagneticfield</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.Griddedfield.time_interpolation_in_static_fields">
+<span class="sig-name descname"><span class="pre">time_interpolation_in_static_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ti</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.Griddedfield.time_interpolation_in_static_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.Griddedfield.time_interpolation_in_dynamic_fields">
+<span class="sig-name descname"><span class="pre">time_interpolation_in_dynamic_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ti</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.Griddedfield.time_interpolation_in_dynamic_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.Griddedfield.int_field_cart">
+<span class="sig-name descname"><span class="pre">int_field_cart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actoninterr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.Griddedfield.int_field_cart" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.Griddedfield.int_field_sph">
+<span class="sig-name descname"><span class="pre">int_field_sph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actoninterr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.Griddedfield.int_field_sph" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.Griddedfield.int_field_cart_add_dip">
+<span class="sig-name descname"><span class="pre">int_field_cart_add_dip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actoninterr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.Griddedfield.int_field_cart_add_dip" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.Griddedfield.int_field_sph_add_dip">
+<span class="sig-name descname"><span class="pre">int_field_sph_add_dip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actoninterr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.Griddedfield.int_field_sph_add_dip" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.Griddedfield.getBE">
+<span class="sig-name descname"><span class="pre">getBE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xh_MAG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yh_MAG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zh_MAG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actoninterr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.Griddedfield.getBE" title="Link to this definition"></a></dt>
+<dd><p>input: coordinates in m</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.IRBEMfield">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">trips_lstar.field_tools.</span></span><span class="sig-name descname"><span class="pre">IRBEMfield</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dpar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t0_ts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_int</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys_needed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['Dst',</span> <span class="pre">'Pdyn',</span> <span class="pre">'ByIMF',</span> <span class="pre">'BzIMF',</span> <span class="pre">'W1',</span> <span class="pre">'W2',</span> <span class="pre">'W3',</span> <span class="pre">'W4',</span> <span class="pre">'W5',</span> <span class="pre">'W6']</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.IRBEMfield" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#trips_lstar.field_tools.Griddedfield" title="trips_lstar.field_tools.Griddedfield"><code class="xref py py-obj docutils literal notranslate"><span class="pre">trips_lstar.field_tools.Griddedfield</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.IRBEMfield.int_field">
+<span class="sig-name descname"><span class="pre">int_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ti_abs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actoninterr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.IRBEMfield.int_field" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.solve_plane">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_tools.</span></span><span class="sig-name descname"><span class="pre">solve_plane</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coords</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.solve_plane" title="Link to this definition"></a></dt>
+<dd><p>solve the normal equation to derive the parameters of a plane across X, Y domain best containing Z coords
+use these parameters to solve the z coordinate of xx, yy on the plane
+this can be used to visualize the magnetic equator</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.rotate_set_of_points_to_x_axis">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_tools.</span></span><span class="sig-name descname"><span class="pre">rotate_set_of_points_to_x_axis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.rotate_set_of_points_to_x_axis" title="Link to this definition"></a></dt>
+<dd><p>rotate a set of 3D points onto the x axis:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.project_fieldline_trace_onto_2d_surface">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_tools.</span></span><span class="sig-name descname"><span class="pre">project_fieldline_trace_onto_2d_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.project_fieldline_trace_onto_2d_surface" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.project_sph2car">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_tools.</span></span><span class="sig-name descname"><span class="pre">project_sph2car</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">th</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vphi</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.project_sph2car" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.get_peak_from_series">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_tools.</span></span><span class="sig-name descname"><span class="pre">get_peak_from_series</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_vicinity_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.get_peak_from_series" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.get_fieldline_turnbacks">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_tools.</span></span><span class="sig-name descname"><span class="pre">get_fieldline_turnbacks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace_ds_used</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.get_fieldline_turnbacks" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.get_tracepath_nloops">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_tools.</span></span><span class="sig-name descname"><span class="pre">get_tracepath_nloops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.get_tracepath_nloops" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.field_tools.get_curvature_of_fieldline_trace_with_constant_ds">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_tools.</span></span><span class="sig-name descname"><span class="pre">get_curvature_of_fieldline_trace_with_constant_ds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace_B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace_ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_Bmin_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_tools.get_curvature_of_fieldline_trace_with_constant_ds" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="trips_lstar.pt_particles.html" class="btn btn-neutral float-left" title="trips_lstar.pt_particles" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="trips_lstar.settings.html" class="btn btn-neutral float-right" title="trips_lstar.settings" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

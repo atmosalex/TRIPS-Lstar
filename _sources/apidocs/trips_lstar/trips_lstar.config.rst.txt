@@ -1,0 +1,204 @@
+:py:mod:`trips_lstar.config`
+============================
+
+.. py:module:: trips_lstar.config
+
+.. autodoc2-docstring:: trips_lstar.config
+   :allowtitles:
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`Keywords <trips_lstar.config.Keywords>`
+     - .. autodoc2-docstring:: trips_lstar.config.Keywords
+          :summary:
+   * - :py:obj:`Configuration <trips_lstar.config.Configuration>`
+     - .. autodoc2-docstring:: trips_lstar.config.Configuration
+          :summary:
+
+API
+~~~
+
+.. py:class:: Keywords
+   :canonical: trips_lstar.config.Keywords
+
+   .. autodoc2-docstring:: trips_lstar.config.Keywords
+
+   .. py:attribute:: species
+      :canonical: trips_lstar.config.Keywords.species
+      :value: 'species'
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.species
+
+   .. py:attribute:: duration
+      :canonical: trips_lstar.config.Keywords.duration
+      :value: 'duration_solve_max'
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.duration
+
+   .. py:attribute:: quitonebounce
+      :canonical: trips_lstar.config.Keywords.quitonebounce
+      :value: 'quit_after_one_bounce'
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.quitonebounce
+
+   .. py:attribute:: quitonedrift
+      :canonical: trips_lstar.config.Keywords.quitonedrift
+      :value: 'quit_after_one_drift'
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.quitonedrift
+
+   .. py:attribute:: reverse
+      :canonical: trips_lstar.config.Keywords.reverse
+      :value: 'reverse_time'
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.reverse
+
+   .. py:attribute:: storetrack
+      :canonical: trips_lstar.config.Keywords.storetrack
+      :value: 'store_trajectory'
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.storetrack
+
+   .. py:attribute:: storegc
+      :canonical: trips_lstar.config.Keywords.storegc
+      :value: 'store_GC'
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.storegc
+
+   .. py:attribute:: calculate_initial_invariants
+      :canonical: trips_lstar.config.Keywords.calculate_initial_invariants
+      :value: 'calculate_initial_invariants'
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.calculate_initial_invariants
+
+   .. py:attribute:: calculate_final_invariants
+      :canonical: trips_lstar.config.Keywords.calculate_final_invariants
+      :value: 'calculate_final_invariants'
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.calculate_final_invariants
+
+   .. py:attribute:: calculate_initial_dshell_curvature
+      :canonical: trips_lstar.config.Keywords.calculate_initial_dshell_curvature
+      :value: 'calculate_initial_dshell_curvature'
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.calculate_initial_dshell_curvature
+
+   .. py:attribute:: add_dipole_background
+      :canonical: trips_lstar.config.Keywords.add_dipole_background
+      :value: 'add_dipole_background'
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.add_dipole_background
+
+   .. py:attribute:: year_month_day
+      :canonical: trips_lstar.config.Keywords.year_month_day
+      :value: 'year_month_day'
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.year_month_day
+
+   .. py:attribute:: ax_lstar
+      :canonical: trips_lstar.config.Keywords.ax_lstar
+      :value: 'ax_Lstar'
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.ax_lstar
+
+   .. py:attribute:: ax_aeq
+      :canonical: trips_lstar.config.Keywords.ax_aeq
+      :value: 'ax_aeq'
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.ax_aeq
+
+   .. py:attribute:: ax_log10mu
+      :canonical: trips_lstar.config.Keywords.ax_log10mu
+      :value: 'ax_log10mu'
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.ax_log10mu
+
+   .. py:attribute:: ax_phasedrift
+      :canonical: trips_lstar.config.Keywords.ax_phasedrift
+      :value: 'ax_phasedrift'
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.ax_phasedrift
+
+   .. py:attribute:: ax_phasebounce
+      :canonical: trips_lstar.config.Keywords.ax_phasebounce
+      :value: 'ax_phasebounce'
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.ax_phasebounce
+
+   .. py:attribute:: ax_phasegyro
+      :canonical: trips_lstar.config.Keywords.ax_phasegyro
+      :value: 'ax_phasegyro'
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.ax_phasegyro
+
+   .. py:attribute:: add_field_from_grid
+      :canonical: trips_lstar.config.Keywords.add_field_from_grid
+      :value: 'add_field_from_grid'
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.add_field_from_grid
+
+   .. py:attribute:: storeinterval
+      :canonical: trips_lstar.config.Keywords.storeinterval
+      :value: 'storeinterval'
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.storeinterval
+
+   .. py:attribute:: skip_all_particles
+      :canonical: trips_lstar.config.Keywords.skip_all_particles
+      :value: 'skip_all_particles'
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.skip_all_particles
+
+   .. py:method:: get_keywords()
+      :canonical: trips_lstar.config.Keywords.get_keywords
+      :staticmethod:
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.get_keywords
+
+   .. py:method:: get_comment_for_file(keyname)
+      :canonical: trips_lstar.config.Keywords.get_comment_for_file
+      :staticmethod:
+
+      .. autodoc2-docstring:: trips_lstar.config.Keywords.get_comment_for_file
+
+.. py:class:: Configuration(filename=None, fromdict={}, check_standard_keys_present=False)
+   :canonical: trips_lstar.config.Configuration
+
+   .. autodoc2-docstring:: trips_lstar.config.Configuration
+
+   .. rubric:: Initialization
+
+   .. autodoc2-docstring:: trips_lstar.config.Configuration.__init__
+
+   .. py:method:: _convert_types_in_data_dictionary()
+      :canonical: trips_lstar.config.Configuration._convert_types_in_data_dictionary
+
+      .. autodoc2-docstring:: trips_lstar.config.Configuration._convert_types_in_data_dictionary
+
+   .. py:method:: _interpret_data_dictionary_and_set_attributes()
+      :canonical: trips_lstar.config.Configuration._interpret_data_dictionary_and_set_attributes
+
+      .. autodoc2-docstring:: trips_lstar.config.Configuration._interpret_data_dictionary_and_set_attributes
+
+   .. py:method:: get_particle_and_dshell_initialization_parameters()
+      :canonical: trips_lstar.config.Configuration.get_particle_and_dshell_initialization_parameters
+
+      .. autodoc2-docstring:: trips_lstar.config.Configuration.get_particle_and_dshell_initialization_parameters
+
+   .. py:method:: saveas(filename, quiet=False, topcomments=[])
+      :canonical: trips_lstar.config.Configuration.saveas
+
+      .. autodoc2-docstring:: trips_lstar.config.Configuration.saveas
+
+   .. py:method:: printsum()
+      :canonical: trips_lstar.config.Configuration.printsum
+
+      .. autodoc2-docstring:: trips_lstar.config.Configuration.printsum

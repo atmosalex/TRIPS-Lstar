@@ -1,0 +1,150 @@
+:py:mod:`trips_lstar.field_burning`
+===================================
+
+.. py:module:: trips_lstar.field_burning
+
+.. autodoc2-docstring:: trips_lstar.field_burning
+   :allowtitles:
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`Epulse <trips_lstar.field_burning.Epulse>`
+     - .. autodoc2-docstring:: trips_lstar.field_burning.Epulse
+          :summary:
+
+Functions
+~~~~~~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`coord_car2sph <trips_lstar.field_burning.coord_car2sph>`
+     - .. autodoc2-docstring:: trips_lstar.field_burning.coord_car2sph
+          :summary:
+   * - :py:obj:`coord_sph2car <trips_lstar.field_burning.coord_sph2car>`
+     - .. autodoc2-docstring:: trips_lstar.field_burning.coord_sph2car
+          :summary:
+   * - :py:obj:`project_car2sph <trips_lstar.field_burning.project_car2sph>`
+     - .. autodoc2-docstring:: trips_lstar.field_burning.project_car2sph
+          :summary:
+   * - :py:obj:`project_sph2car_np <trips_lstar.field_burning.project_sph2car_np>`
+     - .. autodoc2-docstring:: trips_lstar.field_burning.project_sph2car_np
+          :summary:
+   * - :py:obj:`project_sph2car <trips_lstar.field_burning.project_sph2car>`
+     - .. autodoc2-docstring:: trips_lstar.field_burning.project_sph2car
+          :summary:
+   * - :py:obj:`rotate_about_z <trips_lstar.field_burning.rotate_about_z>`
+     - .. autodoc2-docstring:: trips_lstar.field_burning.rotate_about_z
+          :summary:
+   * - :py:obj:`surroundidx <trips_lstar.field_burning.surroundidx>`
+     - .. autodoc2-docstring:: trips_lstar.field_burning.surroundidx
+          :summary:
+   * - :py:obj:`nearestidx_sph_np <trips_lstar.field_burning.nearestidx_sph_np>`
+     - .. autodoc2-docstring:: trips_lstar.field_burning.nearestidx_sph_np
+          :summary:
+   * - :py:obj:`nearestidx_sph <trips_lstar.field_burning.nearestidx_sph>`
+     - .. autodoc2-docstring:: trips_lstar.field_burning.nearestidx_sph
+          :summary:
+   * - :py:obj:`study_march91 <trips_lstar.field_burning.study_march91>`
+     - .. autodoc2-docstring:: trips_lstar.field_burning.study_march91
+          :summary:
+   * - :py:obj:`solvefield_pulse <trips_lstar.field_burning.solvefield_pulse>`
+     - .. autodoc2-docstring:: trips_lstar.field_burning.solvefield_pulse
+          :summary:
+   * - :py:obj:`burn_IRBEM_field_to_grid_sph <trips_lstar.field_burning.burn_IRBEM_field_to_grid_sph>`
+     - .. autodoc2-docstring:: trips_lstar.field_burning.burn_IRBEM_field_to_grid_sph
+          :summary:
+   * - :py:obj:`burn_IRBEM_field_to_grid_cart <trips_lstar.field_burning.burn_IRBEM_field_to_grid_cart>`
+     - .. autodoc2-docstring:: trips_lstar.field_burning.burn_IRBEM_field_to_grid_cart
+          :summary:
+
+API
+~~~
+
+.. py:class:: Epulse(E0=0.24, c1=0.8, c2=0.8, c3=8.0, v0=2000000.0, ti=80, phi0=pi / 4, d=30000000.0)
+   :canonical: trips_lstar.field_burning.Epulse
+
+   .. autodoc2-docstring:: trips_lstar.field_burning.Epulse
+
+   .. rubric:: Initialization
+
+   .. autodoc2-docstring:: trips_lstar.field_burning.Epulse.__init__
+
+   .. py:method:: Ephi_dEphidr(t, r, phi)
+      :canonical: trips_lstar.field_burning.Epulse.Ephi_dEphidr
+
+      .. autodoc2-docstring:: trips_lstar.field_burning.Epulse.Ephi_dEphidr
+
+.. py:function:: coord_car2sph(x, y, z)
+   :canonical: trips_lstar.field_burning.coord_car2sph
+
+   .. autodoc2-docstring:: trips_lstar.field_burning.coord_car2sph
+
+.. py:function:: coord_sph2car(r_, theta, phi)
+   :canonical: trips_lstar.field_burning.coord_sph2car
+
+   .. autodoc2-docstring:: trips_lstar.field_burning.coord_sph2car
+
+.. py:function:: project_car2sph(r, th, phi, vx, vy, vz)
+   :canonical: trips_lstar.field_burning.project_car2sph
+
+   .. autodoc2-docstring:: trips_lstar.field_burning.project_car2sph
+
+.. py:function:: project_sph2car_np(r, th, phi, vr, vth, vphi)
+   :canonical: trips_lstar.field_burning.project_sph2car_np
+
+   .. autodoc2-docstring:: trips_lstar.field_burning.project_sph2car_np
+
+.. py:function:: project_sph2car(r, th, phi, vr, vth, vphi)
+   :canonical: trips_lstar.field_burning.project_sph2car
+
+   .. autodoc2-docstring:: trips_lstar.field_burning.project_sph2car
+
+.. py:function:: rotate_about_z(x, y, dphi)
+   :canonical: trips_lstar.field_burning.rotate_about_z
+
+   .. autodoc2-docstring:: trips_lstar.field_burning.rotate_about_z
+
+.. py:function:: surroundidx(array, x0)
+   :canonical: trips_lstar.field_burning.surroundidx
+
+   .. autodoc2-docstring:: trips_lstar.field_burning.surroundidx
+
+.. py:function:: nearestidx_sph_np(field_r, field_theta, field_phi, r0, theta0, phi0)
+   :canonical: trips_lstar.field_burning.nearestidx_sph_np
+
+   .. autodoc2-docstring:: trips_lstar.field_burning.nearestidx_sph_np
+
+.. py:function:: nearestidx_sph(field_r, field_theta, field_phi, r0, theta0, phi0)
+   :canonical: trips_lstar.field_burning.nearestidx_sph
+
+   .. autodoc2-docstring:: trips_lstar.field_burning.nearestidx_sph
+
+.. py:function:: study_march91(fpath_sol, redo=True)
+   :canonical: trips_lstar.field_burning.study_march91
+
+   .. autodoc2-docstring:: trips_lstar.field_burning.study_march91
+
+.. py:function:: solvefield_pulse(pulse, fpath_sol, t0_ts, dur, resolution)
+   :canonical: trips_lstar.field_burning.solvefield_pulse
+
+   .. autodoc2-docstring:: trips_lstar.field_burning.solvefield_pulse
+
+.. py:function:: burn_IRBEM_field_to_grid_sph(dpar, times, Rmax=7, resolution=(101, 49, 25), field_ext=11, field_int=0, redo=True, dir_out='configs', name='')
+   :canonical: trips_lstar.field_burning.burn_IRBEM_field_to_grid_sph
+
+   .. autodoc2-docstring:: trips_lstar.field_burning.burn_IRBEM_field_to_grid_sph
+
+.. py:function:: burn_IRBEM_field_to_grid_cart(dpar, times=[1420070400.0], Rmax=7, resolution=(101, 101, 101), field_ext=11, field_int=0, redo=True, dir_out='configs', name='')
+   :canonical: trips_lstar.field_burning.burn_IRBEM_field_to_grid_cart
+
+   .. autodoc2-docstring:: trips_lstar.field_burning.burn_IRBEM_field_to_grid_cart

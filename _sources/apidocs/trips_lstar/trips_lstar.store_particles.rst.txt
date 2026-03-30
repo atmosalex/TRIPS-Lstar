@@ -1,0 +1,138 @@
+:py:mod:`trips_lstar.store_particles`
+=====================================
+
+.. py:module:: trips_lstar.store_particles
+
+.. autodoc2-docstring:: trips_lstar.store_particles
+   :allowtitles:
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`HDF5_pt <trips_lstar.store_particles.HDF5_pt>`
+     - .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt
+          :summary:
+
+API
+~~~
+
+.. py:class:: HDF5_pt(filepath, existing=False)
+   :canonical: trips_lstar.store_particles.HDF5_pt
+
+   .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt
+
+   .. rubric:: Initialization
+
+   .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt.__init__
+
+   .. py:method:: setup(dict_config={}, dict_tracklist={}, dict_dshells={}, dict_tracklist_dshell_correspondence={})
+      :canonical: trips_lstar.store_particles.HDF5_pt.setup
+
+      .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt.setup
+
+   .. py:method:: read_root()
+      :canonical: trips_lstar.store_particles.HDF5_pt.read_root
+
+      .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt.read_root
+
+   .. py:method:: update_dataset(qname, quantity)
+      :canonical: trips_lstar.store_particles.HDF5_pt.update_dataset
+
+      .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt.update_dataset
+
+   .. py:method:: add_particledata(id, particle, compressmethod=None, checkcode=1)
+      :canonical: trips_lstar.store_particles.HDF5_pt.add_particledata
+
+      .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt.add_particledata
+
+   .. py:method:: add_driftshelldata_init(id, dshell, compressmethod=None, checkcode=1)
+      :canonical: trips_lstar.store_particles.HDF5_pt.add_driftshelldata_init
+
+      .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt.add_driftshelldata_init
+
+   .. py:method:: add_driftshelldata_final(id, dshell, compressmethod=None)
+      :canonical: trips_lstar.store_particles.HDF5_pt.add_driftshelldata_final
+
+      .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt.add_driftshelldata_final
+
+   .. py:method:: add_extra_group(gname)
+      :canonical: trips_lstar.store_particles.HDF5_pt.add_extra_group
+
+      .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt.add_extra_group
+
+   .. py:method:: add_extra_group_quantity(gname, qname, quantity, compressmethod=None)
+      :canonical: trips_lstar.store_particles.HDF5_pt.add_extra_group_quantity
+
+      .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt.add_extra_group_quantity
+
+   .. py:method:: overwrite_extra_group_quantity(gname, qname, quantity)
+      :canonical: trips_lstar.store_particles.HDF5_pt.overwrite_extra_group_quantity
+
+      .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt.overwrite_extra_group_quantity
+
+   .. py:method:: rename_extra_group(gname_old, gname_new)
+      :canonical: trips_lstar.store_particles.HDF5_pt.rename_extra_group
+
+      .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt.rename_extra_group
+
+   .. py:method:: delete_extra_group(gname)
+      :canonical: trips_lstar.store_particles.HDF5_pt.delete_extra_group
+
+      .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt.delete_extra_group
+
+   .. py:method:: delete_all_extra_groups()
+      :canonical: trips_lstar.store_particles.HDF5_pt.delete_all_extra_groups
+
+      .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt.delete_all_extra_groups
+
+   .. py:method:: read_extra_group_quantity(gname, qname)
+      :canonical: trips_lstar.store_particles.HDF5_pt.read_extra_group_quantity
+
+      .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt.read_extra_group_quantity
+
+   .. py:method:: read_particledata(id, verbose=True, storeinterval=1)
+      :canonical: trips_lstar.store_particles.HDF5_pt.read_particledata
+
+      .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt.read_particledata
+
+   .. py:method:: read_invariants(id)
+      :canonical: trips_lstar.store_particles.HDF5_pt.read_invariants
+
+      .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt.read_invariants
+
+   .. py:method:: read_driftshelldata(id, init=True, verbose=True)
+      :canonical: trips_lstar.store_particles.HDF5_pt.read_driftshelldata
+
+      .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt.read_driftshelldata
+
+   .. py:method:: get_existing_config_dict()
+      :canonical: trips_lstar.store_particles.HDF5_pt.get_existing_config_dict
+
+      .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt.get_existing_config_dict
+
+   .. py:method:: get_existing_tracklist()
+      :canonical: trips_lstar.store_particles.HDF5_pt.get_existing_tracklist
+
+      .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt.get_existing_tracklist
+
+   .. py:method:: get_existing_tracklist_dshell_correspondence()
+      :canonical: trips_lstar.store_particles.HDF5_pt.get_existing_tracklist_dshell_correspondence
+
+      .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt.get_existing_tracklist_dshell_correspondence
+
+   .. py:method:: get_existing_dshells()
+      :canonical: trips_lstar.store_particles.HDF5_pt.get_existing_dshells
+
+      .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt.get_existing_dshells
+
+   .. py:method:: get_extra_group_names()
+      :canonical: trips_lstar.store_particles.HDF5_pt.get_extra_group_names
+
+      .. autodoc2-docstring:: trips_lstar.store_particles.HDF5_pt.get_extra_group_names

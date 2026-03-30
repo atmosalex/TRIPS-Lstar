@@ -1,0 +1,275 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>trips_lstar.store_particles &mdash; Trajectory Redistribution in Phase Space (trips-lstar) 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="trips_lstar.store_fields" href="trips_lstar.store_fields.html" />
+    <link rel="prev" title="trips_lstar.field_burning" href="trips_lstar.field_burning.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Trajectory Redistribution in Phase Space (trips-lstar)
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../some-feature.html">Some feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../IGRF.html">TRIPS and the International Geomagnetic Reference Field (IGRF)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../another-feature.html">More features here</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="trips_lstar.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="trips_lstar.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.constants.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.constants</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.driftshells.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.driftshells</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.pt_pushers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.pt_pushers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.field_burning.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.field_burning</span></code></a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.store_particles</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.store_fields.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.store_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.pt_particles.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.pt_particles</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.field_tools.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.field_tools</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.settings.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.settings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.IGRF_tools.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.IGRF_tools</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.planet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.planet</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.run.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.run</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.curvature.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.curvature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.pt_fp.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.pt_fp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.cosys.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.cosys</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Trajectory Redistribution in Phase Space (trips-lstar)</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="trips_lstar.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.store_particles</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/apidocs/trips_lstar/trips_lstar.store_particles.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-trips_lstar.store_particles">
+<span id="trips-lstar-store-particles"></span><h1><a class="reference internal" href="#module-trips_lstar.store_particles" title="trips_lstar.store_particles"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.store_particles</span></code></a><a class="headerlink" href="#module-trips_lstar.store_particles" title="Link to this heading"></a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.store_particles.HDF5_pt" title="trips_lstar.store_particles.HDF5_pt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HDF5_pt</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="trips_lstar.store_particles.HDF5_pt">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">trips_lstar.store_particles.</span></span><span class="sig-name descname"><span class="pre">HDF5_pt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">existing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.store_particles.HDF5_pt" title="Link to this definition"></a></dt>
+<dd><p class="rubric">Initialization</p>
+<p>create a HDF5 file</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.store_particles.HDF5_pt.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dict_tracklist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dict_dshells</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dict_tracklist_dshell_correspondence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.store_particles.HDF5_pt.setup" title="Link to this definition"></a></dt>
+<dd><p>save metadata about the simulation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.store_particles.HDF5_pt.read_root">
+<span class="sig-name descname"><span class="pre">read_root</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.store_particles.HDF5_pt.read_root" title="Link to this definition"></a></dt>
+<dd><p>copy all data in the root group and return it</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.store_particles.HDF5_pt.update_dataset">
+<span class="sig-name descname"><span class="pre">update_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantity</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.store_particles.HDF5_pt.update_dataset" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.store_particles.HDF5_pt.add_particledata">
+<span class="sig-name descname"><span class="pre">add_particledata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compressmethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkcode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.store_particles.HDF5_pt.add_particledata" title="Link to this definition"></a></dt>
+<dd><p>add new data corresponding to a particle ID</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.store_particles.HDF5_pt.add_driftshelldata_init">
+<span class="sig-name descname"><span class="pre">add_driftshelldata_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dshell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compressmethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkcode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.store_particles.HDF5_pt.add_driftshelldata_init" title="Link to this definition"></a></dt>
+<dd><p>add new data corresponding to a drift shell ID</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.store_particles.HDF5_pt.add_driftshelldata_final">
+<span class="sig-name descname"><span class="pre">add_driftshelldata_final</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dshell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compressmethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.store_particles.HDF5_pt.add_driftshelldata_final" title="Link to this definition"></a></dt>
+<dd><p>add new data corresponding to a drift shell that the particle’s final trajectory lies on
+we don’t need a check code here, we are not updating any top-level data in this function</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.store_particles.HDF5_pt.add_extra_group">
+<span class="sig-name descname"><span class="pre">add_extra_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.store_particles.HDF5_pt.add_extra_group" title="Link to this definition"></a></dt>
+<dd><p>add new group</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.store_particles.HDF5_pt.add_extra_group_quantity">
+<span class="sig-name descname"><span class="pre">add_extra_group_quantity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compressmethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.store_particles.HDF5_pt.add_extra_group_quantity" title="Link to this definition"></a></dt>
+<dd><p>add new data array to a group</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.store_particles.HDF5_pt.overwrite_extra_group_quantity">
+<span class="sig-name descname"><span class="pre">overwrite_extra_group_quantity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantity</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.store_particles.HDF5_pt.overwrite_extra_group_quantity" title="Link to this definition"></a></dt>
+<dd><p>add new data array to a group</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.store_particles.HDF5_pt.rename_extra_group">
+<span class="sig-name descname"><span class="pre">rename_extra_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gname_old</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gname_new</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.store_particles.HDF5_pt.rename_extra_group" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.store_particles.HDF5_pt.delete_extra_group">
+<span class="sig-name descname"><span class="pre">delete_extra_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.store_particles.HDF5_pt.delete_extra_group" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.store_particles.HDF5_pt.delete_all_extra_groups">
+<span class="sig-name descname"><span class="pre">delete_all_extra_groups</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.store_particles.HDF5_pt.delete_all_extra_groups" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.store_particles.HDF5_pt.read_extra_group_quantity">
+<span class="sig-name descname"><span class="pre">read_extra_group_quantity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.store_particles.HDF5_pt.read_extra_group_quantity" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.store_particles.HDF5_pt.read_particledata">
+<span class="sig-name descname"><span class="pre">read_particledata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storeinterval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.store_particles.HDF5_pt.read_particledata" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.store_particles.HDF5_pt.read_invariants">
+<span class="sig-name descname"><span class="pre">read_invariants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.store_particles.HDF5_pt.read_invariants" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.store_particles.HDF5_pt.read_driftshelldata">
+<span class="sig-name descname"><span class="pre">read_driftshelldata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.store_particles.HDF5_pt.read_driftshelldata" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.store_particles.HDF5_pt.get_existing_config_dict">
+<span class="sig-name descname"><span class="pre">get_existing_config_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.store_particles.HDF5_pt.get_existing_config_dict" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.store_particles.HDF5_pt.get_existing_tracklist">
+<span class="sig-name descname"><span class="pre">get_existing_tracklist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.store_particles.HDF5_pt.get_existing_tracklist" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.store_particles.HDF5_pt.get_existing_tracklist_dshell_correspondence">
+<span class="sig-name descname"><span class="pre">get_existing_tracklist_dshell_correspondence</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.store_particles.HDF5_pt.get_existing_tracklist_dshell_correspondence" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.store_particles.HDF5_pt.get_existing_dshells">
+<span class="sig-name descname"><span class="pre">get_existing_dshells</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.store_particles.HDF5_pt.get_existing_dshells" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.store_particles.HDF5_pt.get_extra_group_names">
+<span class="sig-name descname"><span class="pre">get_extra_group_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.store_particles.HDF5_pt.get_extra_group_names" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="trips_lstar.field_burning.html" class="btn btn-neutral float-left" title="trips_lstar.field_burning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="trips_lstar.store_fields.html" class="btn btn-neutral float-right" title="trips_lstar.store_fields" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

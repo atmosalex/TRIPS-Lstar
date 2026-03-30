@@ -1,0 +1,90 @@
+:py:mod:`trips_lstar.settings`
+==============================
+
+.. py:module:: trips_lstar.settings
+
+.. autodoc2-docstring:: trips_lstar.settings
+   :allowtitles:
+
+Module Contents
+---------------
+
+Functions
+~~~~~~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`get_IGRF_filepath <trips_lstar.settings.get_IGRF_filepath>`
+     - .. autodoc2-docstring:: trips_lstar.settings.get_IGRF_filepath
+          :summary:
+   * - :py:obj:`print_Lstar_tolerance <trips_lstar.settings.print_Lstar_tolerance>`
+     - .. autodoc2-docstring:: trips_lstar.settings.print_Lstar_tolerance
+          :summary:
+
+Data
+~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`find_driftshell_theta_tolerance <trips_lstar.settings.find_driftshell_theta_tolerance>`
+     - .. autodoc2-docstring:: trips_lstar.settings.find_driftshell_theta_tolerance
+          :summary:
+   * - :py:obj:`ellipsoid_surface_n_phi <trips_lstar.settings.ellipsoid_surface_n_phi>`
+     - .. autodoc2-docstring:: trips_lstar.settings.ellipsoid_surface_n_phi
+          :summary:
+   * - :py:obj:`ellipsoid_surface_n_theta <trips_lstar.settings.ellipsoid_surface_n_theta>`
+     - .. autodoc2-docstring:: trips_lstar.settings.ellipsoid_surface_n_theta
+          :summary:
+   * - :py:obj:`calculate_fractional_elements_of_surface_mesh_enclosed_by_driftshell <trips_lstar.settings.calculate_fractional_elements_of_surface_mesh_enclosed_by_driftshell>`
+     - .. autodoc2-docstring:: trips_lstar.settings.calculate_fractional_elements_of_surface_mesh_enclosed_by_driftshell
+          :summary:
+   * - :py:obj:`field_line_curvature_fitting_n_include <trips_lstar.settings.field_line_curvature_fitting_n_include>`
+     - .. autodoc2-docstring:: trips_lstar.settings.field_line_curvature_fitting_n_include
+          :summary:
+
+API
+~~~
+
+.. py:function:: get_IGRF_filepath()
+   :canonical: trips_lstar.settings.get_IGRF_filepath
+
+   .. autodoc2-docstring:: trips_lstar.settings.get_IGRF_filepath
+
+.. py:data:: find_driftshell_theta_tolerance
+   :canonical: trips_lstar.settings.find_driftshell_theta_tolerance
+   :value: 0.0005
+
+   .. autodoc2-docstring:: trips_lstar.settings.find_driftshell_theta_tolerance
+
+.. py:data:: ellipsoid_surface_n_phi
+   :canonical: trips_lstar.settings.ellipsoid_surface_n_phi
+   :value: None
+
+   .. autodoc2-docstring:: trips_lstar.settings.ellipsoid_surface_n_phi
+
+.. py:data:: ellipsoid_surface_n_theta
+   :canonical: trips_lstar.settings.ellipsoid_surface_n_theta
+   :value: None
+
+   .. autodoc2-docstring:: trips_lstar.settings.ellipsoid_surface_n_theta
+
+.. py:data:: calculate_fractional_elements_of_surface_mesh_enclosed_by_driftshell
+   :canonical: trips_lstar.settings.calculate_fractional_elements_of_surface_mesh_enclosed_by_driftshell
+   :value: True
+
+   .. autodoc2-docstring:: trips_lstar.settings.calculate_fractional_elements_of_surface_mesh_enclosed_by_driftshell
+
+.. py:data:: field_line_curvature_fitting_n_include
+   :canonical: trips_lstar.settings.field_line_curvature_fitting_n_include
+   :value: 20
+
+   .. autodoc2-docstring:: trips_lstar.settings.field_line_curvature_fitting_n_include
+
+.. py:function:: print_Lstar_tolerance()
+   :canonical: trips_lstar.settings.print_Lstar_tolerance
+
+   .. autodoc2-docstring:: trips_lstar.settings.print_Lstar_tolerance

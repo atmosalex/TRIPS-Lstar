@@ -1,0 +1,93 @@
+:py:mod:`trips_lstar.cosys`
+===========================
+
+.. py:module:: trips_lstar.cosys
+
+.. autodoc2-docstring:: trips_lstar.cosys
+   :allowtitles:
+
+Module Contents
+---------------
+
+Functions
+~~~~~~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`dt_to_dec <trips_lstar.cosys.dt_to_dec>`
+     - .. autodoc2-docstring:: trips_lstar.cosys.dt_to_dec
+          :summary:
+   * - :py:obj:`dec_to_dt <trips_lstar.cosys.dec_to_dt>`
+     - .. autodoc2-docstring:: trips_lstar.cosys.dec_to_dt
+          :summary:
+   * - :py:obj:`get_eccentric_centre_GEO <trips_lstar.cosys.get_eccentric_centre_GEO>`
+     - .. autodoc2-docstring:: trips_lstar.cosys.get_eccentric_centre_GEO
+          :summary:
+   * - :py:obj:`get_eccentric_centre_MAG <trips_lstar.cosys.get_eccentric_centre_MAG>`
+     - .. autodoc2-docstring:: trips_lstar.cosys.get_eccentric_centre_MAG
+          :summary:
+   * - :py:obj:`get_rotation_GEO_to_GEI <trips_lstar.cosys.get_rotation_GEO_to_GEI>`
+     - .. autodoc2-docstring:: trips_lstar.cosys.get_rotation_GEO_to_GEI
+          :summary:
+   * - :py:obj:`get_rotation_GEI_to_GSE <trips_lstar.cosys.get_rotation_GEI_to_GSE>`
+     - .. autodoc2-docstring:: trips_lstar.cosys.get_rotation_GEI_to_GSE
+          :summary:
+   * - :py:obj:`get_rotation_GEO_to_MAG <trips_lstar.cosys.get_rotation_GEO_to_MAG>`
+     - .. autodoc2-docstring:: trips_lstar.cosys.get_rotation_GEO_to_MAG
+          :summary:
+   * - :py:obj:`get_rotation_GEO_to_GSE <trips_lstar.cosys.get_rotation_GEO_to_GSE>`
+     - .. autodoc2-docstring:: trips_lstar.cosys.get_rotation_GEO_to_GSE
+          :summary:
+   * - :py:obj:`get_MLT <trips_lstar.cosys.get_MLT>`
+     - .. autodoc2-docstring:: trips_lstar.cosys.get_MLT
+          :summary:
+
+API
+~~~
+
+.. py:function:: dt_to_dec(dt)
+   :canonical: trips_lstar.cosys.dt_to_dec
+
+   .. autodoc2-docstring:: trips_lstar.cosys.dt_to_dec
+
+.. py:function:: dec_to_dt(dec)
+   :canonical: trips_lstar.cosys.dec_to_dt
+
+   .. autodoc2-docstring:: trips_lstar.cosys.dec_to_dt
+
+.. py:function:: get_eccentric_centre_GEO(IGRFprops)
+   :canonical: trips_lstar.cosys.get_eccentric_centre_GEO
+
+   .. autodoc2-docstring:: trips_lstar.cosys.get_eccentric_centre_GEO
+
+.. py:function:: get_eccentric_centre_MAG(IGRFprops)
+   :canonical: trips_lstar.cosys.get_eccentric_centre_MAG
+
+   .. autodoc2-docstring:: trips_lstar.cosys.get_eccentric_centre_MAG
+
+.. py:function:: get_rotation_GEO_to_GEI(year_dec)
+   :canonical: trips_lstar.cosys.get_rotation_GEO_to_GEI
+
+   .. autodoc2-docstring:: trips_lstar.cosys.get_rotation_GEO_to_GEI
+
+.. py:function:: get_rotation_GEI_to_GSE(year_dec)
+   :canonical: trips_lstar.cosys.get_rotation_GEI_to_GSE
+
+   .. autodoc2-docstring:: trips_lstar.cosys.get_rotation_GEI_to_GSE
+
+.. py:function:: get_rotation_GEO_to_MAG(IGRFprops)
+   :canonical: trips_lstar.cosys.get_rotation_GEO_to_MAG
+
+   .. autodoc2-docstring:: trips_lstar.cosys.get_rotation_GEO_to_MAG
+
+.. py:function:: get_rotation_GEO_to_GSE(year_dec)
+   :canonical: trips_lstar.cosys.get_rotation_GEO_to_GSE
+
+   .. autodoc2-docstring:: trips_lstar.cosys.get_rotation_GEO_to_GSE
+
+.. py:function:: get_MLT(x_MAG, IGRFprops)
+   :canonical: trips_lstar.cosys.get_MLT
+
+   .. autodoc2-docstring:: trips_lstar.cosys.get_MLT

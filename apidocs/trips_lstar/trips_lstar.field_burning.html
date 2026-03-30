@@ -1,0 +1,276 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>trips_lstar.field_burning &mdash; Trajectory Redistribution in Phase Space (trips-lstar) 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="trips_lstar.store_particles" href="trips_lstar.store_particles.html" />
+    <link rel="prev" title="trips_lstar.pt_pushers" href="trips_lstar.pt_pushers.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Trajectory Redistribution in Phase Space (trips-lstar)
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../some-feature.html">Some feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../IGRF.html">TRIPS and the International Geomagnetic Reference Field (IGRF)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../another-feature.html">More features here</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="trips_lstar.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="trips_lstar.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.constants.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.constants</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.driftshells.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.driftshells</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.pt_pushers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.pt_pushers</span></code></a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.field_burning</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.store_particles.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.store_particles</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.store_fields.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.store_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.pt_particles.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.pt_particles</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.field_tools.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.field_tools</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.settings.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.settings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.IGRF_tools.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.IGRF_tools</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.planet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.planet</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.run.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.run</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.curvature.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.curvature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.pt_fp.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.pt_fp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.cosys.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.cosys</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Trajectory Redistribution in Phase Space (trips-lstar)</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="trips_lstar.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.field_burning</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/apidocs/trips_lstar/trips_lstar.field_burning.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-trips_lstar.field_burning">
+<span id="trips-lstar-field-burning"></span><h1><a class="reference internal" href="#module-trips_lstar.field_burning" title="trips_lstar.field_burning"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.field_burning</span></code></a><a class="headerlink" href="#module-trips_lstar.field_burning" title="Link to this heading"></a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.field_burning.Epulse" title="trips_lstar.field_burning.Epulse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Epulse</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.field_burning.coord_car2sph" title="trips_lstar.field_burning.coord_car2sph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coord_car2sph</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trips_lstar.field_burning.coord_sph2car" title="trips_lstar.field_burning.coord_sph2car"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coord_sph2car</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.field_burning.project_car2sph" title="trips_lstar.field_burning.project_car2sph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">project_car2sph</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trips_lstar.field_burning.project_sph2car_np" title="trips_lstar.field_burning.project_sph2car_np"><code class="xref py py-obj docutils literal notranslate"><span class="pre">project_sph2car_np</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.field_burning.project_sph2car" title="trips_lstar.field_burning.project_sph2car"><code class="xref py py-obj docutils literal notranslate"><span class="pre">project_sph2car</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trips_lstar.field_burning.rotate_about_z" title="trips_lstar.field_burning.rotate_about_z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rotate_about_z</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.field_burning.surroundidx" title="trips_lstar.field_burning.surroundidx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">surroundidx</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trips_lstar.field_burning.nearestidx_sph_np" title="trips_lstar.field_burning.nearestidx_sph_np"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nearestidx_sph_np</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.field_burning.nearestidx_sph" title="trips_lstar.field_burning.nearestidx_sph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nearestidx_sph</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trips_lstar.field_burning.study_march91" title="trips_lstar.field_burning.study_march91"><code class="xref py py-obj docutils literal notranslate"><span class="pre">study_march91</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.field_burning.solvefield_pulse" title="trips_lstar.field_burning.solvefield_pulse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">solvefield_pulse</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trips_lstar.field_burning.burn_IRBEM_field_to_grid_sph" title="trips_lstar.field_burning.burn_IRBEM_field_to_grid_sph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">burn_IRBEM_field_to_grid_sph</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.field_burning.burn_IRBEM_field_to_grid_cart" title="trips_lstar.field_burning.burn_IRBEM_field_to_grid_cart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">burn_IRBEM_field_to_grid_cart</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="trips_lstar.field_burning.Epulse">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">trips_lstar.field_burning.</span></span><span class="sig-name descname"><span class="pre">Epulse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">E0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.24</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c3</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ti</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">80</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">pi</span> <span class="pre">/</span> <span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30000000.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_burning.Epulse" title="Link to this definition"></a></dt>
+<dd><p class="rubric">Initialization</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.field_burning.Epulse.Ephi_dEphidr">
+<span class="sig-name descname"><span class="pre">Ephi_dEphidr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_burning.Epulse.Ephi_dEphidr" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.field_burning.coord_car2sph">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_burning.</span></span><span class="sig-name descname"><span class="pre">coord_car2sph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_burning.coord_car2sph" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.field_burning.coord_sph2car">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_burning.</span></span><span class="sig-name descname"><span class="pre">coord_sph2car</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_burning.coord_sph2car" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.field_burning.project_car2sph">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_burning.</span></span><span class="sig-name descname"><span class="pre">project_car2sph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">th</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vz</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_burning.project_car2sph" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.field_burning.project_sph2car_np">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_burning.</span></span><span class="sig-name descname"><span class="pre">project_sph2car_np</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">th</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vphi</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_burning.project_sph2car_np" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.field_burning.project_sph2car">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_burning.</span></span><span class="sig-name descname"><span class="pre">project_sph2car</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">th</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vphi</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_burning.project_sph2car" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.field_burning.rotate_about_z">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_burning.</span></span><span class="sig-name descname"><span class="pre">rotate_about_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dphi</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_burning.rotate_about_z" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.field_burning.surroundidx">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_burning.</span></span><span class="sig-name descname"><span class="pre">surroundidx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_burning.surroundidx" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.field_burning.nearestidx_sph_np">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_burning.</span></span><span class="sig-name descname"><span class="pre">nearestidx_sph_np</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_phi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_burning.nearestidx_sph_np" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.field_burning.nearestidx_sph">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_burning.</span></span><span class="sig-name descname"><span class="pre">nearestidx_sph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_phi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_burning.nearestidx_sph" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.field_burning.study_march91">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_burning.</span></span><span class="sig-name descname"><span class="pre">study_march91</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fpath_sol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">redo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_burning.study_march91" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.field_burning.solvefield_pulse">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_burning.</span></span><span class="sig-name descname"><span class="pre">solvefield_pulse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pulse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fpath_sol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t0_ts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dur</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_burning.solvefield_pulse" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.field_burning.burn_IRBEM_field_to_grid_sph">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_burning.</span></span><span class="sig-name descname"><span class="pre">burn_IRBEM_field_to_grid_sph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dpar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">times</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(101,</span> <span class="pre">49,</span> <span class="pre">25)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_int</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">redo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'configs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_burning.burn_IRBEM_field_to_grid_sph" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.field_burning.burn_IRBEM_field_to_grid_cart">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.field_burning.</span></span><span class="sig-name descname"><span class="pre">burn_IRBEM_field_to_grid_cart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dpar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">times</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1420070400.0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(101,</span> <span class="pre">101,</span> <span class="pre">101)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_int</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">redo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'configs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.field_burning.burn_IRBEM_field_to_grid_cart" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="trips_lstar.pt_pushers.html" class="btn btn-neutral float-left" title="trips_lstar.pt_pushers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="trips_lstar.store_particles.html" class="btn btn-neutral float-right" title="trips_lstar.store_particles" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

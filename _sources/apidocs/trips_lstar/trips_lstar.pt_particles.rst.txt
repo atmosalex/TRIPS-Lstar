@@ -1,0 +1,134 @@
+:py:mod:`trips_lstar.pt_particles`
+==================================
+
+.. py:module:: trips_lstar.pt_particles
+
+.. autodoc2-docstring:: trips_lstar.pt_particles
+   :allowtitles:
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`Proton_trace <trips_lstar.pt_particles.Proton_trace>`
+     - .. autodoc2-docstring:: trips_lstar.pt_particles.Proton_trace
+          :summary:
+   * - :py:obj:`Electron_trace <trips_lstar.pt_particles.Electron_trace>`
+     - .. autodoc2-docstring:: trips_lstar.pt_particles.Electron_trace
+          :summary:
+
+Functions
+~~~~~~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`moving_average <trips_lstar.pt_particles.moving_average>`
+     - .. autodoc2-docstring:: trips_lstar.pt_particles.moving_average
+          :summary:
+   * - :py:obj:`get_solved_momenta_from_track <trips_lstar.pt_particles.get_solved_momenta_from_track>`
+     - .. autodoc2-docstring:: trips_lstar.pt_particles.get_solved_momenta_from_track
+          :summary:
+   * - :py:obj:`approx_Yb <trips_lstar.pt_particles.approx_Yb>`
+     - .. autodoc2-docstring:: trips_lstar.pt_particles.approx_Yb
+          :summary:
+   * - :py:obj:`approx_Ya <trips_lstar.pt_particles.approx_Ya>`
+     - .. autodoc2-docstring:: trips_lstar.pt_particles.approx_Ya
+          :summary:
+
+Data
+~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`phasespacecoords_idxdict <trips_lstar.pt_particles.phasespacecoords_idxdict>`
+     - .. autodoc2-docstring:: trips_lstar.pt_particles.phasespacecoords_idxdict
+          :summary:
+
+API
+~~~
+
+.. py:data:: phasespacecoords_idxdict
+   :canonical: trips_lstar.pt_particles.phasespacecoords_idxdict
+   :value: None
+
+   .. autodoc2-docstring:: trips_lstar.pt_particles.phasespacecoords_idxdict
+
+.. py:function:: moving_average(a, n)
+   :canonical: trips_lstar.pt_particles.moving_average
+
+   .. autodoc2-docstring:: trips_lstar.pt_particles.moving_average
+
+.. py:function:: get_solved_momenta_from_track(particle_m0, solved_position, solved_times)
+   :canonical: trips_lstar.pt_particles.get_solved_momenta_from_track
+
+   .. autodoc2-docstring:: trips_lstar.pt_particles.get_solved_momenta_from_track
+
+.. py:class:: Proton_trace(mu_SI, aeq, L, iphase_gyro=0, iphase_bounce=0, iphase_drift=0, storetrack=True, storeinterval=1, tsperorbit=300)
+   :canonical: trips_lstar.pt_particles.Proton_trace
+
+   .. autodoc2-docstring:: trips_lstar.pt_particles.Proton_trace
+
+   .. rubric:: Initialization
+
+   .. autodoc2-docstring:: trips_lstar.pt_particles.Proton_trace.__init__
+
+   .. py:method:: reset(time, state)
+      :canonical: trips_lstar.pt_particles.Proton_trace.reset
+
+      .. autodoc2-docstring:: trips_lstar.pt_particles.Proton_trace.reset
+
+   .. py:method:: update_keep(time, state)
+      :canonical: trips_lstar.pt_particles.Proton_trace.update_keep
+
+      .. autodoc2-docstring:: trips_lstar.pt_particles.Proton_trace.update_keep
+
+   .. py:method:: update_lastonly(time, state)
+      :canonical: trips_lstar.pt_particles.Proton_trace.update_lastonly
+
+      .. autodoc2-docstring:: trips_lstar.pt_particles.Proton_trace.update_lastonly
+
+   .. py:method:: pop_track(requiredlen=0)
+      :canonical: trips_lstar.pt_particles.Proton_trace.pop_track
+
+      .. autodoc2-docstring:: trips_lstar.pt_particles.Proton_trace.pop_track
+
+   .. py:method:: get_initial_p_v_relative_to_field(B_GC_abs)
+      :canonical: trips_lstar.pt_particles.Proton_trace.get_initial_p_v_relative_to_field
+
+      .. autodoc2-docstring:: trips_lstar.pt_particles.Proton_trace.get_initial_p_v_relative_to_field
+
+   .. py:method:: print_invariants(time_index=-1)
+      :canonical: trips_lstar.pt_particles.Proton_trace.print_invariants
+
+      .. autodoc2-docstring:: trips_lstar.pt_particles.Proton_trace.print_invariants
+
+.. py:class:: Electron_trace(mu_SI, aeq, L, iphase_gyro, iphase_bounce, iphase_drift, storetrack=True, tsperorbit=100)
+   :canonical: trips_lstar.pt_particles.Electron_trace
+
+   Bases: :py:obj:`trips_lstar.pt_particles.Proton_trace`
+
+   .. autodoc2-docstring:: trips_lstar.pt_particles.Electron_trace
+
+   .. rubric:: Initialization
+
+   .. autodoc2-docstring:: trips_lstar.pt_particles.Electron_trace.__init__
+
+.. py:function:: approx_Yb(BeBmratio)
+   :canonical: trips_lstar.pt_particles.approx_Yb
+
+   .. autodoc2-docstring:: trips_lstar.pt_particles.approx_Yb
+
+.. py:function:: approx_Ya(aeq)
+   :canonical: trips_lstar.pt_particles.approx_Ya
+
+   .. autodoc2-docstring:: trips_lstar.pt_particles.approx_Ya

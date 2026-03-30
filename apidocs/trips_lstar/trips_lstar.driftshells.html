@@ -1,0 +1,306 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>trips_lstar.driftshells &mdash; Trajectory Redistribution in Phase Space (trips-lstar) 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="trips_lstar.pt_pushers" href="trips_lstar.pt_pushers.html" />
+    <link rel="prev" title="trips_lstar.constants" href="trips_lstar.constants.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Trajectory Redistribution in Phase Space (trips-lstar)
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../some-feature.html">Some feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../IGRF.html">TRIPS and the International Geomagnetic Reference Field (IGRF)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../another-feature.html">More features here</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="trips_lstar.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="trips_lstar.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.constants.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.constants</span></code></a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.driftshells</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.pt_pushers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.pt_pushers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.field_burning.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.field_burning</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.store_particles.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.store_particles</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.store_fields.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.store_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.pt_particles.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.pt_particles</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.field_tools.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.field_tools</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.settings.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.settings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.IGRF_tools.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.IGRF_tools</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.planet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.planet</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.run.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.run</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.curvature.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.curvature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.pt_fp.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.pt_fp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.cosys.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.cosys</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Trajectory Redistribution in Phase Space (trips-lstar)</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="trips_lstar.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.driftshells</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/apidocs/trips_lstar/trips_lstar.driftshells.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-trips_lstar.driftshells">
+<span id="trips-lstar-driftshells"></span><h1><a class="reference internal" href="#module-trips_lstar.driftshells" title="trips_lstar.driftshells"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.driftshells</span></code></a><a class="headerlink" href="#module-trips_lstar.driftshells" title="Link to this heading"></a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.driftshells.Driftshell" title="trips_lstar.driftshells.Driftshell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Driftshell</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.driftshells.interpolate_contour_index_in_arbitrary_cyclical_coordinates" title="trips_lstar.driftshells.interpolate_contour_index_in_arbitrary_cyclical_coordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpolate_contour_index_in_arbitrary_cyclical_coordinates</span></code></a></p></td>
+<td><p>phi values must be cyclical in the range [0 to 2pi]
+this function is NOT reference frame-specific but phi and pts MUST be in the same reference frame
+this function assumes:</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trips_lstar.driftshells.find_driftshell_with_given_properties" title="trips_lstar.driftshells.find_driftshell_with_given_properties"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_driftshell_with_given_properties</span></code></a></p></td>
+<td><p>converge on a drift orbit with Lstar close to what the user specified
+time_field is field time (seconds)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.driftshells.find_LCDS" title="trips_lstar.driftshells.find_LCDS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_LCDS</span></code></a></p></td>
+<td><p>this function finds the last closed drift shell using the searching_for_LCDS argument, which increases target_Lstar every time it is found</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="trips_lstar.driftshells.Driftshell">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">trips_lstar.driftshells.</span></span><span class="sig-name descname"><span class="pre">Driftshell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Xgc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aloc_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace_ds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.003</span> <span class="pre">*</span> <span class="pre">constants.RE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hemisph_to_draw_contour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quit_in_loss_cone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.driftshells.Driftshell" title="Link to this definition"></a></dt>
+<dd><p class="rubric">Initialization</p>
+<p>Xgc is the gyrocenter location in the MAG frame, it MUST be outside the ellipsoid surface
+aloc_r is the local pitch angle in radians
+time is the time at which to query a magnetic field object, units are seconds since the t0 date of the field</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.driftshells.Driftshell.trace_to_conjugate_hemisphere">
+<span class="sig-name descname"><span class="pre">trace_to_conjugate_hemisphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ellipsoid_surf</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.driftshells.Driftshell.trace_to_conjugate_hemisphere" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.driftshells.Driftshell._attempt_contour">
+<span class="sig-name descname"><span class="pre">_attempt_contour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bfield</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ellipsoid_surf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_meridians_to_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.driftshells.Driftshell._attempt_contour" title="Link to this definition"></a></dt>
+<dd><p>attempted to draw a contour around Earth’s pole by stepping azimuthally onto field lines with the same I, Bm
+if this function returns False, it is for one of these reasons:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>the path went out of the field’s range</p></li>
+<li><p>the path went into the loss cone</p></li>
+<li><p>some other error trying to locate two field lines with neighbouring I (contour tracing error), which has numerous causes</p></li>
+</ul>
+<p>the calling function should reset the range warning!!</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.driftshells.Driftshell._calculate_Lstar">
+<span class="sig-name descname"><span class="pre">_calculate_Lstar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ellipsoid_surf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_conjugate_contour</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calculate_fractional_elements</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.driftshells.Driftshell._calculate_Lstar" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.driftshells.Driftshell.compute_curvature_from_solved_contourpts">
+<span class="sig-name descname"><span class="pre">compute_curvature_from_solved_contourpts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bfield</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ellipsoid_surf</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.driftshells.Driftshell.compute_curvature_from_solved_contourpts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.driftshells.Driftshell.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bfield</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ellipsoid_surf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_meridians_to_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.driftshells.Driftshell.solve" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.driftshells.Driftshell.get_MLT_of_contourpts">
+<span class="sig-name descname"><span class="pre">get_MLT_of_contourpts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IGRFprops</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.driftshells.Driftshell.get_MLT_of_contourpts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.driftshells.Driftshell.interpolate_contour_at_phi_GEO">
+<span class="sig-name descname"><span class="pre">interpolate_contour_at_phi_GEO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ellipsoid_surf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi_GEO</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.driftshells.Driftshell.interpolate_contour_at_phi_GEO" title="Link to this definition"></a></dt>
+<dd><p>interpolate a point from the solved contour at angle phi in the GEO frame
+phi must be in the GEO frame
+the returned point is in the GEO frame
+the ellipsoid surface is necessary to pass because we interpolate a point on this surface</p>
+<blockquote>
+<div><p>using this method along improves accuracy because we can interpolate in a spherical coordinate system</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.driftshells.Driftshell.interpolate_contour_at_phi_MAG">
+<span class="sig-name descname"><span class="pre">interpolate_contour_at_phi_MAG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ellipsoid_surf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi_MAG</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.driftshells.Driftshell.interpolate_contour_at_phi_MAG" title="Link to this definition"></a></dt>
+<dd><p>interpolate a point from the solved contour at angle phi in the MAG frame
+phi must be in the MAG frame
+the returned point is in the MAG frame
+the ellipsoid surface is necessary to pass because we interpolate a point on this surface</p>
+<blockquote>
+<div><p>using this method along improves accuracy because we can interpolate in a spherical coordinate system</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.driftshells.Driftshell.interpolate_contour_at_MLT">
+<span class="sig-name descname"><span class="pre">interpolate_contour_at_MLT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ellipsoid_surf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MLT</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.driftshells.Driftshell.interpolate_contour_at_MLT" title="Link to this definition"></a></dt>
+<dd><p>interpolate a point from the solved contour at a given MLT
+the returned point is in the MAG frame
+the ellipsoid surface is necessary to pass because we interpolate a point on this surface</p>
+<blockquote>
+<div><p>using this method along improves accuracy because we can interpolate in a spherical coordinate system</p>
+</div></blockquote>
+<dl class="simple">
+<dt>note: the orientation of the dipole is specified by the properties of ellipsoid surface</dt><dd><p>therefore, the result of this calculation depends on the time specified during construction of the ellipsoid surface</p>
+</dd>
+<dt>this function assumes MLT increases throughout the contour points</dt><dd><p>this is true if the points go anticlockwise around the MAG Z frame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.driftshells.Driftshell.interpolate_curvature_from_contour_at_phi_MAG">
+<span class="sig-name descname"><span class="pre">interpolate_curvature_from_contour_at_phi_MAG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi_MAG</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.driftshells.Driftshell.interpolate_curvature_from_contour_at_phi_MAG" title="Link to this definition"></a></dt>
+<dd><p>MAG frame</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.driftshells.Driftshell.interpolate_curvature_from_contour_at_MLT">
+<span class="sig-name descname"><span class="pre">interpolate_curvature_from_contour_at_MLT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ellipsoid_surf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MLT</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.driftshells.Driftshell.interpolate_curvature_from_contour_at_MLT" title="Link to this definition"></a></dt>
+<dd><p>MAG frame</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.driftshells.interpolate_contour_index_in_arbitrary_cyclical_coordinates">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.driftshells.</span></span><span class="sig-name descname"><span class="pre">interpolate_contour_index_in_arbitrary_cyclical_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi_contour</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.driftshells.interpolate_contour_index_in_arbitrary_cyclical_coordinates" title="Link to this definition"></a></dt>
+<dd><p>phi values must be cyclical in the range [0 to 2pi]
+this function is NOT reference frame-specific but phi and pts MUST be in the same reference frame
+this function assumes:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>a contour of points goes around the MAG frame Z axis anticlockwise, such that…</p></li>
+<li><p>the angle of the points in the XY frame increases</p></li>
+</ul>
+</div></blockquote>
+<dl class="simple">
+<dt>note: it does not make sense to interpolate a contour at some phi defined in a different reference frame</dt><dd><p>this is because a single phi corresponds to a slew of azimuths in a rotated reference frame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.driftshells.find_driftshell_with_given_properties">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.driftshells.</span></span><span class="sig-name descname"><span class="pre">find_driftshell_with_given_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ellipsoid_surf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_Lstar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_aeq_rad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bfield</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">searching_for_LCDS</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dth_quit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">settings.find_driftshell_theta_tolerance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.driftshells.find_driftshell_with_given_properties" title="Link to this definition"></a></dt>
+<dd><p>converge on a drift orbit with Lstar close to what the user specified
+time_field is field time (seconds)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.driftshells.find_LCDS">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.driftshells.</span></span><span class="sig-name descname"><span class="pre">find_LCDS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ellipsoid_surf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_aeq_rad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bfield</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_field</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.driftshells.find_LCDS" title="Link to this definition"></a></dt>
+<dd><p>this function finds the last closed drift shell using the searching_for_LCDS argument, which increases target_Lstar every time it is found</p>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="trips_lstar.constants.html" class="btn btn-neutral float-left" title="trips_lstar.constants" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="trips_lstar.pt_pushers.html" class="btn btn-neutral float-right" title="trips_lstar.pt_pushers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

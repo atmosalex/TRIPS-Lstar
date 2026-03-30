@@ -1,0 +1,263 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>trips_lstar.pt_particles &mdash; Trajectory Redistribution in Phase Space (trips-lstar) 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="trips_lstar.field_tools" href="trips_lstar.field_tools.html" />
+    <link rel="prev" title="trips_lstar.store_fields" href="trips_lstar.store_fields.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Trajectory Redistribution in Phase Space (trips-lstar)
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../some-feature.html">Some feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../IGRF.html">TRIPS and the International Geomagnetic Reference Field (IGRF)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../another-feature.html">More features here</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="trips_lstar.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="trips_lstar.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.constants.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.constants</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.driftshells.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.driftshells</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.pt_pushers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.pt_pushers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.field_burning.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.field_burning</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.store_particles.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.store_particles</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.store_fields.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.store_fields</span></code></a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.pt_particles</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.field_tools.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.field_tools</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.settings.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.settings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.IGRF_tools.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.IGRF_tools</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.planet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.planet</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.run.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.run</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.curvature.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.curvature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.pt_fp.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.pt_fp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="trips_lstar.cosys.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.cosys</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Trajectory Redistribution in Phase Space (trips-lstar)</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="trips_lstar.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.pt_particles</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/apidocs/trips_lstar/trips_lstar.pt_particles.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-trips_lstar.pt_particles">
+<span id="trips-lstar-pt-particles"></span><h1><a class="reference internal" href="#module-trips_lstar.pt_particles" title="trips_lstar.pt_particles"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trips_lstar.pt_particles</span></code></a><a class="headerlink" href="#module-trips_lstar.pt_particles" title="Link to this heading"></a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.pt_particles.Proton_trace" title="trips_lstar.pt_particles.Proton_trace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Proton_trace</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trips_lstar.pt_particles.Electron_trace" title="trips_lstar.pt_particles.Electron_trace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Electron_trace</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.pt_particles.moving_average" title="trips_lstar.pt_particles.moving_average"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moving_average</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trips_lstar.pt_particles.get_solved_momenta_from_track" title="trips_lstar.pt_particles.get_solved_momenta_from_track"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_solved_momenta_from_track</span></code></a></p></td>
+<td><p>infer momentum from previously calculated trajectory
+returns a numpy array nt-1 x 3, where nt is the length of solved_position</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.pt_particles.approx_Yb" title="trips_lstar.pt_particles.approx_Yb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">approx_Yb</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#trips_lstar.pt_particles.approx_Ya" title="trips_lstar.pt_particles.approx_Ya"><code class="xref py py-obj docutils literal notranslate"><span class="pre">approx_Ya</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#trips_lstar.pt_particles.phasespacecoords_idxdict" title="trips_lstar.pt_particles.phasespacecoords_idxdict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">phasespacecoords_idxdict</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading"></a></h3>
+<dl class="py data">
+<dt class="sig sig-object py" id="trips_lstar.pt_particles.phasespacecoords_idxdict">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.pt_particles.</span></span><span class="sig-name descname"><span class="pre">phasespacecoords_idxdict</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#trips_lstar.pt_particles.phasespacecoords_idxdict" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.pt_particles.moving_average">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.pt_particles.</span></span><span class="sig-name descname"><span class="pre">moving_average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.pt_particles.moving_average" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.pt_particles.get_solved_momenta_from_track">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.pt_particles.</span></span><span class="sig-name descname"><span class="pre">get_solved_momenta_from_track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">particle_m0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solved_position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solved_times</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.pt_particles.get_solved_momenta_from_track" title="Link to this definition"></a></dt>
+<dd><p>infer momentum from previously calculated trajectory
+returns a numpy array nt-1 x 3, where nt is the length of solved_position</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="trips_lstar.pt_particles.Proton_trace">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">trips_lstar.pt_particles.</span></span><span class="sig-name descname"><span class="pre">Proton_trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu_SI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aeq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iphase_gyro</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iphase_bounce</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iphase_drift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storetrack</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storeinterval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tsperorbit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.pt_particles.Proton_trace" title="Link to this definition"></a></dt>
+<dd><p class="rubric">Initialization</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.pt_particles.Proton_trace.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.pt_particles.Proton_trace.reset" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.pt_particles.Proton_trace.update_keep">
+<span class="sig-name descname"><span class="pre">update_keep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.pt_particles.Proton_trace.update_keep" title="Link to this definition"></a></dt>
+<dd><p>time: float
+state: array of floats, length 6</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.pt_particles.Proton_trace.update_lastonly">
+<span class="sig-name descname"><span class="pre">update_lastonly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.pt_particles.Proton_trace.update_lastonly" title="Link to this definition"></a></dt>
+<dd><p>time: float
+state: array of floats, length 6</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.pt_particles.Proton_trace.pop_track">
+<span class="sig-name descname"><span class="pre">pop_track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">requiredlen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.pt_particles.Proton_trace.pop_track" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.pt_particles.Proton_trace.get_initial_p_v_relative_to_field">
+<span class="sig-name descname"><span class="pre">get_initial_p_v_relative_to_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">B_GC_abs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.pt_particles.Proton_trace.get_initial_p_v_relative_to_field" title="Link to this definition"></a></dt>
+<dd><p>get perpendicular and parallel components of momentum and velocity
+based on particle aeq and mu, and the gyrocenter field strength</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="trips_lstar.pt_particles.Proton_trace.print_invariants">
+<span class="sig-name descname"><span class="pre">print_invariants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.pt_particles.Proton_trace.print_invariants" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="trips_lstar.pt_particles.Electron_trace">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">trips_lstar.pt_particles.</span></span><span class="sig-name descname"><span class="pre">Electron_trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu_SI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aeq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iphase_gyro</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iphase_bounce</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iphase_drift</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storetrack</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tsperorbit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.pt_particles.Electron_trace" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#trips_lstar.pt_particles.Proton_trace" title="trips_lstar.pt_particles.Proton_trace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">trips_lstar.pt_particles.Proton_trace</span></code></a></p>
+<p class="rubric">Initialization</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.pt_particles.approx_Yb">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.pt_particles.</span></span><span class="sig-name descname"><span class="pre">approx_Yb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">BeBmratio</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.pt_particles.approx_Yb" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="trips_lstar.pt_particles.approx_Ya">
+<span class="sig-prename descclassname"><span class="pre">trips_lstar.pt_particles.</span></span><span class="sig-name descname"><span class="pre">approx_Ya</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aeq</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#trips_lstar.pt_particles.approx_Ya" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="trips_lstar.store_fields.html" class="btn btn-neutral float-left" title="trips_lstar.store_fields" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="trips_lstar.field_tools.html" class="btn btn-neutral float-right" title="trips_lstar.field_tools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

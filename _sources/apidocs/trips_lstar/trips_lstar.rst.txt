@@ -1,0 +1,31 @@
+:py:mod:`trips_lstar`
+=====================
+
+.. py:module:: trips_lstar
+
+.. autodoc2-docstring:: trips_lstar
+   :allowtitles:
+
+Submodules
+----------
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   trips_lstar.constants
+   trips_lstar.driftshells
+   trips_lstar.pt_pushers
+   trips_lstar.field_burning
+   trips_lstar.store_particles
+   trips_lstar.store_fields
+   trips_lstar.pt_particles
+   trips_lstar.field_tools
+   trips_lstar.settings
+   trips_lstar.IGRF_tools
+   trips_lstar.planet
+   trips_lstar.run
+   trips_lstar.curvature
+   trips_lstar.pt_fp
+   trips_lstar.config
+   trips_lstar.cosys

@@ -1,0 +1,301 @@
+:py:mod:`trips_lstar.field_tools`
+=================================
+
+.. py:module:: trips_lstar.field_tools
+
+.. autodoc2-docstring:: trips_lstar.field_tools
+   :allowtitles:
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`_Geomagneticfield <trips_lstar.field_tools._Geomagneticfield>`
+     - .. autodoc2-docstring:: trips_lstar.field_tools._Geomagneticfield
+          :summary:
+   * - :py:obj:`Dipolefield <trips_lstar.field_tools.Dipolefield>`
+     -
+   * - :py:obj:`Griddedfield <trips_lstar.field_tools.Griddedfield>`
+     -
+   * - :py:obj:`IRBEMfield <trips_lstar.field_tools.IRBEMfield>`
+     -
+
+Functions
+~~~~~~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`calculate_I <trips_lstar.field_tools.calculate_I>`
+     - .. autodoc2-docstring:: trips_lstar.field_tools.calculate_I
+          :summary:
+   * - :py:obj:`solve_plane <trips_lstar.field_tools.solve_plane>`
+     - .. autodoc2-docstring:: trips_lstar.field_tools.solve_plane
+          :summary:
+   * - :py:obj:`rotate_set_of_points_to_x_axis <trips_lstar.field_tools.rotate_set_of_points_to_x_axis>`
+     - .. autodoc2-docstring:: trips_lstar.field_tools.rotate_set_of_points_to_x_axis
+          :summary:
+   * - :py:obj:`project_fieldline_trace_onto_2d_surface <trips_lstar.field_tools.project_fieldline_trace_onto_2d_surface>`
+     - .. autodoc2-docstring:: trips_lstar.field_tools.project_fieldline_trace_onto_2d_surface
+          :summary:
+   * - :py:obj:`project_sph2car <trips_lstar.field_tools.project_sph2car>`
+     - .. autodoc2-docstring:: trips_lstar.field_tools.project_sph2car
+          :summary:
+   * - :py:obj:`get_peak_from_series <trips_lstar.field_tools.get_peak_from_series>`
+     - .. autodoc2-docstring:: trips_lstar.field_tools.get_peak_from_series
+          :summary:
+   * - :py:obj:`get_fieldline_turnbacks <trips_lstar.field_tools.get_fieldline_turnbacks>`
+     - .. autodoc2-docstring:: trips_lstar.field_tools.get_fieldline_turnbacks
+          :summary:
+   * - :py:obj:`get_tracepath_nloops <trips_lstar.field_tools.get_tracepath_nloops>`
+     - .. autodoc2-docstring:: trips_lstar.field_tools.get_tracepath_nloops
+          :summary:
+   * - :py:obj:`get_curvature_of_fieldline_trace_with_constant_ds <trips_lstar.field_tools.get_curvature_of_fieldline_trace_with_constant_ds>`
+     - .. autodoc2-docstring:: trips_lstar.field_tools.get_curvature_of_fieldline_trace_with_constant_ds
+          :summary:
+
+Data
+~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`trace_ds_default <trips_lstar.field_tools.trace_ds_default>`
+     - .. autodoc2-docstring:: trips_lstar.field_tools.trace_ds_default
+          :summary:
+
+API
+~~~
+
+.. py:data:: trace_ds_default
+   :canonical: trips_lstar.field_tools.trace_ds_default
+   :value: None
+
+   .. autodoc2-docstring:: trips_lstar.field_tools.trace_ds_default
+
+.. py:function:: calculate_I(Bm, traceB, idx_eq, trace_ds, It_min_numerical=0)
+   :canonical: trips_lstar.field_tools.calculate_I
+
+   .. autodoc2-docstring:: trips_lstar.field_tools.calculate_I
+
+.. py:class:: _Geomagneticfield(year_dec)
+   :canonical: trips_lstar.field_tools._Geomagneticfield
+
+   .. autodoc2-docstring:: trips_lstar.field_tools._Geomagneticfield
+
+   .. rubric:: Initialization
+
+   .. autodoc2-docstring:: trips_lstar.field_tools._Geomagneticfield.__init__
+
+   .. py:method:: getBE(**kwargs)
+      :canonical: trips_lstar.field_tools._Geomagneticfield.getBE
+
+      .. autodoc2-docstring:: trips_lstar.field_tools._Geomagneticfield.getBE
+
+   .. py:method:: _reset_range_warning()
+      :canonical: trips_lstar.field_tools._Geomagneticfield._reset_range_warning
+
+      .. autodoc2-docstring:: trips_lstar.field_tools._Geomagneticfield._reset_range_warning
+
+   .. py:method:: get_dipolelc(Lb, atm_height)
+      :canonical: trips_lstar.field_tools._Geomagneticfield.get_dipolelc
+
+      .. autodoc2-docstring:: trips_lstar.field_tools._Geomagneticfield.get_dipolelc
+
+   .. py:method:: getB_dipole(xh_MAG, yh_MAG, zh_MAG)
+      :canonical: trips_lstar.field_tools._Geomagneticfield.getB_dipole
+
+      .. autodoc2-docstring:: trips_lstar.field_tools._Geomagneticfield.getB_dipole
+
+   .. py:method:: get_L(x1_MAG)
+      :canonical: trips_lstar.field_tools._Geomagneticfield.get_L
+
+      .. autodoc2-docstring:: trips_lstar.field_tools._Geomagneticfield.get_L
+
+   .. py:method:: get_dipoleLambda(x1_MAG)
+      :canonical: trips_lstar.field_tools._Geomagneticfield.get_dipoleLambda
+
+      .. autodoc2-docstring:: trips_lstar.field_tools._Geomagneticfield.get_dipoleLambda
+
+   .. py:method:: get_aclockw_angle_around_dipole_z(x1_MAG)
+      :canonical: trips_lstar.field_tools._Geomagneticfield.get_aclockw_angle_around_dipole_z
+
+      .. autodoc2-docstring:: trips_lstar.field_tools._Geomagneticfield.get_aclockw_angle_around_dipole_z
+
+   .. py:method:: find_magequator(xs, ys, zs, ti, trace_ds=0.0001 * constants.RE, direction=1, return_tracepath=False, tracepath_continue=[], tracepath_absB_continue=[], actoninterr=1)
+      :canonical: trips_lstar.field_tools._Geomagneticfield.find_magequator
+
+      .. autodoc2-docstring:: trips_lstar.field_tools._Geomagneticfield.find_magequator
+
+   .. py:method:: find_magequator_z(xs, ys, zs, ti, trace_ds=0.0001 * constants.RE)
+      :canonical: trips_lstar.field_tools._Geomagneticfield.find_magequator_z
+
+      .. autodoc2-docstring:: trips_lstar.field_tools._Geomagneticfield.find_magequator_z
+
+   .. py:method:: _trace_until_surface_intersection(trace_field_direction, fn_intersect, xs, ys, zs, ti, trace_ds=0.00075 * constants.RE, force_direction=None, return_tracepath=False, actoninterr=1)
+      :canonical: trips_lstar.field_tools._Geomagneticfield._trace_until_surface_intersection
+
+      .. autodoc2-docstring:: trips_lstar.field_tools._Geomagneticfield._trace_until_surface_intersection
+
+   .. py:method:: trace_until_surface_intersection_from_inside(surface, xs, ys, zs, ti, trace_ds=0.0001 * constants.RE, force_direction=None, return_tracepath=False, actoninterr=1)
+      :canonical: trips_lstar.field_tools._Geomagneticfield.trace_until_surface_intersection_from_inside
+
+      .. autodoc2-docstring:: trips_lstar.field_tools._Geomagneticfield.trace_until_surface_intersection_from_inside
+
+   .. py:method:: trace_until_surface_intersection_from_outside(surface, xs, ys, zs, ti, trace_ds=0.0001 * constants.RE, force_direction=None, return_tracepath=False, actoninterr=1)
+      :canonical: trips_lstar.field_tools._Geomagneticfield.trace_until_surface_intersection_from_outside
+
+      .. autodoc2-docstring:: trips_lstar.field_tools._Geomagneticfield.trace_until_surface_intersection_from_outside
+
+   .. py:method:: trace_until_conjugate_surface_intersections_from_outside(ellipsoid_surf, Xs, time, trace_ds=0.0001 * constants.RE, actoninterr=1)
+      :canonical: trips_lstar.field_tools._Geomagneticfield.trace_until_conjugate_surface_intersections_from_outside
+
+      .. autodoc2-docstring:: trips_lstar.field_tools._Geomagneticfield.trace_until_conjugate_surface_intersections_from_outside
+
+   .. py:method:: _trace_until_threshold_B(d, xs, ys, zs, ti, Bhit, trace_ds=0.00075 * constants.RE, force_direction=None, return_tracepath=False, distance_traced_max=408595245, actoninterr=1)
+      :canonical: trips_lstar.field_tools._Geomagneticfield._trace_until_threshold_B
+
+      .. autodoc2-docstring:: trips_lstar.field_tools._Geomagneticfield._trace_until_threshold_B
+
+   .. py:method:: trace_until_weak_B(xs, ys, zs, ti, Bhit, trace_ds=0.00075 * constants.RE, force_direction=None, return_tracepath=False, actoninterr=1)
+      :canonical: trips_lstar.field_tools._Geomagneticfield.trace_until_weak_B
+
+      .. autodoc2-docstring:: trips_lstar.field_tools._Geomagneticfield.trace_until_weak_B
+
+   .. py:method:: trace_until_strong_B(xs, ys, zs, ti, Bhit, trace_ds=0.00075 * constants.RE, force_direction=None, return_tracepath=False, actoninterr=1)
+      :canonical: trips_lstar.field_tools._Geomagneticfield.trace_until_strong_B
+
+      .. autodoc2-docstring:: trips_lstar.field_tools._Geomagneticfield.trace_until_strong_B
+
+   .. py:method:: trace_until_conjugate_field_strength(Bhit, Xs, time, trace_ds=0.0001 * constants.RE, actoninterr=1)
+      :canonical: trips_lstar.field_tools._Geomagneticfield.trace_until_conjugate_field_strength
+
+      .. autodoc2-docstring:: trips_lstar.field_tools._Geomagneticfield.trace_until_conjugate_field_strength
+
+   .. py:method:: get_Bdotn_surf(pS, t0, ellipsoid_surf, actoninterr=1)
+      :canonical: trips_lstar.field_tools._Geomagneticfield.get_Bdotn_surf
+
+      .. autodoc2-docstring:: trips_lstar.field_tools._Geomagneticfield.get_Bdotn_surf
+
+   .. py:method:: get_hemisph(pS, t0, ellipsoid_surf, actoninterr=1)
+      :canonical: trips_lstar.field_tools._Geomagneticfield.get_hemisph
+
+      .. autodoc2-docstring:: trips_lstar.field_tools._Geomagneticfield.get_hemisph
+
+.. py:class:: Dipolefield(year_dec)
+   :canonical: trips_lstar.field_tools.Dipolefield
+
+   Bases: :py:obj:`trips_lstar.field_tools._Geomagneticfield`
+
+   .. py:method:: getBE(xh_MAG, yh_MAG, zh_MAG, t=0, actoninterr=1)
+      :canonical: trips_lstar.field_tools.Dipolefield.getBE
+
+      .. autodoc2-docstring:: trips_lstar.field_tools.Dipolefield.getBE
+
+   .. py:method:: find_magequator(xs, ys, zs, ti, **kwargs)
+      :canonical: trips_lstar.field_tools.Dipolefield.find_magequator
+
+      .. autodoc2-docstring:: trips_lstar.field_tools.Dipolefield.find_magequator
+
+   .. py:method:: find_magequator_z(**kwargs)
+      :canonical: trips_lstar.field_tools.Dipolefield.find_magequator_z
+
+      .. autodoc2-docstring:: trips_lstar.field_tools.Dipolefield.find_magequator_z
+
+.. py:class:: Griddedfield(fileload, simulation_t0=0, reversetime=False, add_dip=False)
+   :canonical: trips_lstar.field_tools.Griddedfield
+
+   Bases: :py:obj:`trips_lstar.field_tools._Geomagneticfield`
+
+   .. py:method:: time_interpolation_in_static_fields(ti)
+      :canonical: trips_lstar.field_tools.Griddedfield.time_interpolation_in_static_fields
+
+      .. autodoc2-docstring:: trips_lstar.field_tools.Griddedfield.time_interpolation_in_static_fields
+
+   .. py:method:: time_interpolation_in_dynamic_fields(ti)
+      :canonical: trips_lstar.field_tools.Griddedfield.time_interpolation_in_dynamic_fields
+
+      .. autodoc2-docstring:: trips_lstar.field_tools.Griddedfield.time_interpolation_in_dynamic_fields
+
+   .. py:method:: int_field_cart(xi, yi, zi, ti, actoninterr=1)
+      :canonical: trips_lstar.field_tools.Griddedfield.int_field_cart
+
+      .. autodoc2-docstring:: trips_lstar.field_tools.Griddedfield.int_field_cart
+
+   .. py:method:: int_field_sph(xi, yi, zi, ti, actoninterr=1)
+      :canonical: trips_lstar.field_tools.Griddedfield.int_field_sph
+
+      .. autodoc2-docstring:: trips_lstar.field_tools.Griddedfield.int_field_sph
+
+   .. py:method:: int_field_cart_add_dip(xi, yi, zi, ti, actoninterr=1)
+      :canonical: trips_lstar.field_tools.Griddedfield.int_field_cart_add_dip
+
+      .. autodoc2-docstring:: trips_lstar.field_tools.Griddedfield.int_field_cart_add_dip
+
+   .. py:method:: int_field_sph_add_dip(xi, yi, zi, ti, actoninterr=1)
+      :canonical: trips_lstar.field_tools.Griddedfield.int_field_sph_add_dip
+
+      .. autodoc2-docstring:: trips_lstar.field_tools.Griddedfield.int_field_sph_add_dip
+
+   .. py:method:: getBE(xh_MAG, yh_MAG, zh_MAG, t=0, actoninterr=1)
+      :canonical: trips_lstar.field_tools.Griddedfield.getBE
+
+      .. autodoc2-docstring:: trips_lstar.field_tools.Griddedfield.getBE
+
+.. py:class:: IRBEMfield(dpar, t0_ts, field_ext=11, field_int=0, keys_needed=['Dst', 'Pdyn', 'ByIMF', 'BzIMF', 'W1', 'W2', 'W3', 'W4', 'W5', 'W6'])
+   :canonical: trips_lstar.field_tools.IRBEMfield
+
+   Bases: :py:obj:`trips_lstar.field_tools.Griddedfield`
+
+   .. py:method:: int_field(xi, yi, zi, ti_abs, actoninterr=1)
+      :canonical: trips_lstar.field_tools.IRBEMfield.int_field
+
+      .. autodoc2-docstring:: trips_lstar.field_tools.IRBEMfield.int_field
+
+.. py:function:: solve_plane(coords, xx, yy)
+   :canonical: trips_lstar.field_tools.solve_plane
+
+   .. autodoc2-docstring:: trips_lstar.field_tools.solve_plane
+
+.. py:function:: rotate_set_of_points_to_x_axis(pts)
+   :canonical: trips_lstar.field_tools.rotate_set_of_points_to_x_axis
+
+   .. autodoc2-docstring:: trips_lstar.field_tools.rotate_set_of_points_to_x_axis
+
+.. py:function:: project_fieldline_trace_onto_2d_surface(pts)
+   :canonical: trips_lstar.field_tools.project_fieldline_trace_onto_2d_surface
+
+   .. autodoc2-docstring:: trips_lstar.field_tools.project_fieldline_trace_onto_2d_surface
+
+.. py:function:: project_sph2car(r, th, phi, vr, vth, vphi)
+   :canonical: trips_lstar.field_tools.project_sph2car
+
+   .. autodoc2-docstring:: trips_lstar.field_tools.project_sph2car
+
+.. py:function:: get_peak_from_series(series, idx_vicinity_range=10, direction=1)
+   :canonical: trips_lstar.field_tools.get_peak_from_series
+
+   .. autodoc2-docstring:: trips_lstar.field_tools.get_peak_from_series
+
+.. py:function:: get_fieldline_turnbacks(path, trace_ds_used)
+   :canonical: trips_lstar.field_tools.get_fieldline_turnbacks
+
+   .. autodoc2-docstring:: trips_lstar.field_tools.get_fieldline_turnbacks
+
+.. py:function:: get_tracepath_nloops(path)
+   :canonical: trips_lstar.field_tools.get_tracepath_nloops
+
+   .. autodoc2-docstring:: trips_lstar.field_tools.get_tracepath_nloops
+
+.. py:function:: get_curvature_of_fieldline_trace_with_constant_ds(trace, trace_B, trace_ds, use_Bmin_point=True)
+   :canonical: trips_lstar.field_tools.get_curvature_of_fieldline_trace_with_constant_ds
+
+   .. autodoc2-docstring:: trips_lstar.field_tools.get_curvature_of_fieldline_trace_with_constant_ds

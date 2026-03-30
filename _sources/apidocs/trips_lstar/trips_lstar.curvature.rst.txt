@@ -1,0 +1,53 @@
+:py:mod:`trips_lstar.curvature`
+===============================
+
+.. py:module:: trips_lstar.curvature
+
+.. autodoc2-docstring:: trips_lstar.curvature
+   :allowtitles:
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`ComputeCurvature <trips_lstar.curvature.ComputeCurvature>`
+     - .. autodoc2-docstring:: trips_lstar.curvature.ComputeCurvature
+          :summary:
+
+API
+~~~
+
+.. py:class:: ComputeCurvature()
+   :canonical: trips_lstar.curvature.ComputeCurvature
+
+   .. autodoc2-docstring:: trips_lstar.curvature.ComputeCurvature
+
+   .. rubric:: Initialization
+
+   .. autodoc2-docstring:: trips_lstar.curvature.ComputeCurvature.__init__
+
+   .. py:method:: calc_r(xc, yc)
+      :canonical: trips_lstar.curvature.ComputeCurvature.calc_r
+
+      .. autodoc2-docstring:: trips_lstar.curvature.ComputeCurvature.calc_r
+
+   .. py:method:: f(c)
+      :canonical: trips_lstar.curvature.ComputeCurvature.f
+
+      .. autodoc2-docstring:: trips_lstar.curvature.ComputeCurvature.f
+
+   .. py:method:: df(c)
+      :canonical: trips_lstar.curvature.ComputeCurvature.df
+
+      .. autodoc2-docstring:: trips_lstar.curvature.ComputeCurvature.df
+
+   .. py:method:: fit(xx, yy)
+      :canonical: trips_lstar.curvature.ComputeCurvature.fit
+
+      .. autodoc2-docstring:: trips_lstar.curvature.ComputeCurvature.fit

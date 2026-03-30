@@ -1,0 +1,120 @@
+:py:mod:`trips_lstar.driftshells`
+=================================
+
+.. py:module:: trips_lstar.driftshells
+
+.. autodoc2-docstring:: trips_lstar.driftshells
+   :allowtitles:
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`Driftshell <trips_lstar.driftshells.Driftshell>`
+     - .. autodoc2-docstring:: trips_lstar.driftshells.Driftshell
+          :summary:
+
+Functions
+~~~~~~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`interpolate_contour_index_in_arbitrary_cyclical_coordinates <trips_lstar.driftshells.interpolate_contour_index_in_arbitrary_cyclical_coordinates>`
+     - .. autodoc2-docstring:: trips_lstar.driftshells.interpolate_contour_index_in_arbitrary_cyclical_coordinates
+          :summary:
+   * - :py:obj:`find_driftshell_with_given_properties <trips_lstar.driftshells.find_driftshell_with_given_properties>`
+     - .. autodoc2-docstring:: trips_lstar.driftshells.find_driftshell_with_given_properties
+          :summary:
+   * - :py:obj:`find_LCDS <trips_lstar.driftshells.find_LCDS>`
+     - .. autodoc2-docstring:: trips_lstar.driftshells.find_LCDS
+          :summary:
+
+API
+~~~
+
+.. py:class:: Driftshell(Xgc, aloc_r, time, trace_ds=0.003 * constants.RE, hemisph_to_draw_contour=-1, quit_in_loss_cone=True)
+   :canonical: trips_lstar.driftshells.Driftshell
+
+   .. autodoc2-docstring:: trips_lstar.driftshells.Driftshell
+
+   .. rubric:: Initialization
+
+   .. autodoc2-docstring:: trips_lstar.driftshells.Driftshell.__init__
+
+   .. py:method:: trace_to_conjugate_hemisphere(field, ellipsoid_surf)
+      :canonical: trips_lstar.driftshells.Driftshell.trace_to_conjugate_hemisphere
+
+      .. autodoc2-docstring:: trips_lstar.driftshells.Driftshell.trace_to_conjugate_hemisphere
+
+   .. py:method:: _attempt_contour(bfield, ellipsoid_surf, surface_meridians_to_step=1, verbose=True)
+      :canonical: trips_lstar.driftshells.Driftshell._attempt_contour
+
+      .. autodoc2-docstring:: trips_lstar.driftshells.Driftshell._attempt_contour
+
+   .. py:method:: _calculate_Lstar(ellipsoid_surf, use_conjugate_contour=False, calculate_fractional_elements=False)
+      :canonical: trips_lstar.driftshells.Driftshell._calculate_Lstar
+
+      .. autodoc2-docstring:: trips_lstar.driftshells.Driftshell._calculate_Lstar
+
+   .. py:method:: compute_curvature_from_solved_contourpts(bfield, ellipsoid_surf)
+      :canonical: trips_lstar.driftshells.Driftshell.compute_curvature_from_solved_contourpts
+
+      .. autodoc2-docstring:: trips_lstar.driftshells.Driftshell.compute_curvature_from_solved_contourpts
+
+   .. py:method:: solve(bfield, ellipsoid_surf, surface_meridians_to_step=1, verbose=True)
+      :canonical: trips_lstar.driftshells.Driftshell.solve
+
+      .. autodoc2-docstring:: trips_lstar.driftshells.Driftshell.solve
+
+   .. py:method:: get_MLT_of_contourpts(IGRFprops)
+      :canonical: trips_lstar.driftshells.Driftshell.get_MLT_of_contourpts
+
+      .. autodoc2-docstring:: trips_lstar.driftshells.Driftshell.get_MLT_of_contourpts
+
+   .. py:method:: interpolate_contour_at_phi_GEO(ellipsoid_surf, phi_GEO)
+      :canonical: trips_lstar.driftshells.Driftshell.interpolate_contour_at_phi_GEO
+
+      .. autodoc2-docstring:: trips_lstar.driftshells.Driftshell.interpolate_contour_at_phi_GEO
+
+   .. py:method:: interpolate_contour_at_phi_MAG(ellipsoid_surf, phi_MAG)
+      :canonical: trips_lstar.driftshells.Driftshell.interpolate_contour_at_phi_MAG
+
+      .. autodoc2-docstring:: trips_lstar.driftshells.Driftshell.interpolate_contour_at_phi_MAG
+
+   .. py:method:: interpolate_contour_at_MLT(ellipsoid_surf, MLT)
+      :canonical: trips_lstar.driftshells.Driftshell.interpolate_contour_at_MLT
+
+      .. autodoc2-docstring:: trips_lstar.driftshells.Driftshell.interpolate_contour_at_MLT
+
+   .. py:method:: interpolate_curvature_from_contour_at_phi_MAG(phi_MAG)
+      :canonical: trips_lstar.driftshells.Driftshell.interpolate_curvature_from_contour_at_phi_MAG
+
+      .. autodoc2-docstring:: trips_lstar.driftshells.Driftshell.interpolate_curvature_from_contour_at_phi_MAG
+
+   .. py:method:: interpolate_curvature_from_contour_at_MLT(ellipsoid_surf, MLT)
+      :canonical: trips_lstar.driftshells.Driftshell.interpolate_curvature_from_contour_at_MLT
+
+      .. autodoc2-docstring:: trips_lstar.driftshells.Driftshell.interpolate_curvature_from_contour_at_MLT
+
+.. py:function:: interpolate_contour_index_in_arbitrary_cyclical_coordinates(phi, phi_contour)
+   :canonical: trips_lstar.driftshells.interpolate_contour_index_in_arbitrary_cyclical_coordinates
+
+   .. autodoc2-docstring:: trips_lstar.driftshells.interpolate_contour_index_in_arbitrary_cyclical_coordinates
+
+.. py:function:: find_driftshell_with_given_properties(ellipsoid_surf, target_Lstar, target_aeq_rad, bfield, time_field, searching_for_LCDS=False, dth_quit=settings.find_driftshell_theta_tolerance)
+   :canonical: trips_lstar.driftshells.find_driftshell_with_given_properties
+
+   .. autodoc2-docstring:: trips_lstar.driftshells.find_driftshell_with_given_properties
+
+.. py:function:: find_LCDS(ellipsoid_surf, target_aeq_rad, bfield, time_field)
+   :canonical: trips_lstar.driftshells.find_LCDS
+
+   .. autodoc2-docstring:: trips_lstar.driftshells.find_LCDS

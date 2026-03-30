@@ -1,0 +1,83 @@
+:py:mod:`trips_lstar.store_fields`
+==================================
+
+.. py:module:: trips_lstar.store_fields
+
+.. autodoc2-docstring:: trips_lstar.store_fields
+   :allowtitles:
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`HDF5_field <trips_lstar.store_fields.HDF5_field>`
+     - .. autodoc2-docstring:: trips_lstar.store_fields.HDF5_field
+          :summary:
+
+API
+~~~
+
+.. py:class:: HDF5_field(filepath, existing=False, delete=False)
+   :canonical: trips_lstar.store_fields.HDF5_field
+
+   .. autodoc2-docstring:: trips_lstar.store_fields.HDF5_field
+
+   .. rubric:: Initialization
+
+   .. autodoc2-docstring:: trips_lstar.store_fields.HDF5_field.__init__
+
+   .. py:method:: _setup()
+      :canonical: trips_lstar.store_fields.HDF5_field._setup
+
+      .. autodoc2-docstring:: trips_lstar.store_fields.HDF5_field._setup
+
+   .. py:method:: read_mdata_root()
+      :canonical: trips_lstar.store_fields.HDF5_field.read_mdata_root
+
+      .. autodoc2-docstring:: trips_lstar.store_fields.HDF5_field.read_mdata_root
+
+   .. py:method:: add_group(gname_full)
+      :canonical: trips_lstar.store_fields.HDF5_field.add_group
+
+      .. autodoc2-docstring:: trips_lstar.store_fields.HDF5_field.add_group
+
+   .. py:method:: add_dataset(gname_full, dsname, dataset, compressmethod=None)
+      :canonical: trips_lstar.store_fields.HDF5_field.add_dataset
+
+      .. autodoc2-docstring:: trips_lstar.store_fields.HDF5_field.add_dataset
+
+   .. py:method:: overwrite_dataset_samesize(gname_full, dsname, dataset)
+      :canonical: trips_lstar.store_fields.HDF5_field.overwrite_dataset_samesize
+
+      .. autodoc2-docstring:: trips_lstar.store_fields.HDF5_field.overwrite_dataset_samesize
+
+   .. py:method:: rename_group(gname_full_old, gname_full_new)
+      :canonical: trips_lstar.store_fields.HDF5_field.rename_group
+
+      .. autodoc2-docstring:: trips_lstar.store_fields.HDF5_field.rename_group
+
+   .. py:method:: delete_group(gname_full)
+      :canonical: trips_lstar.store_fields.HDF5_field.delete_group
+
+      .. autodoc2-docstring:: trips_lstar.store_fields.HDF5_field.delete_group
+
+   .. py:method:: delete_dataset(gname_full, dsname)
+      :canonical: trips_lstar.store_fields.HDF5_field.delete_dataset
+
+      .. autodoc2-docstring:: trips_lstar.store_fields.HDF5_field.delete_dataset
+
+   .. py:method:: delete_all_data()
+      :canonical: trips_lstar.store_fields.HDF5_field.delete_all_data
+
+      .. autodoc2-docstring:: trips_lstar.store_fields.HDF5_field.delete_all_data
+
+   .. py:method:: read_dataset(gname, dsname)
+      :canonical: trips_lstar.store_fields.HDF5_field.read_dataset
+
+      .. autodoc2-docstring:: trips_lstar.store_fields.HDF5_field.read_dataset

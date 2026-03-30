@@ -1,0 +1,203 @@
+:py:mod:`trips_lstar.pt_fp`
+===========================
+
+.. py:module:: trips_lstar.pt_fp
+
+.. autodoc2-docstring:: trips_lstar.pt_fp
+   :allowtitles:
+
+Module Contents
+---------------
+
+Functions
+~~~~~~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`tb_estimate <trips_lstar.pt_fp.tb_estimate>`
+     - .. autodoc2-docstring:: trips_lstar.pt_fp.tb_estimate
+          :summary:
+   * - :py:obj:`dYdt <trips_lstar.pt_fp.dYdt>`
+     - .. autodoc2-docstring:: trips_lstar.pt_fp.dYdt
+          :summary:
+   * - :py:obj:`angle_between <trips_lstar.pt_fp.angle_between>`
+     - .. autodoc2-docstring:: trips_lstar.pt_fp.angle_between
+          :summary:
+   * - :py:obj:`reflexangle_between <trips_lstar.pt_fp.reflexangle_between>`
+     - .. autodoc2-docstring:: trips_lstar.pt_fp.reflexangle_between
+          :summary:
+   * - :py:obj:`create_2d_rotation_matrix <trips_lstar.pt_fp.create_2d_rotation_matrix>`
+     - .. autodoc2-docstring:: trips_lstar.pt_fp.create_2d_rotation_matrix
+          :summary:
+   * - :py:obj:`calc_rg <trips_lstar.pt_fp.calc_rg>`
+     - .. autodoc2-docstring:: trips_lstar.pt_fp.calc_rg
+          :summary:
+   * - :py:obj:`get_instantaneous_GC_from_track <trips_lstar.pt_fp.get_instantaneous_GC_from_track>`
+     - .. autodoc2-docstring:: trips_lstar.pt_fp.get_instantaneous_GC_from_track
+          :summary:
+   * - :py:obj:`get_idx_mirrpt_from_track <trips_lstar.pt_fp.get_idx_mirrpt_from_track>`
+     - .. autodoc2-docstring:: trips_lstar.pt_fp.get_idx_mirrpt_from_track
+          :summary:
+   * - :py:obj:`get_second_invariant_from_GC_bounce <trips_lstar.pt_fp.get_second_invariant_from_GC_bounce>`
+     - .. autodoc2-docstring:: trips_lstar.pt_fp.get_second_invariant_from_GC_bounce
+          :summary:
+   * - :py:obj:`converge_on_first_crossing_idx <trips_lstar.pt_fp.converge_on_first_crossing_idx>`
+     - .. autodoc2-docstring:: trips_lstar.pt_fp.converge_on_first_crossing_idx
+          :summary:
+   * - :py:obj:`construct_guiding_center_frame <trips_lstar.pt_fp.construct_guiding_center_frame>`
+     - .. autodoc2-docstring:: trips_lstar.pt_fp.construct_guiding_center_frame
+          :summary:
+   * - :py:obj:`diagnostic_initialization <trips_lstar.pt_fp.diagnostic_initialization>`
+     - .. autodoc2-docstring:: trips_lstar.pt_fp.diagnostic_initialization
+          :summary:
+   * - :py:obj:`check_trajectory_bounces <trips_lstar.pt_fp.check_trajectory_bounces>`
+     - .. autodoc2-docstring:: trips_lstar.pt_fp.check_trajectory_bounces
+          :summary:
+   * - :py:obj:`solve_trajectory <trips_lstar.pt_fp.solve_trajectory>`
+     - .. autodoc2-docstring:: trips_lstar.pt_fp.solve_trajectory
+          :summary:
+   * - :py:obj:`derive_invariants <trips_lstar.pt_fp.derive_invariants>`
+     - .. autodoc2-docstring:: trips_lstar.pt_fp.derive_invariants
+          :summary:
+
+Data
+~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`G2T <trips_lstar.pt_fp.G2T>`
+     - .. autodoc2-docstring:: trips_lstar.pt_fp.G2T
+          :summary:
+   * - :py:obj:`c <trips_lstar.pt_fp.c>`
+     - .. autodoc2-docstring:: trips_lstar.pt_fp.c
+          :summary:
+   * - :py:obj:`RE <trips_lstar.pt_fp.RE>`
+     - .. autodoc2-docstring:: trips_lstar.pt_fp.RE
+          :summary:
+   * - :py:obj:`MeV2J <trips_lstar.pt_fp.MeV2J>`
+     - .. autodoc2-docstring:: trips_lstar.pt_fp.MeV2J
+          :summary:
+   * - :py:obj:`aeq_max_for_bounce_detection <trips_lstar.pt_fp.aeq_max_for_bounce_detection>`
+     - .. autodoc2-docstring:: trips_lstar.pt_fp.aeq_max_for_bounce_detection
+          :summary:
+   * - :py:obj:`continue_with_irregular_bounce <trips_lstar.pt_fp.continue_with_irregular_bounce>`
+     - .. autodoc2-docstring:: trips_lstar.pt_fp.continue_with_irregular_bounce
+          :summary:
+
+API
+~~~
+
+.. py:data:: G2T
+   :canonical: trips_lstar.pt_fp.G2T
+   :value: None
+
+   .. autodoc2-docstring:: trips_lstar.pt_fp.G2T
+
+.. py:data:: c
+   :canonical: trips_lstar.pt_fp.c
+   :value: None
+
+   .. autodoc2-docstring:: trips_lstar.pt_fp.c
+
+.. py:data:: RE
+   :canonical: trips_lstar.pt_fp.RE
+   :value: None
+
+   .. autodoc2-docstring:: trips_lstar.pt_fp.RE
+
+.. py:data:: MeV2J
+   :canonical: trips_lstar.pt_fp.MeV2J
+   :value: None
+
+   .. autodoc2-docstring:: trips_lstar.pt_fp.MeV2J
+
+.. py:data:: aeq_max_for_bounce_detection
+   :canonical: trips_lstar.pt_fp.aeq_max_for_bounce_detection
+   :value: 89
+
+   .. autodoc2-docstring:: trips_lstar.pt_fp.aeq_max_for_bounce_detection
+
+.. py:data:: continue_with_irregular_bounce
+   :canonical: trips_lstar.pt_fp.continue_with_irregular_bounce
+   :value: True
+
+   .. autodoc2-docstring:: trips_lstar.pt_fp.continue_with_irregular_bounce
+
+.. py:function:: tb_estimate(R_gc, vmag, aeq)
+   :canonical: trips_lstar.pt_fp.tb_estimate
+
+   .. autodoc2-docstring:: trips_lstar.pt_fp.tb_estimate
+
+.. py:function:: dYdt(t, Y, m0, q, bfield)
+   :canonical: trips_lstar.pt_fp.dYdt
+
+   .. autodoc2-docstring:: trips_lstar.pt_fp.dYdt
+
+.. py:function:: angle_between(v1, v2)
+   :canonical: trips_lstar.pt_fp.angle_between
+
+   .. autodoc2-docstring:: trips_lstar.pt_fp.angle_between
+
+.. py:function:: reflexangle_between(v1, v2)
+   :canonical: trips_lstar.pt_fp.reflexangle_between
+
+   .. autodoc2-docstring:: trips_lstar.pt_fp.reflexangle_between
+
+.. py:function:: create_2d_rotation_matrix(theta_radians)
+   :canonical: trips_lstar.pt_fp.create_2d_rotation_matrix
+
+   .. autodoc2-docstring:: trips_lstar.pt_fp.create_2d_rotation_matrix
+
+.. py:function:: calc_rg(Y0, bfield, m0, q, t)
+   :canonical: trips_lstar.pt_fp.calc_rg
+
+   .. autodoc2-docstring:: trips_lstar.pt_fp.calc_rg
+
+.. py:function:: get_instantaneous_GC_from_track(bfield, particle, freezefield=-1)
+   :canonical: trips_lstar.pt_fp.get_instantaneous_GC_from_track
+
+   .. autodoc2-docstring:: trips_lstar.pt_fp.get_instantaneous_GC_from_track
+
+.. py:function:: get_idx_mirrpt_from_track(track_gyrocentre_time, track_gyrocentre, bfield, tsperorbit_stored, n_mirrpt=4, freezefield=-1)
+   :canonical: trips_lstar.pt_fp.get_idx_mirrpt_from_track
+
+   .. autodoc2-docstring:: trips_lstar.pt_fp.get_idx_mirrpt_from_track
+
+.. py:function:: get_second_invariant_from_GC_bounce(track_gyrocentre_bounce_time, track_gyrocentre_bounce, track_gyrocentre_bounce_p, bfield, freezefield=-1)
+   :canonical: trips_lstar.pt_fp.get_second_invariant_from_GC_bounce
+
+   .. autodoc2-docstring:: trips_lstar.pt_fp.get_second_invariant_from_GC_bounce
+
+.. py:function:: converge_on_first_crossing_idx(xyz, ti, bfield, idx_jump, count_index=0, time_direction=1, crossing_direction=1)
+   :canonical: trips_lstar.pt_fp.converge_on_first_crossing_idx
+
+   .. autodoc2-docstring:: trips_lstar.pt_fp.converge_on_first_crossing_idx
+
+.. py:function:: construct_guiding_center_frame(x_GC_MAG, B_GC)
+   :canonical: trips_lstar.pt_fp.construct_guiding_center_frame
+
+   .. autodoc2-docstring:: trips_lstar.pt_fp.construct_guiding_center_frame
+
+.. py:function:: diagnostic_initialization(dshell, particle, bfield, ellipsoid_surf)
+   :canonical: trips_lstar.pt_fp.diagnostic_initialization
+
+   .. autodoc2-docstring:: trips_lstar.pt_fp.diagnostic_initialization
+
+.. py:function:: check_trajectory_bounces(idx_reversals, mirrpt_above_equator, reversals_required=2)
+   :canonical: trips_lstar.pt_fp.check_trajectory_bounces
+
+   .. autodoc2-docstring:: trips_lstar.pt_fp.check_trajectory_bounces
+
+.. py:function:: solve_trajectory(dshell_init, particle, bfield, ellipsoid_surf, cfg)
+   :canonical: trips_lstar.pt_fp.solve_trajectory
+
+   .. autodoc2-docstring:: trips_lstar.pt_fp.solve_trajectory
+
+.. py:function:: derive_invariants(particle, bfield, ellipsoid_surf, reverse=False)
+   :canonical: trips_lstar.pt_fp.derive_invariants
+
+   .. autodoc2-docstring:: trips_lstar.pt_fp.derive_invariants

@@ -1,0 +1,70 @@
+:py:mod:`trips_lstar.run`
+=========================
+
+.. py:module:: trips_lstar.run
+
+.. autodoc2-docstring:: trips_lstar.run
+   :allowtitles:
+
+Module Contents
+---------------
+
+Functions
+~~~~~~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`parseargs <trips_lstar.run.parseargs>`
+     - .. autodoc2-docstring:: trips_lstar.run.parseargs
+          :summary:
+   * - :py:obj:`get_resultfile_existing <trips_lstar.run.get_resultfile_existing>`
+     - .. autodoc2-docstring:: trips_lstar.run.get_resultfile_existing
+          :summary:
+   * - :py:obj:`get_resultfile_GC_new_from_resultfile_existing <trips_lstar.run.get_resultfile_GC_new_from_resultfile_existing>`
+     - .. autodoc2-docstring:: trips_lstar.run.get_resultfile_GC_new_from_resultfile_existing
+          :summary:
+   * - :py:obj:`get_resultfile_new <trips_lstar.run.get_resultfile_new>`
+     - .. autodoc2-docstring:: trips_lstar.run.get_resultfile_new
+          :summary:
+
+Data
+~~~~
+
+.. list-table::
+   :class: autosummary longtable
+   :align: left
+
+   * - :py:obj:`dict_Particles <trips_lstar.run.dict_Particles>`
+     - .. autodoc2-docstring:: trips_lstar.run.dict_Particles
+          :summary:
+
+API
+~~~
+
+.. py:data:: dict_Particles
+   :canonical: trips_lstar.run.dict_Particles
+   :value: None
+
+   .. autodoc2-docstring:: trips_lstar.run.dict_Particles
+
+.. py:function:: parseargs()
+   :canonical: trips_lstar.run.parseargs
+
+   .. autodoc2-docstring:: trips_lstar.run.parseargs
+
+.. py:function:: get_resultfile_existing(filename_hdf5)
+   :canonical: trips_lstar.run.get_resultfile_existing
+
+   .. autodoc2-docstring:: trips_lstar.run.get_resultfile_existing
+
+.. py:function:: get_resultfile_GC_new_from_resultfile_existing(resultfile, cfg)
+   :canonical: trips_lstar.run.get_resultfile_GC_new_from_resultfile_existing
+
+   .. autodoc2-docstring:: trips_lstar.run.get_resultfile_GC_new_from_resultfile_existing
+
+.. py:function:: get_resultfile_new(cfg, args)
+   :canonical: trips_lstar.run.get_resultfile_new
+
+   .. autodoc2-docstring:: trips_lstar.run.get_resultfile_new
